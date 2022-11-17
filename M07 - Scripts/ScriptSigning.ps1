@@ -1,0 +1,2 @@
+$codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=Code Signing for PowerShell"}
+Set-AuthenticodeSignature -FilePath "Path To Script" -Certificate $codeCertificate

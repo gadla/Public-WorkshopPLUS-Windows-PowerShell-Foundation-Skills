@@ -1,0 +1,1701 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0047)https://labondemand.com/LabProfile/Manual/LABID -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Local Lab Instructions</title>
+
+
+    <script src="./Content/jquery-2.1.4.min.js.download" type="text/javascript"></script>
+    <script src="./Content/showdown.min.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Content/prettify.css">
+    <script src="./Content/yaml.min.js.download"></script>
+    <script src="./Content/LocalizeTo" type="text/javascript"></script>
+    <link href="./Content/CloudClient.css" rel="stylesheet" type="text/css">
+  
+    <style type="text/css">
+        body, html {
+            font-family: Segoe UI,Tahoma,Verdana,Arial,sans-serif;
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            background-color: #efefef;
+            color: #000;
+            height: 100%;
+        }
+
+        body {
+            overflow:auto;
+        }
+
+        #outputWrapper {
+            background-color: #efefef;
+            min-height:100%;
+        }
+
+        .instructionsPreview {
+            padding: 20px;
+            height: 100%;
+        }
+
+        .instructionsPreview .page {
+            position:relative;
+            display: block !important;
+            padding: 15px 20px;
+            background-color:#fff;
+            page-break-after: always;
+            min-height:40px;
+        }
+
+        .instructionsPreview .page:not(:first-child) {
+            margin-top:20px;
+        }
+
+        @media print {
+            body, html{
+                height:auto;
+            }
+            
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            div {
+                page-break-inside: avoid;
+            }
+
+            #outputWrapper {
+                background-color: transparent;
+            }
+
+            .instructionsPreview {
+                padding: 0;
+            }
+
+            .instructionsPreview .page:not(:first-child) {
+                margin-top: 0px;
+            }
+
+        }
+
+        @page {
+            margin-left: 1.5cm;
+            margin-right: 1.5cm;
+            margin-top: 1.5cm;
+            margin-bottom: 1.5cm;
+        }
+    </style>
+    <link id="themeStylesheet" href="./Content/Blue.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="outputWrapper">
+                <div id="instructions" class="instructionsPreview">
+    </div>
+    <input type="hidden" id="rawContent" value="[TemplateVersion]:
+&#39;1.1&#39;
+
+[LODLabID]:
+&#39;40030&#39;
+
+[LODLabNumber]:
+&#39;12 FS.Flow_Control&#39;
+
+[AdminPowerShell]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell -Verb RunAs&quot;
+exit
+```
+
+[AdminPowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise -Verb RunAs&quot;
+exit
+```
+
+# Welcome student to the module: Flow Control
+Flow control enables decision-making within functions and scripts.
+
+Estimated time to complete this lab: **60 minutes**
+
+## Module Objective
+After completing this lab you will be able to:
+- Understand the choices for the various looping constructs.
+- Understand the use and capabilities of If/Else and Switch keywords.
+- Understand and use flow control keywords
+
+===
+
+# Login to Windows 10 and Start the Lab
+
+Login to **win10(wdt** machine with the given credentials. You can find them on the **Resources** pane.
+
+Please login with Username: **+++Power+++** and Password: **+++Pa$$w0rd+++**
+
+After logging in wait until you see the &quot;Lab preparation has been completed&quot; in the action center (This can take up to 2 minutes). If this does not popup you can click in the bottom right of the Vm to open the action center. Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+> [!TIP] **Notes about using the lab**
+> - It might take a moment to start ISE if you click the above link
+> - You can click the **+++Type Text+++** icon to enter the highlighted text at the position of the cursor in the virtual machine. You can also click on the **++Copyto Clipboard++** icon and then paste in at the desired destination.
+> - Entering your code in the script pane of the ISE will allow for better troubleshooting if you find errors
+> - Remember that the PowerShell ISE will allow you to highlight multiple lines of PowerShell code and run them together by pressing **F8**
+
+===
+# Feedback
+
+First of all, we want to **THANK YOU** for participating in this class. We hope you learned a lot and had a great experience. **To keep improving this course** and provide an even greater experience for future candidates, **we would like to ask you to answer a few questions (3 minutes )** about this course before you continue with the lab of flow control.
+
+The **feedback** is like the issue report tool **completely anonymous** and no correlations can be made back to this session.
+
+To provide feedback start a PowerShell session run the command +++**Start-Feedback**+++.
+
+===
+
+# Exercise 1: Looping
+
+Windows PowerShell includes a number of statements for iterating through the same set of code as long as the control check does not satisfy. Although most options are the same, the order of how they work differs.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+- Understand basic loops syntax
+- Use loops in a basic manner
+
+===
+
+## Task 1.1: Looping - While
+
+1. [] Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+1. [] PowerShell ISE has built in template samples that you can use to insert a loop using the ISE snippets. What is the key shortcut to insert snippets?
+
+    <details>
+    <summary>Answer</summary>
+
+    &quot;CTRL + J&quot;
+
+    </details>
+
+1. [] Use the snippet for the While loop and insert this in the ISE.
+
+    The code should display
+
+    ```
+    while ($x -gt 0)
+    {
+
+    }
+    ```
+
+1. [] While is a loop that keeps running as long as the validation is true. This can cause a never ending loop.
+
+    1. []  Before the loop add the variable $X with a value of 0
+
+        ```
+        $x = 0
+        while ($x -gt 0)
+        {
+
+        }
+        ```
+
+    1. [] While looking at the code, how many iterations will this code run?
+
+        <details>
+        <summary>Answer</summary>
+
+        &quot;This will not run the code block at all. 0 is not greater than 0&quot;
+
+        </details>
+
+    1. [] Update the code so that the variable &quot;X&quot; on line one has a value of 1.
+
+
+        ```
+        $x = 1
+        while ($x -gt 0)
+        {
+
+        }
+        ```
+
+    1. [] While looking at the code, how many iterations will this code run?
+
+        <details>
+        <summary>Answer</summary>
+
+        &quot;This will run forever as the condition is always true&quot;
+
+        </details>
+
+1. To properly use a loop you will need to control the validation and make sure it can end.
+
+    1. [] Can you update the current code block in a way it will end after a number of iterations
+
+        <details>
+        <summary>Hint</summary>
+
+        &quot;Using the increment operators is the easiest way&quot;
+
+        </details>
+
+        <details>
+        <summary>Answer</summary>
+
+        Although there are always multiple possibilities the following are some samples:
+
+        ```
+        $x = 1
+        while ($x -gt 0)
+        {
+            $x--
+        }
+        ```
+
+        ```
+        $x = 1
+        while ($x -gt 0)
+        {
+            $x = $x - 1
+        }
+        ```
+
+        ```
+        $x = 1
+        while ($x -gt 0)
+        {
+            --$x
+        }
+
+        ```
+        </details>
+
+1. [] The validation of the loops only works on the end verdict $true or $false
+
+    1. [] Will the following code run the loop ?
+
+        |Statement|Will Run yes/No|
+        |:---|:---|
+        |while(get-service){}|[&quot;\_\_\_\_&quot;](&quot;yes&quot;)|
+        |while($null){}|[&quot;\_\_\_\_&quot;](&quot;No&quot;)|
+        |while(1){}|[&quot;\_\_\_\_&quot;](&quot;yes&quot;)|
+        |while(0){}|[&quot;\_\_\_\_&quot;](&quot;No&quot;)|
+        |while($false){}|[&quot;\_\_\_\_&quot;](&quot;No&quot;)|
+
+===
+
+# Task 1.2: Looping - Do While
+
+1. [] Use the snippet plugin again for adding a Do While loop and insert this in the ISE.
+
+    The code should display
+
+    ```
+    do
+    {
+
+    }
+    while ($x -gt 0)
+    ```
+
+1. [] Notice that the code block and the validation are now in opposit order of the while loop.
+
+    1. [] Update the code so that the variable &quot;X&quot; on line one has a value of 0. Next add $x in the code block so that the value will be displayed when the code block is run.
+
+        ```
+        $x = 0
+        do
+        {
+            $x
+        }
+        while ($x -gt 0)
+        ```
+
+    1. [] Run the code. Notice that the code block run at least one time, because the validation is after the code block. Because the Do while loop repeate the code block only when the condition is true, in this case X is never larger than 0, so the code will run once.
+
+
+===
+# Task 1.3: Looping - Do Until
+
+1. [] Use the snippet plugin again for adding a Do Until loop and insert this in the ISE. Add the $x = 0 value before the loop again, and the $x in the code block to see the value.
+
+    The code should display
+
+    ```
+    $x = 0
+    do
+    {
+        $x
+    }
+    until ($x -gt 0)
+    ```
+
+1. [] Run the code block. How is the behavior different from the Do While code block?
+
+    <details>
+    <summary>Answer</summary>
+
+    Because until is reversed logic from while this time it will keep running as $X is still never larger than 0.
+
+    </details>
+
+
+===
+
+# Task 1.4: Looping - For
+
+As a best practice the for loop should not be used and should be replaced with any of the previous explained loops. For is mainly supported for language compatibility. The explanation in this chapter is just to teach you the syntax.
+
+1. [] Use the snippet plugin again for adding a For loop and insert this in the ISE.
+
+    The code should display
+
+    ```
+    for ($i = 1; $i -lt 99; $i++)
+    {
+
+    }
+    ```
+
+1. [] Add the initiation variable $i in the code block and run the loop. Pay attention to the value.
+
+    ```
+    for ($i = 1; $i -lt 99; $i++)
+    {
+       $i
+    }
+    ```
+
+1. [] In the first line $i++ is the increment for each iteration making sure $i is one more than the last iteration. As long as the validation itself ($i -lt 99) is **True**. The loop will continue to run iterations. The first piece is only used when the loop starts initializing the $i variable.
+
+    1. [] Below is the well known beer song, but there is a problem with the song. Can you fix the loop so the song is ok again?
+
+        ```
+        for ($i = 1; $i -lt 99; $i++)
+        {
+
+           &quot; $i bottles of beer on the wall, $i bottles of beer.&quot;
+           &quot;Take One down, pass it around, $($i-1) bottles of beer on the wall...&quot;
+
+        }
+        ```
+
+        <details>
+        <summary>Hint 1</summary>
+
+        &quot;You have to start (initialize) with 99 bottles of beer&quot;
+
+        </details>
+
+        <details>
+        <summary>Hint 2</summary>
+
+        &quot;When you pass one around it will reduce the number&quot;
+
+        </details>
+
+
+        <details>
+        <summary>Answer</summary>
+
+        ```
+        for ($i = 99; $i -gt 0; $i--)
+        {
+
+           &quot;$i bottles of beer on the wall, $i bottles of beer.&quot;
+           &quot;Take One down, pass it around, $($i-1) bottles of beer on the wall...&quot;
+
+        }
+        ```
+
+        </details>
+
+===
+
+# Task 1.5: Looping - ForEach
+
+Foreach is not a loop that validates and runs, but instead takes a item from an array and than runs the code block. It will keep iterating for as long as there are unprocessed items left in the array.
+
+1. [] Use the snippet plugin again for adding a Foreach loop and insert this in the ISE.
+
+    The code should display
+
+    ```
+    foreach ($item in $collection)
+    {
+
+    }
+    ```
+
+1. [] Let`s add the beer song into the code block again.
+
+    1. [] As $item is the amount of bottles we need to use that in the text as the number of bottles.
+
+        ```
+        foreach ($item in $collection)
+        {
+
+           &quot;$item bottles of beer on the wall, $item bottles of beer.&quot;
+           &quot;Take One down, pass it around, $($item-1) bottles of beer on the wall...&quot;
+
+        }
+        ```
+
+    1. [] To make the song work we need to have a array of bottles in the collection. Create a variable called $collection as a array with 99 items in it.
+
+        <details>
+        <summary>Hint</summary>
+
+        You can use the range operator <number>..<number> as a value for the variable
+
+        </details>
+
+        <details>
+        <summary>Answer</summary>
+
+        $collection = 99..0
+
+        </details>
+
+    1. [] Run the code, is the song ok again?
+
+        <details>
+        <summary>Answer</summary>
+
+        If you used the sample above, than now we get negative bottles.?? ehh.. If you used 99..1 you`re a hero.
+
+        </details>
+
+    1. [] As there is no validation in the code it processed all items even item 0 which is not good so you have to make sure that your item should all be processed or handle the code that will run with extra validations.
+
+===
+# Exercise 2: Branching
+
+**Branching** keywords allow for testing of conditional statements and if true execute a script block. This means you can choose based on the condition if a scriptblock should run or not.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Understand the use and capabilities of the If/Else and Switch keywords.
+
+===
+
+# Task 2.1: Branching - If
+
+1. [] For the following tasks we will inspect the windows features that are enabled on the system and based on the state enabled them. Finally we need to check if post script run everything is OK.
+
+1. [] Open the following script from within PowerShell ISE:
+    +++**C:\PShell\Labs\Ifstatement.ps1**+++
+
+1. [] The script is not yet complete, you will complete it during the following tasks.
+
+1. [] Run the script to store the current state of the containers feature to the variable ***Feature***.
+
+1. [] inspect the variable property **State**
+
+    1. [] What is the current state of the containers feature?
+
+        <details>
+        <summary>Hint</summary>
+
+        $feature.state
+
+        </details>
+
+        <details>
+        <summary>Answer</summary>
+
+        Disabled
+
+        </details>
+
+    1. [] What type is the state property ?
+
+        <details>
+        <summary>Hint</summary>
+
+        you can use $feature.state.gettype() or Get-member
+
+        </details>
+
+        <details>
+        <summary>Answer</summary>
+
+        Enumeration or System.Enum
+
+        </details>
+
+    1. [] An enumeration starts with 0 and lists items in sequence. What value does Disable have?
+
+        <details>
+        <summary>Hint</summary>
+
+        the value of a enum can be retieved calling the ***Value__*** property
+
+        </details>
+
+        <details>
+        <summary>Answer</summary>
+
+        The value of 0
+
+        </details>
+
+1. [] So we have the state of the feature that has a disabled value of 0.  How can we use this is a validation statement for a **if** decision.?
+
+    <details>
+    <summary>Answer</summary>
+
+    **IF** validation with a input of 0, results to not running the **IF** statement code block. Any other non 0 value will cause the codeblock to be run. This means we can now use the feature state directly in the **IF** statement.
+
+    </details>
+
+1. [] Complete the script writing a **IF** statement that will use ++write-host &quot;The feature $($feature.featurename) is enabled&quot;++ when the feature is indeed enabled.
+
+    <details>
+    <summary>Hint</summary>
+
+    ```PowerShell-notab
+    $feature = Get-WindowsOptionalFeature -FeatureName containers -online
+    if(){write-host &quot;The feature $($feature.featurename) is enabled&quot;}
+    ```
+
+    </details>
+
+    <details>
+    <summary>Hint</summary>
+
+    ```PowerShell-notab
+    $feature = Get-WindowsOptionalFeature -FeatureName containers -online
+    if($feature.?????){write-host &quot;The feature $($feature.featurename) is enabled&quot;}
+    ```
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    $feature = Get-WindowsOptionalFeature -FeatureName containers -online
+
+    if($feature.state){write-host &quot;The feature $($feature.featurename) is enabled&quot;}
+    ```
+    </details>
+
+    1. [] Run the code, does it write something to the screen ?
+
+        <details>
+        <summary>Answer</summary>
+
+        No nothing happens as the validation fails.
+
+        </details>
+
+    1. [] How can we fix the script to show if the feature is enabled or not to the screen?
+
+        <details>
+        <summary>Hint</summary>
+
+        There is a **Else** keyword
+
+        </details>
+
+        <details>
+        <summary>Answer</summary>
+
+        ```
+        $feature = Get-WindowsOptionalFeature -FeatureName containers -online
+
+        if($feature.state)
+        {
+            write-host &quot;The feature $($feature.featurename) is enabled&quot;
+        }else
+        {
+            write-host &quot;The feature $($feature.featurename) is disabled&quot;
+        }
+        ```
+        </details>
+
+    1. [] Save the script
+
+===
+# Task 2.2: More advanced - If Else
+
+In the last script for task 2.1 you used the Enum of a feature state in the validation. Sofar you only tested for $true (1 or more) or False (0). What about if we want to split out the $true values?
+
+1. [] Can you use what you learned and update the if validation to use the proper enum value for a enabled state for the if validation test.
+
+    <details>
+    <summary>Hint</summary>
+
+    The Enum value for enabled = 2
+
+    You can validate this by requesting the state property and the value propety of that state for a feature that is enabled
+
+    ```
+    (get-windowsoptionalfeature -FeatureName workfolders-client -online).state.value__
+    ```
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    $feature = Get-WindowsOptionalFeature -FeatureName containers -online
+
+    if($feature.state -eq 2)
+    {
+        write-host &quot;The feature $($feature.featurename) is enabled&quot;
+    }else
+    {
+        write-host &quot;The feature $($feature.featurename) is disabled&quot;
+    }
+    ```
+
+    </details>
+
+1. [] Now that you created a better If statement can you add another test to test for the enum value 6. The codeblock for this should say: +++Write-host &quot;Feature $($feature.featurename) is disabled and payload is removed&quot;+++
+
+    <details>
+    <summary>Hint</summary>
+
+    You can add a elseif statement for this
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    $feature = Get-WindowsOptionalFeature -FeatureName containers -online
+
+    if($feature.state -eq 2)
+    {
+        write-host &quot;The feature $($feature.featurename) is Enabled&quot;
+
+    }elseif($feature.state -eq 6)
+    {
+        write-host &quot;The feature $($feature.featurename) is Disabled and payload is removed&quot;
+    }
+    else
+    {
+        write-host &quot;The feature $($feature.featurename) is Disabled&quot;
+    }
+    ```
+    </details>
+
+1. [] Finally add 1 more **elseif** to test for disabled and rewrite the else block to say something like state is unknown. This makes the code nice and robust. Anytime you encounter a new state you can add it to the set using a elseif.
+
+    <details>
+    <summary>Answer</summary>
+
+    >[!note] In the answer the Enum test values have been reorderd to keep things simple, readable and ordered. This brings structure to your code.
+
+    ```
+    if($feature.state -eq 0)
+    {
+        write-host &quot;The feature $($feature.featurename) is Disabled&quot;
+
+    }elseif($feature.state -eq 2)
+    {
+        write-host &quot;The feature $($feature.featurename) is enabled&quot;
+    }elseif($feature.state -eq 6)
+    {
+        write-host &quot;The feature $($feature.featurename) is Disabled and payload is removed&quot;
+
+    }
+    else
+    {
+        write-host &quot;The feature $($feature.featurename) state is Unknown&quot;
+    }
+    ```
+
+    </details>
+
+1. [] Save the script.
+
+===
+# Task 2.3: Branching and looping brought together
+
+A lot of times when you need to test something you need to test that for more than 1 object. This means bringing in a loop is a great choice.
+
+1. [] Use the script from task 2.2
+
+1. [] On line 1 of the script you filtered for the feature *Containers*. Remove the parameter &quot;Featurename&quot; and its value from this line to store all windows features information into the variable **$features**. Note that we add the &quot;s&quot; to the variable name as it now contains all features.
+
+    <details>
+    <summary>Answer</summary>
+
+    $feature<b>s</b> = Get-WindowsOptionalFeature -online
+
+    </details>
+
+1. [] Nest the complete **If/Else** statement you created inside a loop so it processes all features and writes its states to the screen.
+
+    <details>
+    <summary>Hint</summary>
+
+    Although you can use any loop to create this functionality the easiest way here is to go for a *foreach loop* as that works of array objects.
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    >[!note] Note that in the last step you renamed the variable you store the objects in using $features with a  &quot;s&quot; behind the variable name.
+
+    ```
+    $features = Get-WindowsOptionalFeature -online
+
+    foreach ($feature in $features)
+    {
+        if($feature.state -eq 0)
+        {
+            write-host &quot;The feature $($feature.featurename) is Disabled&quot;
+        }elseif($feature.state -eq 2)
+        {
+            write-host &quot;The feature $($feature.featurename) is enabled&quot;
+        }elseif($feature.state -eq 6)
+        {
+            write-host &quot;The feature $($feature.featurename) is Disabled and payload is removed&quot;
+        }
+        else
+        {
+            write-host &quot;The feature $($feature.featurename) state is Unknown&quot;
+        }
+    }
+    ```
+
+    </details>
+
+1. [] Well done you have now created a script using loops and branches to control the code flow and validate values of a object that you can actually use in real live.
+
+Ow ehh,  One last thing , Your manager just walked in and asked if you could enable all Hyper-V functionality on the windows 10 machine. Can you do this using the previous code ?
+
+<details>
+<summary>Hint 1</summary>
+
+The command to enable a windows feature is: **Enable-WindowsOptionalFeature**
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+You can use a new If statement in the code block when the validation tests for &quot;Disabled&quot; Enum value 0
+
+</details>
+
+<details>
+<summary>Hint 3</summary>
+
+This new IF statement should check if the name contains &quot;Hyper-V&quot;
+
+</details>
+
+<details>
+<summary>Hint 4</summary>
+
+Enable-WindowsOptionalFeature -Featurename $feature.featurename -online
+
+The code above should be in this new codeblock. Mind the -online switch as you dont have a local source.
+
+</details>
+
+<details>
+<summary>Answer</summary>
+
+>[!Note] Note: that we added some extra verbose text so we know what is going on when running the code.
+
+```
+$features = Get-WindowsOptionalFeature -online
+
+foreach ($feature in $features)
+{
+    if($feature.state -eq 0)
+    {
+        write-host &quot;The feature $($feature.featurename) is Disabled&quot;
+
+        If ( $feature.featurename -like &quot;*Hyper-V*&quot; )
+        {
+
+            write-host &quot;Detected a disabled Hyper-V feature: $($feature.featurename) . Trying to enable now&quot;
+            Enable-WindowsOptionalFeature -Featurename $feature.featurename -online
+
+        }
+    }elseif($feature.state -eq 2)
+    {
+        write-host &quot;The feature $($feature.featurename) is enabled&quot;
+    }elseif($feature.state -eq 6)
+    {
+        write-host &quot;The feature $($feature.featurename) is Disabled and payload is removed&quot;
+
+    }
+    else
+    {
+        write-host &quot;The feature $($feature.featurename) state is Unknown&quot;
+    }
+}
+```
+
+</details>
+
+1. [] Save the script for later reference
+
+
+===
+# Exercise 3: Branching simplified with Switch
+
+In the last exercise you used multiple if else statements writing the code. As you are using if/else only 1 codeblock can run. If you need the option to have multipe code blocks run it would mean repeating code or creation functions to make it work. In doing so you create a lot of overhead code. This is where a switch comes in as a switch can test and execute multiple codeblocks and validation tests.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Understand the capabilities of the switch
+- learn when to use a switch effectively
+
+===
+# Task 3.1: Inspecting a switch
+
+1. [] While leaving the script from the last task open, Open a new file in ISE.
+
+1. [] Add the code below to the new file and inspect the difference between the 2 files.
+
+    ```
+    $features = Get-WindowsOptionalFeature -online
+    Switch ($features)
+    {
+        {$_.state -eq 0}{write-host &quot;The feature $($_.featurename) is Disabled&quot;}
+        {$_.state -eq 2}{write-host &quot;The feature $($_.featurename) is Enabled&quot;}
+        {$_.state -eq 6}{write-host &quot;The feature $($_.featurename) is Disabled and payload is removed&quot;}
+        Default {write-host &quot;The feature $($feature.featurename) state is Unknown&quot;}
+    }
+
+    ```
+
+1. [] Run both code files and validate that the result is the same while the code is more readable and simpler.
+
+===
+# Task 3.2: Switch Basics
+
+1. [] Open a new file in ISE
+
+1. [] Add the following code definition for a switch to the new file:
+
+    >[!note]Note: based on the type of validation you need use proper enclosing. (&quot;&quot;, () or {} )
+
+    ```
+    switch (Input)
+    {
+
+        &quot;validation&quot; {Codeblock}
+
+    }
+    ```
+
+1. [] What day is today ? lets find out
+
+    1. [] Inspect the command &quot;get-Date&quot;, What property contains the name of the day ?
+
+        <details>
+        <summary>Hint</summary>
+
+        You can use Get-Member.
+
+        </details>
+
+        <details>
+        <summary>Answer</summary>
+
+        The property &quot;Dayofweek&quot;
+
+        </details>
+
+    1. [] Replace the input part with code to retrieve the date as the name of day.
+
+        <details>
+        <summary>Hint</summary>
+
+        &quot;(Get-date).?????&quot; is part of the command to get the current date name.
+
+        </details>
+
+        <details>
+        <summary>Answer</summary>
+
+        ```
+        switch ((Get-Date).dayofweek)
+        {
+
+           &quot;validation&quot; {Codeblock}
+
+        }
+        ```
+
+        </details>
+
+    1. [] Add the 7 week day names as validations. And use a Write-host in the codeblock to send back the day name.
+
+        <details>
+        <summary>Answer</summary>
+
+        ```
+        switch ((Get-Date).dayofweek)
+        {
+            &quot;Monday&quot;    {Write-Host &quot;It is Monday&quot;}
+            &quot;Tuesday&quot;   {Write-Host &quot;It is Tuesday&quot;}
+            &quot;Wednesday&quot; {Write-Host &quot;It is Wednesday&quot;}
+            &quot;Thursday&quot;  {Write-Host &quot;It is thursday&quot;}
+            &quot;Friday&quot;    {Write-Host &quot;It is Friday&quot;}
+            &quot;Saturday&quot;  {Write-Host &quot;It is Saturday&quot;}
+            &quot;Sunday&quot;    {Write-Host &quot;It is Sunday&quot;}
+        }
+
+        ```
+
+        >[!Note] Note: We add whitespace between the validation and the codeblock so the codeblocks line up nicely for readability.
+
+        </details>
+
+1. [] Run the code and validate that it works.
+
+1. [] Change all the validation day names to start with a smaller case letter.
+
+1. [] Retest the code, does it still work ?
+
+1. [] Change the code in a way it does no longer trigger due to the first letter being smaller case.
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    switch -Casesensitive ((Get-Date).dayofweek)
+    {
+        &quot;monday&quot;    {Write-Host &quot;It is Monday&quot;}
+        &quot;tuesday&quot;   {Write-Host &quot;It is Tuesday&quot;}
+        &quot;wednesday&quot; {Write-Host &quot;It is Wednesday&quot;}
+        &quot;thursday&quot;  {Write-Host &quot;It is thursday&quot;}
+        &quot;friday&quot;    {Write-Host &quot;It is Friday&quot;}
+        &quot;saturday&quot;  {Write-Host &quot;It is Saturday&quot;}
+        &quot;sunday&quot;    {Write-Host &quot;It is Sunday&quot;}
+    }
+
+    ```
+    </details>
+
+
+===
+# Task 3.3: Switch Advanced
+
+1. [] A switch also supports more advanced switching logic that is controlled via parameters. Open a New ISE file and add the code below
+
+    ```
+    switch (ipconfig)
+    {
+
+       &quot;[0-9]{1,3}&quot; {$_}
+
+    }
+    ```
+
+1. [] Run the code. This code should extract all the lines that might contain a ipadress from the output of *Ipconfig* using a simple regex. Did it work?
+
+    <details>
+    <summary>Answer</summary>
+
+    &quot;it should not have returned any output&quot;
+
+    </details>
+
+    1. [] Do you know why not ? , Can you make it work?
+
+        <details>
+        <summary>Answer</summary>
+
+        you need to add the parameter *-regex* to the **switch** keyword.
+
+        ```
+        switch -regex (ipconfig)
+        {
+
+           &quot;[0-9]{1,3}&quot; {$_}
+
+        }
+        ```
+
+        </details>
+
+    1. [] Rerun the code does it work now ?
+
+        <details>
+        <summary>Answer</summary>
+
+        You should see only lines from the output that contain numbers
+
+        </details>
+
+
+    >[!NOTE] See: Get-Help about_regular_expressions -ShowWindow if you want to know more about regex. Regex is covered in depth in the IT management PowerShell course.
+
+
+1. [] Like the parameter for switching regex you can also use a file as direct input and skim through the file to extract interesting records. As you dont know what might be infront or behind the keyword you are looking for you will also need a second switch for supporting wildcards.
+
+1. [] Open a new ISE file and paste the below code in it.
+
+
+    ```
+    switch (C:\PShell\Labs\WindowsUpdate.log)
+    {
+
+       &quot;*&quot; {$_}
+
+    }
+    ```
+
+1. [] Complete the needed parameters to make sure all lines of code are displayed.
+
+    <details>
+    <summary>Hint</summary>
+
+    You will need both parameters mentioned on the text above.
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    >[!Note]Note: The sequence of the parameters is important when using -file. -File should be the last parameter.
+
+    ```
+    switch -wildcard -file (&quot;C:\PShell\Labs\WindowsUpdate.log&quot;)
+    {
+
+       &quot;*&quot; {$_}
+
+    }
+    ```
+
+    </details>
+
+1. [] Lets update the validation checks to some more interesting lines.
+
+    1. [] Add a validation for anything that contains &quot;error&quot; and use ++&quot;write-host -foregroundcolor red $_&quot;++ as codeblock
+
+        <details>
+        <summary>Hint</summary>
+
+        ++&quot;*error*&quot; {write-host -foregroundcolor red $_}++
+
+        </details>
+
+    1. [] Add a validation for anything that contains &quot;warning&quot; and use ++&quot;write-host -foregroundcolor Yellow $_&quot;++ as codeblock
+
+    1. [] Add a validation for anything that contains &quot;failed&quot;  and use ++&quot;write-host -foregroundcolor Cyan $_&quot;++ as codeblock
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    switch -wildcard -file (&quot;C:\PShell\Labs\WindowsUpdate.log&quot;)
+    {
+
+       &quot;*error*&quot; {write-host -foregroundcolor red $_}
+       &quot;*warning*&quot; {write-host -foregroundcolor yellow $_}
+       &quot;*failed*&quot; {write-host -foregroundcolor Cyan $_}
+
+    }
+    ```
+
+    </details>
+
+===
+
+# Self test (Optional part of the course)
+
+## Self test information
+
+The following self test is an optional part of this course and can be used to evaluate if your knowledge of the subject matter is sufficient. You can use this self test to re-evaluate your knowledge after taking the course or test your knowledge before you take / retake the course.
+
+The self test consists of 10 questions/exercises. For best results, it is recommended to complete this self test without referring back to the previous materials or other resources.
+
+##  Self test duration
+
+Although the self test is not timed this test should be completed in approximately 15 minutes.
+
+To start the self test continue to the next page.
+
+===
+
+## Self test
+
+1. <Removed>
+___
+2. <Removed>
+___
+3. <Removed>
+___
+4. <Removed>
+___
+5. <Removed>
+___
+6. <Removed>
+___
+7. <Removed>
+___
+8. <Removed>
+___
+9. <Removed>
+___
+10. <Removed>
+
+
+
+
+>[oldlab]:
+>===
+># Task 2.5: Branching - Switch (Wildcards)
+>
+>1. [] Open **(but do NOT execute)** the following script within the Windows PowerShell ISE script pane.
+>    +++**C:\PShell\Labs\Switch-Wildcard.ps1**+++
+>
+>    >[!NOTE] The script is written below for reference.
+>
+>    ```PowerShell-notab-nocopy
+>    $filepath = &quot;C:\PShell\Labs\OriginalFiles&quot;
+>    $archivePath = &quot;$filepath\Archive\&quot;
+>
+>    if (Test-Path $filepath) {
+>        if (-NOT (Test-Path $archivepath)) {
+>            New-Item -Path $filepath -Name &quot;Archive&quot; -ItemType Directory
+>
+>            &quot;2016&quot;, &quot;2017&quot;, &quot;KEEP&quot; |
+>            ForEach-Object { New-Item -Path $archivepath -Name $_ -ItemType Directory }
+>        }
+>
+>        switch -WildCard (Get-ChildItem &quot;$filepath\*.log&quot;) {
+>            *2016*  { Move-Item   $_  -Destination $archivePath\2016 -Verbose -Force }
+>            *2017*  { Move-Item   $_  -Destination $archivePath\2017 -Verbose -Force }
+>            *KEEP*  { Move-Item   $_  -Destination $archivePath\KEEP -Verbose -Force }
+>            default { Remove-Item $_  -Verbose -Force }
+>        }
+>
+>    }
+>    else {
+>        write-output &quot;Not Found: $filepath&quot;
+>    }
+>    ```
+>
+>1. [] The files in the following folder will be archived by the script:
+>+++**C:\PShell\Labs\OriginalFiles**+++
+>
+>1. [] Place the cursor in the script pane on the switch ... line and press **F9**.
+>
+>1. [] Execute the script by pressing **F5**. The next line executed will turn yellow.
+>
+>1. [] Press **F10** to step through each line of the script and note where the statement exits.
+>
+>1. [] After stepping through a few iterations with **F10**, press **F5** to run the script to completion.
+>
+>1. [] Confirm that the archive folders contains the files matching the wildcard patterns.
+>
+>    **C:\PShell\Labs\OriginalFiles\Archive**
+>
+>===
+># Task 2.7: Branching - Switch (Input from Filename)
+>
+>1. [] Ensure you have launched ISE with Run as Administrator.
+>
+>1. [] Open and execute the following script within the Windows PowerShell ISE script pane.
+>+++**C:\PShell\Labs\Switch-Filename.ps1**+++
+>
+>    >[!NOTE] The script is written below for reference.
+>
+>    ```PowerShell-notab-nocopy
+>    #Requires -RunAsAdministrator
+>
+>    copy-item $ENV:WinDir\SoftwareDistribution\ReportingEvents.log $ENV:TEMP\ReportingEvents.Log -Force
+>    $errcount = $warncount = 0
+>
+>    switch -wildcard -CaseSensitive -File &quot;$ENV:TEMP\ReportingEvents.Log&quot; {
+>        &quot;*AGENT_INSTALLING_FAILED*&quot; {
+>            write-host &quot;Panic! Panic!&quot;
+>            $errcount++
+>        }
+>        &quot;*AGENT_DOWNLOAD_FAILED*&quot; {
+>            write-host &quot;Worry! Worry!&quot;
+>            $warncount++
+>        }
+>    }
+>    write-output &quot;Errors:   $errcount&quot;
+>    write-output &quot;Warnings: $warncount&quot;
+>    ```
+>
+>    > [!KNOWLEDGE] We use a copy in TEMP because Switch -FILE tries to open the source as read/write and will fail on the original in C:\\Windows.
+>
+>1. [] Execute the script by pressing **F5**.
+>
+>1. [] Explore the ReportingEvents.log file (it can be found under +++**C:\Windows\SoftwareDistribution**+++) and alter the patterns to match things you wish to highlight.
+>
+>===
+># Task 2.8: Branching - Switch (and the Break Statement)
+>
+>1. [] Ensure you have launched ISE with &quot;Run as Administrator&quot;.
+>
+>1. [] Open and execute the following script within the Windows PowerShell ISE script pane.
+>+++**C:\PShell\Labs\Switch-Break.ps1**+++
+>
+>    >[!NOTE] The script is written below for reference.
+>
+>    ```PowerShell-notab-nocopy
+>    #Requires -RunAsAdministrator
+>
+>    # switch can iterate an array/collection/pipeline AND be told to halt.
+>
+>    $SinceWhen = &quot;TODAY&quot;, &quot;YESTERDAY&quot;, &quot;LOGIN&quot;, &quot;BOOT&quot;
+>
+>    Switch ($SinceWhen | Sort-Object) {
+>        &quot;BOOT&quot; {
+>            $OS = Get-CIMinstance Win32_OperatingSystem
+>            $sinceTime = $OS.LastBootUpTime
+>            Write-Output &quot;Boot $sinceTime&quot;
+>        }
+>        &quot;LOGIN&quot; {
+>            $loginSession = Get-CIMinstance -class Win32_LogonSession
+>            $sinceTime = $loginSession.StartTime
+>            Write-Output &quot;Login $SinceTime&quot;
+>        }
+>        &quot;TODAY&quot; {
+>            $sinceTime = (Get-Date) - (Get-Date).timeofday
+>            Write-Output &quot;Today $sinceTime&quot;
+>        }
+>        &quot;YESTERDAY&quot; {
+>            $sinceTime = ((Get-Date) - (Get-Date).timeofday).AddDays(-1)
+>            Write-Output &quot;Yesterday $sinceTime&quot;
+>        }
+>    }
+>    # what happens if I add a &quot;;Break&quot; to one of the matches?
+>    ```
+>
+>1. [] Place the cursor in the script pane on the &quot;switch ...&quot; line and press **F9**.
+>
+>1. [] Execute the script by pressing **F5**. The next line to be executed will turn yellow.
+>
+>1. [] Press **F10** to step through each line of the script and note where the statement exits.
+>
+>1. [] Add a line to one of the script blocks after a Write-Output with the command &quot;break&quot; and re-run. Note the change in behavior!
+>
+>    > [!NOTE] If you are using a collection of objects (i.e. such as with -File) in conjunction with the break keyword, the implict loop will also terminate and no further objects will be processed.
+>
+>===
+>#Exercise 3: Break and Continue Keywords
+>
+>Break and Continue keywords are used to alter the default flow within a flow control statement.
+>
+>## Objectives
+>
+>After completing this exercise, you will be able to:
+>
+>- Understand the use and capabilities of Break and Continue.
+>
+>===
+># Task 3.1: Flow Control - Break/Continue
+>
+>Flow control statements can immediately exit, or continue, a loop or script block&#39;s execution.
+>
+>1. [] Sign in to **win10(wdt** as **+++Power+++** using +++**Pa$$w0rd**+++ as the password.
+>
+>1. [] Open and execute the following script within the ISE script pane.
+>+++**C:\PShell\Labs\BreakContinue.ps1**+++
+>
+>    >[!NOTE] The script is written below for reference.
+>
+>    ```PowerShell-notab-nocopy
+>    $i = 0
+>    foreach ($x in 1..100) {
+>        $i += $x
+>        if ($i % 5) {
+>        &quot;Jump to end&quot;
+>        continue
+>        }
+>
+>        $i
+>
+>        if ($i -gt 1770) {
+>        &quot;I&#39;m Out!&quot;
+>        break
+>        }
+>    }
+>
+>    write-output &quot;Note: Continue jumps to the bottom of the loop.&quot;
+>    write-output &quot;Note: Break exits the loop completely and the next&quot;
+>    write-output &quot;      section of the script will then execute.&quot;
+>    ```
+>
+>1. [] Alter the numeric values in the if statements and note how the execution flows.
+>
+>===
+># Task 3.2: Flow Control - Exit
+>
+>A Windows PowerShell script exits after the last line of code executes. Within functions, it is possible to &quot;Return&quot; early from the current scope. This behaves like a break statement, but for a function. The same ability exists within Scripts. The Exit statement can force the entire script to exit early, regardless of the current execution location.
+>
+>1. [] Open and execute the following script within the Windows PowerShell ISE script pane.
+>    +++**C:\PShell\Labs\ExitScript.ps1**+++
+>
+>    >[!NOTE] The script is written below for reference.
+>
+>    ```PowerShell-notab-nocopy
+>    $dayToIgnore = &quot;Monday&quot;
+>
+>    function Get-PublicSMBInfo() {
+>    if ( ((get-date).DayOfWeek) -EQ $dayToIgnore ) {
+>    &quot;I don&#39;t work on $dayToIgnore!&quot;
+>    EXIT
+>    }
+>    return ( Get-SMBshare | Where-Object {$_.Description -Match &quot;^Public&quot;} )
+>    }
+>
+>    Get-PublicSMBinfo | Format-Table
+>    Write-Host &quot;Will never get here on &#39;$dayToIgnore&#39;!&quot;
+>    ```
+>
+>
+>1. [] Change the value of $dayToIgnore variable and re-run. Note the result when EXIT occurs..
+">
+    <input type="hidden" id="activities" value="[]">
+    <input type="hidden" id="replacementTokens" value="[{&quot;Token&quot;:&quot;@lab.LabProfile.Id&quot;,&quot;Replacement&quot;:&quot;38671&quot;},{&quot;Token&quot;:&quot;@lab.CtrlAltDelete&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;ctrlAltDeleteLink&#39;&gt;Ctrl+Alt+Delete&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;63124&#39;&gt;WIN10&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54597&#39;&gt;MS&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54598&#39;&gt;DC&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Username&quot;,&quot;Replacement&quot;:&quot;Administrator&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.OpticalMedia(5638).LoadLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;loadMediaLink opticalMedia&#39; data-data=&#39;5638&#39;&gt;Introduction to Commands - 0050&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.Id&quot;,&quot;Replacement&quot;:&quot;[ID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.GlobalId&quot;,&quot;Replacement&quot;:&quot;[lodID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.StartDate&quot;,&quot;Replacement&quot;:&quot;20190108&quot;},{&quot;Token&quot;:&quot;@lab.User.Id&quot;,&quot;Replacement&quot;:&quot;[USERID]&quot;},{&quot;Token&quot;:&quot;@lab.User.FirstName&quot;,&quot;Replacement&quot;:&quot;[FIRSTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.LastName&quot;,&quot;Replacement&quot;:&quot;[LASTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.Email&quot;,&quot;Replacement&quot;:&quot;[EMAIL]&quot;},{&quot;Token&quot;:&quot;@lab.User.ExternalId&quot;,&quot;Replacement&quot;:&quot;[EXTERNALID]&quot;},{&quot;Token&quot;:&quot;@lab.Tag&quot;,&quot;Replacement&quot;:&quot;[TAG]&quot;}]">
+
+    <textarea id="copyInput" value="" style="position: absolute; left:-10000px; top:-10000px; "></textarea>
+
+    <script type="text/javascript"> 
+    
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        var childWindows = [];
+
+        function showClickFeedbackMessage(text, x, y, duration) {
+            var $message = $("<div class='clickFeedbackMessage noselect'>" + text + "</div>");
+            $message.appendTo($("body")).hide();
+            $message.css({ left: x, top: y });
+            $message.fadeIn("fast");
+            window.setTimeout(function () {
+                $message.fadeOut("fast", function () { $message.remove(); });
+            }, duration);
+        }
+
+        function copyableClicked(element) {
+            //only copy if we are clicking, not if we have used the mouse to select the text manually.
+            var selectedText;
+            if (window.getSelection) {
+                selectedText = window.getSelection().toString();
+            } else if (document.selection && document.selection.type !== "Control") {
+                selectedText = document.selection.createRange().text;
+            }
+            if (selectedText) { return };
+
+            var $element = $(element);
+            var text = $element.text();
+            $("#copyInput").val(text).select();
+            var offset = $element.offset();
+            var x = offset.left;
+            var y = offset.top - 40;
+            try {
+                var successful = document.execCommand("copy");
+                if (successful) {
+                    showClickFeedbackMessage("Copied to clipboard", x, y, 2000);
+                } else {
+                    showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                }
+            } catch (err) {
+                showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                console.log("Unable to copy. " + err);
+            }
+        }
+
+        function setupKnowledgeExpanders() {
+            $(".knowledge").each(function () {
+                var knowledge = this;
+                var $knowledge = $(this);
+                var $moreKnowledge = $knowledge.next();
+                if ($moreKnowledge.is(".moreKnowledge")) {
+                    var maxHeight = 100;
+                    var leeway = 100;
+                    var diff = knowledge.scrollHeight - maxHeight;
+                    if (diff < leeway) {
+                        $knowledge.removeClass("collapsed");
+                        $moreKnowledge.find("a").hide();
+                    } else {
+                        //this is tall content, let's show the 'more' link
+                        $moreKnowledge.find("a").show();
+                        $knowledge.addClass("collapsed");
+                    }
+                }
+            });
+        }
+
+        var variables = {};
+
+        function processVariables() {
+            $("span.variable").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.html(variables[name]);
+                } else {
+                    $this.text("<" + name + ">");
+                }
+            });
+            $("input.variableTextBox").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.val(variables[name]);
+                } else {
+                    $this.val("");
+                }
+            });
+            $("code").each(function () {
+                var originalHtml = this.originalHtml ? this.originalHtml : this.innerHTML;
+                var newHtml = originalHtml;
+                for (var name in variables) {
+                    var val = variables[name];
+                    var regex = new RegExp('<span class="nocode">&lt;' + name + '&gt;</span>', 'g');
+                    newHtml = newHtml.replace(regex, val);
+                }
+                if (originalHtml != newHtml || originalHtml != this.innerHTML) {
+                    this.originalHtml = originalHtml;
+                    this.innerHTML = newHtml;
+                }
+            });
+        }
+        
+        window.onload = function () {
+
+            var rawContent = document.getElementById("rawContent").value;
+            var contentRoot = "./Content/"
+            var activitiesString = document.getElementById("activities").value;
+            var activities = (activitiesString == null || activitiesString.length == 0) ? [] : JSON.parse(activitiesString);
+            var replacementTokensString = document.getElementById("replacementTokens").value;
+            var replacementTokens = (replacementTokensString == null || replacementTokensString.length == 0) ? [] : JSON.parse(replacementTokensString);
+            instructionsProcessor.process(rawContent, "instructions", false, contentRoot, replacementTokens,
+                function ($page) {
+                    setupKnowledgeExpanders();
+                },
+                activities
+            );
+            $(".page").each(function () {
+                var $page = $(this);
+                if ($page.find("iframe.externalManual").length > 0) {
+                    $page.css("padding", 0);
+                }
+            });
+
+            $("body").on("click", ".moreKnowledgeLink", function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var $knowledge = $link.parent().prev();
+                if ($knowledge.hasClass("expanded")) {
+                    $knowledge.removeClass("expanded");
+                    $link.text("more...");
+                } else {
+                    $knowledge.addClass("expanded");
+                    $link.text("...less");
+                }
+            }).on("click", ".copyable, code:not(.nocopy)", function (e) {
+                copyableClicked(this);
+            }).on("click", ".dialogLink", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var $dialogLink = $(this);
+                var title = $dialogLink.attr("title");
+                var target = $dialogLink.attr("data-target");
+                if (target) {
+                    var $hiddenDialog = $("blockquote.referenceContent[data-id='" + target + "']");
+                    if ($hiddenDialog.length === 0) {
+                        alert('CONTENT ERROR: Unable to find a reference content "' + target + '"');
+                    } else {
+                        showDialog({title:title, content: $hiddenDialog.html() });
+                    }
+                }
+                else {
+                    showDialog({title:title, url: $dialogLink.attr("href"), isInstructions: $dialogLink.hasClass("instructions") });
+                }
+            }).on("click", ".videoLink, video", function (e) {
+                e.preventDefault();
+                var videoUrl = $(this).hasClass("videoLink") ? this.href : this.src;
+                var url = "./Content/" + videoUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var videoWindow = window.open(url, "videoWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(videoWindow);
+                try {
+                    videoWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".imageLink, img", function (e) {
+                var $this = $(this);
+                if ($this.parent().is("a")) return;
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var imgUrl = $this.hasClass("imageLink") ? this.href : this.src;
+                var url = "./Content/" + imgUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var imageWindow = window.open(url, "imageWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(imageWindow);
+                try {
+                    imageWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".tipLink", function (e) {
+                e.preventDefault();
+                var $tiplink = $(this);
+                var $hiddenTip = $tiplink.next();
+                var offset = $(this).offset();
+                var x = offset.left;
+                var y = offset.top + 25;
+                showClickFeedbackMessage($hiddenTip.html().replaceAll('<code title="Copy to clipboard" class="prettyprint">','<code title="Copy to clipboard" style="background-color:#8888;" class="prettyprint">').replaceAll("class",'style="background-color:#8888;" class'), x, y, 5000);
+            }).on("change", ".variableTextBox", function () {
+                var $textBox = $(this);
+                var name = $textBox.attr("data-name");
+                var val = $textBox.val();
+                if (val == null || val.length == 0) {
+                    if (name in variables) {
+                        delete variables[name];
+                    }
+                } else {
+                    variables[name] = val;
+                }
+                processVariables();
+            });;
+
+            $(window).resize(function () {
+                setupKnowledgeExpanders();
+            }).unload(function () {
+                closeAllChildWindows();
+            });
+
+            function closeAllChildWindows() {
+                for (var i = 0; i < childWindows.length; i++) {
+                    try {
+                        childWindows[i].close();
+                    } catch (e) {
+                    }
+                }
+                childWindows = [];
+            }
+
+            function showDialog(options) {
+                if (!options) return;
+                var $dialog = $("#modalDialog");
+                var isUpdatedContent = false;
+                if ($dialog.length > 0) {
+                    $dialog.find(".dialogContent").html("");
+                    $dialog.find(".dialogButtons").html("");
+                    isUpdatedContent = true;
+                } else {
+                    var $dialog = $('<div id="modalDialog" class="dialog"><div class="dialogMask"></div><div class="dialogBox"><div class="dialogCloseButton"></div><div class="dialogTitle"></div><div class="dialogContent"></div><div class="dialogButtons"></div></div></div>');
+                }
+                var $dialogBox = $dialog.find(".dialogBox");
+                var close = function () {
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", 0).animate({ marginTop: -h - offset.top }, 300);
+                    $dialog.delay(200).fadeOut("fast", function () { $dialog.remove(); });
+                }
+                $dialog.find(".dialogCloseButton").click(close);
+
+                if (options.title) {
+                    $dialog.find(".dialogTitle").html(options.title).show();
+                } else {
+                    $dialog.find(".dialogTitle").hide();
+                    $dialog.addClass("noTitle");
+                }
+                if (options.content) {
+                    $dialog.find(".dialogContent").removeClass("noScroll").append(options.content);
+                } else if (options.url) {
+                    var urlLower = options.url.toLowerCase();
+                    if (urlLower.indexOf(".mp4") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<video src="' + options.url + '" controls autoplay></video>');
+                        var $video = $("#contentDialogVideo");
+                        try {
+                            $video[0].play();
+                        } catch (e) {
+                            //
+                        }
+                    } else if (urlLower.indexOf(".png") !== -1 || urlLower.indexOf(".jpg") !== -1 || urlLower.indexOf(".jpeg") !== -1 || urlLower.indexOf(".gif") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<img src="' + options.url + '" controls></iframe>');
+                    } else if (options.isInstructions || urlLower.indexOf(".md") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<div id="instructionsDialog"></div>');
+                        window.setTimeout(function () {
+                            instructionsProcessor.processUrl(options.url, "instructionsDialog");
+                            if (options.url.indexOf("#") >= 0) {
+                                window.setTimeout(function () {
+                                    var hash = options.url.substr(options.url.indexOf("#"));
+                                    var $element = $("#instructionsDialog " + hash);
+                                    if ($element.length > 0) {
+                                        $dialog.find(".dialogContent").scrollTop($element.position().top);
+                                    }
+                                }, 400); //leave time for the content to layout... the dialog takes 400ms to animate anyway, which should be sufficient.
+                            }
+                        }, 1);
+                    } else {
+                        $dialog.find(".dialogContent").addClass("noScroll").append('<iframe id="contentDialogIFrame" src="' + options.url + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>');
+                    }
+                } else {
+                    $dialog.find(".dialogContent").hide();
+                }
+                if (options.buttons && options.buttons.length > 0) {
+                    $dialog.addClass("hasButtons");
+                    var $dialogButtons = $dialog.find(".dialogButtons");
+                    var numButtons = options.buttons.length;
+                    for (var i = 0; i < numButtons; i++) {
+                        var button = options.buttons[i];
+                        var $button = $("<input type='button' value='" + button.text + "' />");
+                        if (button.click) {
+                            $button.click(button.click);
+                        }
+                        if (button.primary) {
+                            $button.addClass("primary");
+                        }
+                        if (button.closeDialog) {
+                            $button.click(close);
+                        }
+                        $dialogButtons.append($button);
+                    }
+                }
+                if (!isUpdatedContent) {
+                    $("body").append($dialog);
+                    $dialog.hide().fadeIn("fast", function () {
+                        if (options.open) {
+                            options.open();
+                        }
+                    });
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", -h - offset.top).animate({ marginTop: 0 }, 400);
+                }
+                return {
+                    close: close
+                };
+            }
+
+        }
+
+        function getScrollTop() {
+            return document.body.scrollTop;
+        }
+
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,1041 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0047)https://labondemand.com/LabProfile/Manual/LABID -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Local Lab Instructions</title>
+
+
+    <script src="./Content/jquery-2.1.4.min.js.download" type="text/javascript"></script>
+    <script src="./Content/showdown.min.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Content/prettify.css">
+    <script src="./Content/yaml.min.js.download"></script>
+    <script src="./Content/LocalizeTo" type="text/javascript"></script>
+    <link href="./Content/CloudClient.css" rel="stylesheet" type="text/css">
+  
+    <style type="text/css">
+        body, html {
+            font-family: Segoe UI,Tahoma,Verdana,Arial,sans-serif;
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            background-color: #efefef;
+            color: #000;
+            height: 100%;
+        }
+
+        body {
+            overflow:auto;
+        }
+
+        #outputWrapper {
+            background-color: #efefef;
+            min-height:100%;
+        }
+
+        .instructionsPreview {
+            padding: 20px;
+            height: 100%;
+        }
+
+        .instructionsPreview .page {
+            position:relative;
+            display: block !important;
+            padding: 15px 20px;
+            background-color:#fff;
+            page-break-after: always;
+            min-height:40px;
+        }
+
+        .instructionsPreview .page:not(:first-child) {
+            margin-top:20px;
+        }
+
+        @media print {
+            body, html{
+                height:auto;
+            }
+            
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            div {
+                page-break-inside: avoid;
+            }
+
+            #outputWrapper {
+                background-color: transparent;
+            }
+
+            .instructionsPreview {
+                padding: 0;
+            }
+
+            .instructionsPreview .page:not(:first-child) {
+                margin-top: 0px;
+            }
+
+        }
+
+        @page {
+            margin-left: 1.5cm;
+            margin-right: 1.5cm;
+            margin-top: 1.5cm;
+            margin-bottom: 1.5cm;
+        }
+    </style>
+    <link id="themeStylesheet" href="./Content/Blue.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="outputWrapper">
+                <div id="instructions" class="instructionsPreview">
+    </div>
+    <input type="hidden" id="rawContent" value="[TemplateVersion]:
+&#39;1.1&#39;
+
+[LODLabID]:
+&#39;40024&#39;
+
+[LODLabNumber]:
+&#39;10 FS.Working_With_DataTypes&#39;
+
+[AdminPowerShell]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell -Verb RunAs&quot;
+exit
+```
+
+[AdminPowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise -Verb RunAs&quot;
+exit
+```
+
+# Welcome student to the module: Working with Types
+
+When working with PowerShell everything is represented through objects. An object always has a type which defines it&#39;s members. You have looked at objects and classes in the earlier module. It is important to understand that the word *type* is synonymous with *class*. This can lead to confusion as some commands and methods use the word *type* and some use the word *class*. You will not only see how objects can be created of an explicit *type* but also how objects are implicitly created of one *type* . You will be using objects of *type* variable in order to store references to other *objects* and to make inspection of object types look easier.
+
+
+Estimated time to complete this lab: **60 minutes**
+
+## Objectives
+
+After completing this lab, you will be able to:
+
+-   Create and access variables
+-   Understand how an object of a type is created
+-   Understand script parsing
+
+===
+
+# Login to Windows 10 and Start the Lab
+
+Login to **win10(wdt** machine with the given credentials. You can find them on the **Resources** pane.
+
+Please login with Username: **+++Power+++** and Password: **+++Pa$$w0rd+++**
+
+After logging in wait until you see the &quot;Lab preparation has been completed&quot; in the action center (This can take up to 2 minutes). If this does not popup you can click in the bottom right of the Vm to open the action center. Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+> [!TIP] **Notes about using the lab**
+> - It might take a moment to start ISE if you click the above link
+> - You can click the **+++Type Text+++** icon to enter the highlighted text at the position of the cursor in the virtual machine. You can also click on the **++Copyto Clipboard++** icon and then paste in at the desired destination.
+> - Entering your code in the script pane of the ISE will allow for better troubleshooting if you find errors
+> - Remember that the PowerShell ISE will allow you to highlight multiple lines of PowerShell code and run them together by pressing **F8**
+
+===
+
+# Exercise 1: Variables
+
+A variable is an object that is used to store references to other object. A variable object has 2 Primary Properties : Name and Value (i.e. Object and what it is referencing). Like all objects created in PowerShell, variables only exist as long as the runspace in which they were created exists. A runspace is an environment that is hosted by a process (eg. PowerShell_ISE,PowerShell.exe, etc ). Once the hosting processes are terminated, the runspace is also terminated and so do all objects created within it (including variables).
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Create, modify and remove variables
+- Understand variables and object types
+
+===
+# Task 1.1: Creating, Modifying & Removing Variables
+
+Variables can be defined and assigned values in a single statement. The assignment operator (**=**) will set the value property of the variable to a reference object. It is the PowerShell language parser that interprets the text which is written and when seeing a dollar-sign ($) implicitly creates or references an existing variable object with the name (i.e. text after the $).
+
+1. [] Sign in to **win10(wdt** as **+++Power+++** using **+++Pa$$w0rd+++** as the password. After logging in wait until you see the message &quot;Lab Preparation is complete&quot;
+
+    >[!TIP] Click the **+++Type Text+++** icon to enter the associated text into the virtual machine.
+
+1. [] Begin by opening Windows PowerShell ISE by right clicking on the PowerShell ISE icon and selecting Run ISE as Administrator.
+
+1. [] Take a look at the existing variables which have already been defined when you start up the PowerShell host. What command can you use for getting all variables?
+
+
+    <details>
+    <summary>Hint</summary>
+
+    Remember the Get-Command and Get-Help commands? How can these help you in finding a command to get variables?
+    </details>
+    <br>
+    <details>
+    <summary>Answer</summary>
+
+
+    ```PowerShell-notabs
+    Get-Variable
+    ```
+
+    </details>
+
+1. [] How can you check what members a variable object has? Use the variable PSVersionTable.
+
+
+    <details>
+    <summary>Hint</summary>
+
+   It might seem strange to work with variables this way. Most likely you handle variables as the object they are referencing as PowerShell exposes the referenced object to you seamlessly. Remember the command Get-Member?
+    </details>
+    <br>
+    <details>
+    <summary>Answer</summary>
+
+
+    ```PowerShell-notabs
+    # This will get the members of the Object that is returned from Get-Variable.
+    # The Object resulting from the call (Get-Variable -Name PSVersionTable) is passed as an argument to the parameter InputObject. The parenthesis sets the priority for it to be executed first.
+    Get-Member -InputObject (Get-Variable -Name PSVersionTable)
+    ```
+
+    </details>
+
+ 1. [] Now you will look at ways to create variable objects implicitly and explicitly. The PowerShell language parser simply parses text and creates objects based on syntax and context. When the parser encounters a dollar-sign ($) it will see the text following as the name of a variable ($<VariableNames>) and checks does a variable already exists with that name, else will implicitly create one. If there is an assignment operator after the variable, PowerShell will assign the object (i.e. operand to the right of =) to the value property of the variable. Create a variable using the $<Name> = <Value> syntax called OneThousand that references the numeric object 1000.
+
+
+    <details>
+    <summary>Answer</summary>
+
+
+    ```PowerShell-notabs
+    $OneThousand = 1000
+    ```
+
+    </details>
+
+1. [] Now access the object that the variable *OneThousand* is referencing and see what type it has. How can you achieve this using the Get-Variable command?
+
+    <details>
+    <summary>Hint</summary>
+
+    What is the name of the property that is referencing the variables object?
+    </details>
+    <br>
+    <details>
+
+    <summary>Answer</summary>
+
+
+    ```PowerShell-notabs
+    # The value property references an object
+    Get-Member -InputObject (Get-Variable -Name OneThousand).Value
+
+
+    # Alternative calling the GetType method on the Value (i.e. Object) property
+    (Get-Variable -Name OneThousand).Value.GetType()
+    ```
+    </details>
+
+1. [] The last tasks implicitly created a variable and assigned values to both the *name* and *value* properties of the variable object. This was done magically by the PowerShell engine and parser. Now you will more explicitly create a variable and assign it with a name and a value. What command can you use to create a new variable with the name TwoTrillion and the value 2000000000000?
+
+
+    <details>
+    <summary>Hint</summary>
+
+    Use Get-Command to find a command that will create a new variable?
+    </details>
+    <br>
+    <details>
+
+    <summary>Answer</summary>
+
+    ```PowerShell-notabs
+    # The value property references an object
+    New-Variable -Name TwoTrillion -Value  2000000000000
+
+    ```
+    </details>
+
+1. [] Accessing the value of a variable can be achieved by simply writing $<VariableName>. The object accessed will be the object that is being referenced by the *value* property of the variable. Fill in the table below matching variable name with object type they are referencing?
+
+    <details>
+    <summary>Hint</summary>
+
+    Just like in the earlier task use either Get-Member or the GetType method to find this information.
+    </details>
+    <br>
+
+    | Variable Name | Value type |
+    |:--- |:---|
+    | $OneThousand | <details><summary>Answer</summary>Int32</details> |
+    | $TwoTrillion |<details><summary>Answer</summary>Int64</details>|
+    | $PSVersionTable |<details><summary>Answer</summary>Hashtable</details>|
+    | $True |<details><summary>Answer</summary>Boolean</details>|
+    | $False |<details><summary>Answer</summary>Boolean</details>|
+    | $PWD |<details><summary>Answer</summary>PathInfo</details>|
+    | $ErrorActionPreference |<details><summary>Answer</summary>ActionPreference</details>|
+
+    >[!KNOWLEDGE] The type of the object that was created when no explicit object type is specified in the PowerShell script will be determined implicitly by the PowerShell language parser. Notice how the types of the objects referenced by the variables are different for OneThousand and TwoTrillion.
+
+    >[!KNOWLEDGE] When using the GetType method on the object you get back object of type *type*. A *type* object has other interesting properties which we will review later.
+
+
+1. [] Now delete the variable OneThousand. How can you accomplish that? What command or commands can you use?
+
+
+    <details>
+    <summary>Hint</summary>
+
+    Find commands with the *noun* &#39;*Variable*&#39; using the Get-Command command. Do you see any that might help deleting a variable?
+    </details>
+    <br>
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    # Remove Variable is the most obvious one to use
+    Remove-Variable -Name OneThousand
+
+    # If you are familiar with PowerShell Providers you can also access the Variable via its path and remove using Remove-Item cmdlet
+    Remove-Item -Path Variable:\OneThousand
+    ```
+    </details>
+
+1. [] Attempt to delete the variable *True* as well and try assigning it a new value. What are the results of these operations?
+
+    - Remove-Variable -Name True [Succeeds\Fails] (&quot;Fails - Error stating Cannot remove variable true because it is constant or read-only&quot;)
+    - Set-Variable -Name True -Value &#39;False&#39; [Succeeds\Fails] (&quot;Fails - Error stating Cannot overwrite variable true because it is read-only or constant.&quot;)
+    - $True = $False [Succeeds\Fails] (&quot;Fails - Error stating Cannot overwrite variable true because it is read-only or constant.&quot;)
+
+
+
+===
+# Task 1.2: Variables, Value Types and Type conversion (Casting)
+
+Windows PowerShell variables are by default so-called *weakly-typed*. What that means is that you can assign any object type to the variable&#39;s value. As we saw in the last task if no type is specified, the variable will allow the assignment of any object to it.
+
+1. [] Fill in the table with the types of the object the variable is referencing after each assignment.
+
+    | Assignment | Value type |
+    |:--- |:---|
+    | $Number = 1 | <details><summary>Answer</summary>Int32</details> |
+    | $Number = 1TB | <details><summary>Answer</summary>Int64</details>|
+    | $Number = &#39;100&#39; | <details><summary>Answer</summary>String</details>|
+    | $Number = (Get-Process -id 4).CPU | <details><summary>Answer</summary>Double</details>|
+
+
+    >[!KNOWLEDGE] Notice that the type of object is implicitly created based on how the PowerShell parser interprets the text on the right of the assignment operator. In the case of **1TB** PowerShell interprets **TB** as terabyte and the one as factor 1 (i.e. 1 x 1099511627776). This numeric value will require an object of type Int64 to store it. In the last assignment the property CPU of the object returned from *Get-Process* is being assigned to the *Number* variable, as it happens to be a *double* which supports numeric values with decimal point in it.
+
+
+1. [] You can also strongly-type a variable where you can state what type of object can be assigned to it. What happens however if the variable type and type of object assigned to it do not match? Fill-in the table below with the value displayed on the console after each assignment to a variable **Number** with type *Int32*.
+
+
+    >[!KNOWLEDGE] The syntax for a type is square-brackets [] with Type Name inside eg. [System.String]. The type often needs to be prefixed with a namespace. There are however so-called Accelerators (i.e. aliases for types) as well as a new Keyword *Namespace* in PowerShell 5.x which allow only you to specify the typename.
+
+    Here the definition of the *strongly-typed* variable *Number*.
+
+    ```PowerShell-notab
+    [System.Int32]$Number = 1
+    ```
+
+    | Assignment | Result |
+    |:--|:--|
+    | $Number = 1 | <details><summary>Answer</summary>Succeeds - 1 - This numeric value can be stored in a Int32</details> |
+    | $Number = 2TB | <details><summary>Answer</summary>Error - 2199023255552 - The number is too large to store into Int32t64</details>|
+    | $Number = &#39;0XFF&#39; | <details><summary>Answer</summary>Succeeds - 255 - Magically PowerShell will convert a string if in the right format (i.e. Hex) to a numeric value</details>|
+    | $Number = &#39;One&#39; | <details><summary>Answer</summary>Error - PowerShell cannot convert this string into a Int32 object</details>|
+    | $Number = 1.499 | <details><summary>Answer</summary>Succeeds - 1 - PowerShell converts the double object into a Int32. Note that rounding occurs</details>|
+    | $Number = 20.6 | <details><summary>Answer</summary>Succeeds - 21 - PowerShell converts the double object into a Int32. Note here it is rounded up</details>|
+
+    >[!KNOWLEDGE] Important rule! The operand&#39;s *type* on the LEFT of the operator determines how the operation will be performed. It is the *type* that implements different kinds of operators. Mostly the operand on the RIGHT will be converted to the same *type* as the operand on the LEFT before the operation is performed. Beware this is the most common case however there are exceptions to the rule. In the task above, the operand on the LEFT was a variable with a *type* Int32. The assignment operator will cause PowerShell to attempt to convert the operand on the RIGHT to *type* Int32.
+
+    >[!KNOWLEDGE] Important! Conversion occurs by taking the propery values from the object and using it to create a new object of a different type. Generally these type conversions are implicitly performed by PowerShell where needed based on the rule above. Be aware, the object you see on the screen in the console may look like the object you expect it to be but it might actually be of an entirely different type. Use Get-Member and the method GetType() frequently when writing and testing scripts to ensure you are operating with the correct types.
+
+1. [] Type conversion often occurs when calling commands and passing it in as arguments. Define the following function by copying it into your PowerShell_ISE edit pane, highlighting it and pressing F8.
+
+    ```PowerShell-notab
+    function Get-DayOfWeek
+    {
+        param
+        (
+            [System.DateTime]$DateTime = (Get-Date)
+        )
+
+        $DateTime.DayOfWeek
+    }
+    ```
+
+
+
+
+1. [] Look at the command syntax of the newly defined function by calling *Get-Command Get-DayOfWeek -Syntax*. Fill in the table accordingly.
+
+    | Call | Conversion Occurs |
+    |:--- |:---|
+    | Get-DayOfWeek -DateTime (Get-Date) | <details><summary>Answer</summary>False - Today&#39;s date - The Object passed in as a argument is of type DateTime </details> |
+    | Get-DayOfWeek | <details><summary>Answer</summary>False - Today&#39;s day - Using default value which is a DateTime object returned from call to Get-Date</details> |
+    | (Get-date &#39;24 Dec 2020&#39;).dayofweek | <details><summary>Answer</summary>True - Thursday - The string is parsed and a new DateTime object is created. Note the string must be formatted properly</details> |
+    | Get-DayOfWeek &#39;24 Dez 2020&#39; | <details><summary>Answer</summary>True - Error - The PowerShell engine attempts to convert the argument of type *string* to a *DateTime* however fails because the string is not properly formatted for the current culture which is en-us</details> |
+
+    >[!NOTE] PowerShell scripts or commands are simply text which is initially parsed and broken into words known as tokens. Each Token has a *type* and will result in a quasi first type conversion where the text turns into Token objects. Objects of *type* variable, Command, string, number, etc are hence being implicitly created through this parsing.
+
+
+===
+# Exercise 2 Static members
+
+Some Types (Classes) implement what is known as static members. These are members that you can access directly from the type (Class) without having to first instantiate an object of that type. The Syntax for accessing or discovering these members is a bit different than accessing and discovering non-static members.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Discover static members of a type (class)
+- Access the static members of a type
+- Get to know some of helpful static members.
+
+===
+
+# Task 2.1: Discover and Access static members
+
+1. [] Look at the command Get-Member. How can we use this to get the *static* members of the type (Class) DateTime?
+
+
+    <details>
+    <summary>Hint</summary>
+
+    Using either Get-Help or Get-Command find a parameterset that can be used to find out how to obtain static members. Once you find the parameterset remember that you want to get the members for an object of *type* *type*.
+    </details>
+    <br>
+    <details>
+    <summary>Answer</summary>
+
+
+    ```PowerShell-notabs
+    # Notice using the Parenthesis around [DateTime] shows that the argument is a *type*
+    Get-Member -InputObject ([DateTime]) -Static
+
+    # Notice the difference in color syntax on how PowerShell parses the below argument for
+    # the parameter InputObject. The default is to create a String object
+    Get-Member -InputObject [DateTime] -Static
+
+    # Alternatively passing the argument for -InputObject via the pipeline.
+    # More on this in the Pipeline module.
+    [DateTime] | Get-Member -Static
+    ```
+    </details>
+
+
+1. [] Using the DateTime *type* identify the member that needs to be used in order to mimic the result to the command *Get-Date* (without arguments).
+
+
+    >[!KNOWLEDGE] Accessing static members is done using the following Syntax [< type \>\] :: \< member \>. If the Member is a method then you may be required to pass in arguments (positionally). If it is a property then it will simply return an object.
+
+    <details>
+    <summary>Hint</summary>
+
+    Look at the help for Get-Date to see what type of object it returns when no arguments are passed in.
+    </details>
+    <br>
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    # This will return a DateTime
+    [DateTime]::Now
+
+    # Compare to calling Get-Date by executing the right after each other
+    # notice the similarity in results.
+    Get-Date
+    ```
+    </details>
+
+1. [] Which of the following are static methods of the string type (class)?
+    >[!Tip] Use the **Get-Member** cmdlet to view the properties and methods of a &quot;string&quot; and use the **-static** parameter to see the static members.
+
+    | MethodName | Static |
+    |:--|:--|
+    |New|<details><summary>True or False</summary>True</details>|
+    |Split|<details><summary>True or False</summary>False</details>|
+    |Join|<details><summary>True or False</summary>True</details>|
+    |Replace|<details><summary>True or False</summary>False</details>|
+
+
+2. [] Calling a static method : What argument *type* needs to be passed and in what order. Using the *new* static method of the string type,create a string with length 16 containing only &#39;I&#39;s.
+
+
+    >[!KNOWLEDGE] In order to see the different ways to call a method, as there could be several, simply attempt to invoke the method without parenthesis. The result will show something called OverLoadDefinitions which is analogous to ParameterSets you saw in the Command module.
+
+
+    <details>
+    <summary>Hint</summary>
+
+    The new methods is also an abstraction of something called a constructor. Look at the constructors for the string class (type) online if more help is needed. [http:](https://docs.microsoft.com/en-us/dotnet/api/system.string?view=netcore-3.1#:~:text=A%20string%20is%20a%20sequential,a%20sequential%20collection%20of%20System.&text=The%20value%20of%20the%20String,it%20is%20read%2Donly).)
+    </details>
+    <br>
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    # There are several possibilties. Below a few
+    [System.String]::New(&#39;I&#39;,16)
+
+    [System.String]::New(&#39;IIIIIIIIIIIIIIII&#39;)
+
+    # Showing that the New-Object Command simply abstracts static method *New* for a type (class)
+    New-Object -TypeName System.String -ArgumentList &#39;I&#39;,16
+
+    # Here we can also allow the Parser to implicitly create the String Object
+    # as when it see&#39;s quotation marks is does this
+    &#39;IIIIIIIIIIIIIIII&#39;
+
+    # The String type also supports a Times operator
+    &#39;IIII&#39; * 4
+    ```
+    </details>
+
+3. [] Exploring the string&#39;s static *Format* method. This method has also been abstracted into the PowerShell operator *-f*. How would you call the Format method in order to get the same result on console pane as the following PowerShell command line does?
+
+    ```PowerShell-notab
+    &#39;New Years eve is on a {0:dddd} this year&#39; -f (Get-Date -Month 12 -day 31)
+    ```
+
+    <details>
+    <summary>Hint</summary>
+
+    Look at the overload definitions for the Format method. Look at the online help if needed for the system.string class.
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    # All in one line
+    [System.String]::Format(&#39;New Years eve is on a {0:dddd} this year&#39;,(Get-Date -Month 12 -day 31) )
+
+    # Breaking it down using variables as arguments and using the String accelerator (Alias)
+    $format = &#39;New Years eve is on a {0:dddd} this year&#39;
+    $arg0 = (Get-Date -Month 12 -day 31)
+    [String]::Format($format,$arg0)
+    ```
+    </details>
+
+===
+
+#  Task 2.2: Enumerators
+
+1. [] Enumerator *types* are *types* that are collections of strings with corresponding numeric values. These *types* are used all over as they make it possible to either pass a string as an argument or a numeric value. The numeric values are much harder to remember therefore these types are very useful also for legibility. Execute the following PowerShell code in order to define a helper command with which to further explore Enumerator *types*.
+
+
+    ```PowerShell-notabs
+    function Show-Enum
+    {
+        param
+        (
+            [System.Type]$Type
+        )
+        if($Type.BaseType.Name -eq &#39;Enum&#39;)
+        {
+            $FormatString = &#39;{0,-32} {1,8} {2,32}&#39;
+            &quot;Enum Type: $($Type.Fullname)`n&quot;
+            [System.String]::Format($FormatString ,&#39;String&#39;,&#39;Decimal&#39;,&#39;Binary&#39;)
+            &#39;-&#39; * (32+1+8+1+32)
+            [System.Enum]::GetValues($Type) |
+                ForEach-Object {
+                    [System.String]::Format($FormatString ,$_,$_.value__,([System.Convert]::ToString($_.value__,2)))
+                }
+        }
+        else
+        {
+            Write-Warning &quot;$($Enum.Fullname) is not a Enumerator type.&quot;
+        }
+    }
+    ```
+    Which of the following are enumerator *types*. Test them using the new command *Show-Enum*. Here Example:
+
+    ```PowerShell-notab
+    Show-Enum -Type ([System.Management.Automation.ActionPreference])
+    ```
+    >[!NOTE] The parenthesis around the *type* in the example above ensures that the argument is passed as a *type* and not as a *string*.
+
+    |**Type**|**Enumerator**|
+    |:--|--:|
+    |[System.IO.FileAttributes] | <details><summary>Answer</summary>True</details>|
+    |[System.ConsoleColor]      | <details><summary>Answer</summary>True</details>|
+    |[System.IO.FileMode]       | <details><summary>Answer</summary>True</details>|
+    |[System.IO.Directory]      | <details><summary>Answer</summary>False</details>|
+    |[System.DayOfWeek]         | <details><summary>Answer</summary>True</details>|
+
+
+    >[!KNOWLEDGE] The numeric value associated with the *string* in an enumerator can be accessed via the *property* *value__* (Two underscores).
+
+1. [] In the below example you will evaluate what the string will be which is using Enumerators to fill in the blanks:
+
+    ```PowerShell-notab
+    $FormatString = &#39;There are {0} {1} Apples on the {2}.&#39;
+    $Arg = @([System.Management.AuthenticationLevel]::Call.value__,[ConsoleColor]12,&#39;Table&#39;)
+    [System.String]::Format($FormatString,$Arg)
+    ```
+
+    There are [\_\_\_](&quot;3&quot;) [\_\_\_](&quot;Red&quot;) Apples on the [\_\_\_](&quot;Table&quot;).
+
+
+1.  [] What color will the string be output in console and why?
+
+    ```PowerShell-notab
+    Write-Host &quot;Guess what color I will be&quot; -ForegroundColor 14 -BackgroundColor ([ConsoleColor]::Red)
+    ```
+
+
+    <details>
+    <summary>Answer</summary>
+
+      Yellow (14) with a Red (12) background. Use Show-Enum to see the String/Numeric pairs.
+    </details>
+===
+
+# Exercise 3: Casting and Type Operators
+
+Casting will attempt to create an object of one using the properties of an object of another *type*. Casting is performed by prefixing an object with a *type*. The syntax is as follows:
+1. [] Below is the syntax and example for casting. Execute the lines of PowerShell to see the result.
+    ```PowerShell-notab
+    # Syntax
+    # [<NameSpace>.<TypeName>]<Object>
+
+    # An Example casting a String to a CultureInfo Object
+    [System.Globalization.CultureInfo]&#39;De-De&#39;
+    ```
+
+1. []  Create a string that represents a IPv4 address and cast it to a system.net.IPAddress object. What is the IPv6 representation.
+
+
+    <details>
+    <summary>Hint</summary>
+
+    Use Get-Member on the resulting IPAddress object
+    </details>
+    <br>
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    # Example using a variable to store new Object
+    $IPAddress = [System.Net.IPAddress]&#39;192.168.0.10&#39;
+
+    # Get-Member -InputObject $IPAddress will help find the method to convert
+    $IPAddress.MapToIPv6().IPAddressToString
+    ```
+    </details>
+
+
+
+1. [] How would you use the *-as* operator to accomplish the same thing you did in the previous task?
+
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    # Use the -As operator by having the Left operand use to create an object of Right operand&#39;s type
+    (&#39;192.168.0.10&#39; -as [System.Net.IPAddress]).MapToIPv6().IPAddressToString
+    ```
+    </details>
+
+1. [] You can check if an object is of a specific type using the *-is* operator. Guess what *type* of object the variable *ConfirmPreference* is? How can you check what value it is and what *type* the value is? Once you find out the *type* how can you check that it is that *type* using the *-is* operator.
+
+    <details>
+    <summary>Hint</summary>
+
+    Use Get-Help about_Type_Operators.
+    </details>
+    <br>
+    <details>
+    <summary>Answer</summary>
+
+
+    ```PowerShell-notab
+    # Look at the ConfirmPreference Object
+    $ConfirmPreference
+
+    # Get the type
+    $ConfirmPreference.Gettype()
+
+    # Confirm that is of that type
+    $ConfirmPreference -is [System.Management.Automation.ConfirmImpact]
+
+    # what do you think? Could it be an enumerator type - Check
+    [System.Management.Automation.ConfirmImpact].IsEnum
+    ```
+    </details>
+
+===
+# Self test (Optional part of the course)
+
+## Self test information
+
+The following self test is an optional part of this course and can be used to evaluate if your knowledge of the subject matter is sufficient. You can use this self test to re-evaluate your knowledge after taking the course or test your knowledge before you take / retake the course.
+
+The self test consists of 10 questions/exercises. For best results, it is recommended to complete this self test without referring back to the previous materials or other resources.
+
+##  Self test duration
+
+Although the self test is not timed this test should be completed in approximately 15 minutes.
+
+To start the self test continue to the next page.
+
+===
+
+## Self test
+
+1. <Removed>
+___
+
+2. <Removed>
+___
+
+3. <Removed>
+___
+
+4. <Removed>
+">
+    <input type="hidden" id="activities" value="[]">
+    <input type="hidden" id="replacementTokens" value="[{&quot;Token&quot;:&quot;@lab.LabProfile.Id&quot;,&quot;Replacement&quot;:&quot;38671&quot;},{&quot;Token&quot;:&quot;@lab.CtrlAltDelete&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;ctrlAltDeleteLink&#39;&gt;Ctrl+Alt+Delete&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;63124&#39;&gt;WIN10&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54597&#39;&gt;MS&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54598&#39;&gt;DC&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Username&quot;,&quot;Replacement&quot;:&quot;Administrator&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.OpticalMedia(5638).LoadLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;loadMediaLink opticalMedia&#39; data-data=&#39;5638&#39;&gt;Introduction to Commands - 0050&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.Id&quot;,&quot;Replacement&quot;:&quot;[ID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.GlobalId&quot;,&quot;Replacement&quot;:&quot;[lodID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.StartDate&quot;,&quot;Replacement&quot;:&quot;20190108&quot;},{&quot;Token&quot;:&quot;@lab.User.Id&quot;,&quot;Replacement&quot;:&quot;[USERID]&quot;},{&quot;Token&quot;:&quot;@lab.User.FirstName&quot;,&quot;Replacement&quot;:&quot;[FIRSTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.LastName&quot;,&quot;Replacement&quot;:&quot;[LASTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.Email&quot;,&quot;Replacement&quot;:&quot;[EMAIL]&quot;},{&quot;Token&quot;:&quot;@lab.User.ExternalId&quot;,&quot;Replacement&quot;:&quot;[EXTERNALID]&quot;},{&quot;Token&quot;:&quot;@lab.Tag&quot;,&quot;Replacement&quot;:&quot;[TAG]&quot;}]">
+
+    <textarea id="copyInput" value="" style="position: absolute; left:-10000px; top:-10000px; "></textarea>
+
+    <script type="text/javascript"> 
+    
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        var childWindows = [];
+
+        function showClickFeedbackMessage(text, x, y, duration) {
+            var $message = $("<div class='clickFeedbackMessage noselect'>" + text + "</div>");
+            $message.appendTo($("body")).hide();
+            $message.css({ left: x, top: y });
+            $message.fadeIn("fast");
+            window.setTimeout(function () {
+                $message.fadeOut("fast", function () { $message.remove(); });
+            }, duration);
+        }
+
+        function copyableClicked(element) {
+            //only copy if we are clicking, not if we have used the mouse to select the text manually.
+            var selectedText;
+            if (window.getSelection) {
+                selectedText = window.getSelection().toString();
+            } else if (document.selection && document.selection.type !== "Control") {
+                selectedText = document.selection.createRange().text;
+            }
+            if (selectedText) { return };
+
+            var $element = $(element);
+            var text = $element.text();
+            $("#copyInput").val(text).select();
+            var offset = $element.offset();
+            var x = offset.left;
+            var y = offset.top - 40;
+            try {
+                var successful = document.execCommand("copy");
+                if (successful) {
+                    showClickFeedbackMessage("Copied to clipboard", x, y, 2000);
+                } else {
+                    showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                }
+            } catch (err) {
+                showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                console.log("Unable to copy. " + err);
+            }
+        }
+
+        function setupKnowledgeExpanders() {
+            $(".knowledge").each(function () {
+                var knowledge = this;
+                var $knowledge = $(this);
+                var $moreKnowledge = $knowledge.next();
+                if ($moreKnowledge.is(".moreKnowledge")) {
+                    var maxHeight = 100;
+                    var leeway = 100;
+                    var diff = knowledge.scrollHeight - maxHeight;
+                    if (diff < leeway) {
+                        $knowledge.removeClass("collapsed");
+                        $moreKnowledge.find("a").hide();
+                    } else {
+                        //this is tall content, let's show the 'more' link
+                        $moreKnowledge.find("a").show();
+                        $knowledge.addClass("collapsed");
+                    }
+                }
+            });
+        }
+
+        var variables = {};
+
+        function processVariables() {
+            $("span.variable").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.html(variables[name]);
+                } else {
+                    $this.text("<" + name + ">");
+                }
+            });
+            $("input.variableTextBox").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.val(variables[name]);
+                } else {
+                    $this.val("");
+                }
+            });
+            $("code").each(function () {
+                var originalHtml = this.originalHtml ? this.originalHtml : this.innerHTML;
+                var newHtml = originalHtml;
+                for (var name in variables) {
+                    var val = variables[name];
+                    var regex = new RegExp('<span class="nocode">&lt;' + name + '&gt;</span>', 'g');
+                    newHtml = newHtml.replace(regex, val);
+                }
+                if (originalHtml != newHtml || originalHtml != this.innerHTML) {
+                    this.originalHtml = originalHtml;
+                    this.innerHTML = newHtml;
+                }
+            });
+        }
+        
+        window.onload = function () {
+
+            var rawContent = document.getElementById("rawContent").value;
+            var contentRoot = "./Content/"
+            var activitiesString = document.getElementById("activities").value;
+            var activities = (activitiesString == null || activitiesString.length == 0) ? [] : JSON.parse(activitiesString);
+            var replacementTokensString = document.getElementById("replacementTokens").value;
+            var replacementTokens = (replacementTokensString == null || replacementTokensString.length == 0) ? [] : JSON.parse(replacementTokensString);
+            instructionsProcessor.process(rawContent, "instructions", false, contentRoot, replacementTokens,
+                function ($page) {
+                    setupKnowledgeExpanders();
+                },
+                activities
+            );
+            $(".page").each(function () {
+                var $page = $(this);
+                if ($page.find("iframe.externalManual").length > 0) {
+                    $page.css("padding", 0);
+                }
+            });
+
+            $("body").on("click", ".moreKnowledgeLink", function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var $knowledge = $link.parent().prev();
+                if ($knowledge.hasClass("expanded")) {
+                    $knowledge.removeClass("expanded");
+                    $link.text("more...");
+                } else {
+                    $knowledge.addClass("expanded");
+                    $link.text("...less");
+                }
+            }).on("click", ".copyable, code:not(.nocopy)", function (e) {
+                copyableClicked(this);
+            }).on("click", ".dialogLink", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var $dialogLink = $(this);
+                var title = $dialogLink.attr("title");
+                var target = $dialogLink.attr("data-target");
+                if (target) {
+                    var $hiddenDialog = $("blockquote.referenceContent[data-id='" + target + "']");
+                    if ($hiddenDialog.length === 0) {
+                        alert('CONTENT ERROR: Unable to find a reference content "' + target + '"');
+                    } else {
+                        showDialog({title:title, content: $hiddenDialog.html() });
+                    }
+                }
+                else {
+                    showDialog({title:title, url: $dialogLink.attr("href"), isInstructions: $dialogLink.hasClass("instructions") });
+                }
+            }).on("click", ".videoLink, video", function (e) {
+                e.preventDefault();
+                var videoUrl = $(this).hasClass("videoLink") ? this.href : this.src;
+                var url = "./Content/" + videoUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var videoWindow = window.open(url, "videoWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(videoWindow);
+                try {
+                    videoWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".imageLink, img", function (e) {
+                var $this = $(this);
+                if ($this.parent().is("a")) return;
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var imgUrl = $this.hasClass("imageLink") ? this.href : this.src;
+                var url = "./Content/" + imgUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var imageWindow = window.open(url, "imageWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(imageWindow);
+                try {
+                    imageWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".tipLink", function (e) {
+                e.preventDefault();
+                var $tiplink = $(this);
+                var $hiddenTip = $tiplink.next();
+                var offset = $(this).offset();
+                var x = offset.left;
+                var y = offset.top + 25;
+                showClickFeedbackMessage($hiddenTip.html().replaceAll('<code title="Copy to clipboard" class="prettyprint">','<code title="Copy to clipboard" style="background-color:#8888;" class="prettyprint">').replaceAll("class",'style="background-color:#8888;" class'), x, y, 5000);
+            }).on("change", ".variableTextBox", function () {
+                var $textBox = $(this);
+                var name = $textBox.attr("data-name");
+                var val = $textBox.val();
+                if (val == null || val.length == 0) {
+                    if (name in variables) {
+                        delete variables[name];
+                    }
+                } else {
+                    variables[name] = val;
+                }
+                processVariables();
+            });;
+
+            $(window).resize(function () {
+                setupKnowledgeExpanders();
+            }).unload(function () {
+                closeAllChildWindows();
+            });
+
+            function closeAllChildWindows() {
+                for (var i = 0; i < childWindows.length; i++) {
+                    try {
+                        childWindows[i].close();
+                    } catch (e) {
+                    }
+                }
+                childWindows = [];
+            }
+
+            function showDialog(options) {
+                if (!options) return;
+                var $dialog = $("#modalDialog");
+                var isUpdatedContent = false;
+                if ($dialog.length > 0) {
+                    $dialog.find(".dialogContent").html("");
+                    $dialog.find(".dialogButtons").html("");
+                    isUpdatedContent = true;
+                } else {
+                    var $dialog = $('<div id="modalDialog" class="dialog"><div class="dialogMask"></div><div class="dialogBox"><div class="dialogCloseButton"></div><div class="dialogTitle"></div><div class="dialogContent"></div><div class="dialogButtons"></div></div></div>');
+                }
+                var $dialogBox = $dialog.find(".dialogBox");
+                var close = function () {
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", 0).animate({ marginTop: -h - offset.top }, 300);
+                    $dialog.delay(200).fadeOut("fast", function () { $dialog.remove(); });
+                }
+                $dialog.find(".dialogCloseButton").click(close);
+
+                if (options.title) {
+                    $dialog.find(".dialogTitle").html(options.title).show();
+                } else {
+                    $dialog.find(".dialogTitle").hide();
+                    $dialog.addClass("noTitle");
+                }
+                if (options.content) {
+                    $dialog.find(".dialogContent").removeClass("noScroll").append(options.content);
+                } else if (options.url) {
+                    var urlLower = options.url.toLowerCase();
+                    if (urlLower.indexOf(".mp4") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<video src="' + options.url + '" controls autoplay></video>');
+                        var $video = $("#contentDialogVideo");
+                        try {
+                            $video[0].play();
+                        } catch (e) {
+                            //
+                        }
+                    } else if (urlLower.indexOf(".png") !== -1 || urlLower.indexOf(".jpg") !== -1 || urlLower.indexOf(".jpeg") !== -1 || urlLower.indexOf(".gif") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<img src="' + options.url + '" controls></iframe>');
+                    } else if (options.isInstructions || urlLower.indexOf(".md") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<div id="instructionsDialog"></div>');
+                        window.setTimeout(function () {
+                            instructionsProcessor.processUrl(options.url, "instructionsDialog");
+                            if (options.url.indexOf("#") >= 0) {
+                                window.setTimeout(function () {
+                                    var hash = options.url.substr(options.url.indexOf("#"));
+                                    var $element = $("#instructionsDialog " + hash);
+                                    if ($element.length > 0) {
+                                        $dialog.find(".dialogContent").scrollTop($element.position().top);
+                                    }
+                                }, 400); //leave time for the content to layout... the dialog takes 400ms to animate anyway, which should be sufficient.
+                            }
+                        }, 1);
+                    } else {
+                        $dialog.find(".dialogContent").addClass("noScroll").append('<iframe id="contentDialogIFrame" src="' + options.url + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>');
+                    }
+                } else {
+                    $dialog.find(".dialogContent").hide();
+                }
+                if (options.buttons && options.buttons.length > 0) {
+                    $dialog.addClass("hasButtons");
+                    var $dialogButtons = $dialog.find(".dialogButtons");
+                    var numButtons = options.buttons.length;
+                    for (var i = 0; i < numButtons; i++) {
+                        var button = options.buttons[i];
+                        var $button = $("<input type='button' value='" + button.text + "' />");
+                        if (button.click) {
+                            $button.click(button.click);
+                        }
+                        if (button.primary) {
+                            $button.addClass("primary");
+                        }
+                        if (button.closeDialog) {
+                            $button.click(close);
+                        }
+                        $dialogButtons.append($button);
+                    }
+                }
+                if (!isUpdatedContent) {
+                    $("body").append($dialog);
+                    $dialog.hide().fadeIn("fast", function () {
+                        if (options.open) {
+                            options.open();
+                        }
+                    });
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", -h - offset.top).animate({ marginTop: 0 }, 400);
+                }
+                return {
+                    close: close
+                };
+            }
+
+        }
+
+        function getScrollTop() {
+            return document.body.scrollTop;
+        }
+
+    </script>
+
+
+</body>
+</html>

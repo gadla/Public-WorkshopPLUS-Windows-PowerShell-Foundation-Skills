@@ -1,0 +1,1163 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0047)https://labondemand.com/LabProfile/Manual/LABID -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Local Lab Instructions</title>
+
+
+    <script src="./Content/jquery-2.1.4.min.js.download" type="text/javascript"></script>
+    <script src="./Content/showdown.min.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Content/prettify.css">
+    <script src="./Content/yaml.min.js.download"></script>
+    <script src="./Content/LocalizeTo" type="text/javascript"></script>
+    <link href="./Content/CloudClient.css" rel="stylesheet" type="text/css">
+  
+    <style type="text/css">
+        body, html {
+            font-family: Segoe UI,Tahoma,Verdana,Arial,sans-serif;
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            background-color: #efefef;
+            color: #000;
+            height: 100%;
+        }
+
+        body {
+            overflow:auto;
+        }
+
+        #outputWrapper {
+            background-color: #efefef;
+            min-height:100%;
+        }
+
+        .instructionsPreview {
+            padding: 20px;
+            height: 100%;
+        }
+
+        .instructionsPreview .page {
+            position:relative;
+            display: block !important;
+            padding: 15px 20px;
+            background-color:#fff;
+            page-break-after: always;
+            min-height:40px;
+        }
+
+        .instructionsPreview .page:not(:first-child) {
+            margin-top:20px;
+        }
+
+        @media print {
+            body, html{
+                height:auto;
+            }
+            
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            div {
+                page-break-inside: avoid;
+            }
+
+            #outputWrapper {
+                background-color: transparent;
+            }
+
+            .instructionsPreview {
+                padding: 0;
+            }
+
+            .instructionsPreview .page:not(:first-child) {
+                margin-top: 0px;
+            }
+
+        }
+
+        @page {
+            margin-left: 1.5cm;
+            margin-right: 1.5cm;
+            margin-top: 1.5cm;
+            margin-bottom: 1.5cm;
+        }
+    </style>
+    <link id="themeStylesheet" href="./Content/Blue.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="outputWrapper">
+                <div id="instructions" class="instructionsPreview">
+    </div>
+    <input type="hidden" id="rawContent" value="[TemplateVersion]:
+&#39;1.1&#39;
+
+[LODLabID]:
+&#39;40031&#39;
+
+[LODLabNumber]:
+&#39;09 FS.Hash_Tables&#39;
+
+[AdminPowerShell]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell -Verb RunAs&quot;
+exit
+```
+
+[AdminPowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise -Verb RunAs&quot;
+exit
+```
+
+[PowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise&quot;
+exit
+```
+
+# Welcome student to the module: Hash Tables
+
+A **hash table**, also known as a dictionary or associative array, is a compact data structure that stores one or more **key/value pairs**. The keys and values in hash tables are also .NET objects. They are most often strings or integers, but they can be of any object type.
+
+> [!KNOWLEDGE] Key objects must always be unique. Uniqueness is checked using the hash code of the object which can be retrieved using the GetHashCode() method. Only objects that implement this method can be used as key objects.
+
+Estimated time to complete this lab: **45 minutes**
+
+## Module Objective
+After completing this lab you will be able to:
+- Create hash tables
+- Access hash table contents
+- Use hash tables
+
+===
+
+# Login to Windows 10 and Start the Lab
+
+Login to **win10(wdt** machine with the given credentials. You can find them on the **Resources** pane.
+
+Please login with
+Username: **+++Power+++** and Password: **+++Pa$$w0rd+++**
+
+After logging in wait until you see the &quot;Lab preparation has been completed&quot; in the action center (This can take up to 2 minutes). If this does not popup you can click in the bottom right of the Vm to open the action center. Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+> [!TIP] **Notes about using the lab:**
+> - It might take a moment to start ISE if you click the above link.
+> - You can click the **+++Type Text+++** icon to enter the highlighted text at the position of the cursor in the virtual machine. You can also click on the **++Copyto Clipboard++** icon and then paste in at the desired destination.
+> - Entering your code in the script pane of the ISE will allow for better troubleshooting if you find errors.
+> - Remember that the PowerShell ISE will allow you to highlight multiple lines of PowerShell code and run them together by pressing **F8**.
+
+===
+
+# Exercise 1: Hash Tables
+
+Hash tables are very efficient for finding and retrieving data. The larger the dataset, the greater the performance gain.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Create and manipulate hash tables
+
+===
+
+# Task 1.1: Creating a Hash Table
+
+A **hash table** can be created by defining a **key/value** pair inside of **@{}**. A hash table can contain a single **key/value** pair or multiples, separated by a line break or semicolon.
+
+1. [] Open the Windows PowerShell ISE by right clicking on the PowerShell icon and selecting &quot;Run ISE as an Administrator, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+1. [] Create a new hash table, using **key/value** pairs inside of **@{}** that:
+    - Is saved to a variable: **$myHashTable**
+    - Has a **key** called &quot;UserName&quot; with a **value** of &quot;DanPark&quot;
+    - Has a **key** called &quot;ComputerName&quot; with a **value** of &quot;WIN10&quot;
+
+    <details>
+    <summary>Answer</summary>
+    ```PowerShell-notab
+    $myHashTable = @{&#39;UserName&#39;=&#39;DanPark&#39;;&#39;ComputerName&#39;=&#39;WIN10&#39;}
+    $myHashTable
+    ```
+    </details>
+
+    > [!KNOWLEDGE] The command termination operator (**&#39;;&#39;**) is used to separate key/value pairs within the hash table, but line breaks are usually easier to read.
+
+1. [] Line breaks make reading hash tables easier. Use the following to create a new hash table, this hash table will be used in the next task.
+
+    ```PowerShell-notab
+    $EUCapitals = @{
+        &#39;Austria&#39;        = &#39;Vienna&#39;
+        &#39;Belgium&#39;        = &#39;Brussels&#39;
+        &#39;Bulgaria&#39;       = &#39;Sofia&#39;
+        &#39;Croatia&#39;        = &#39;Zagreb&#39;
+        &#39;Czech Republic&#39; = &#39;Prague&#39;
+        &#39;Denmark&#39;        = &#39;Copenhagen&#39;
+        &#39;Finland&#39;        = &#39;Helsinki&#39;
+        &#39;France&#39;         = &#39;Paris&#39;
+        &#39;Germany&#39;        = &#39;Berlin&#39;
+    }
+    ```
+
+1. [] Review the hash table key value pairs.
+
+    ```PowerShell-notab
+    $EUCapitals
+    ```
+
+    > [!Tip] The order the hash table is written to the console will probably not match the order they were typed.
+
+===
+
+# Task 1.2: Accessing and Adding to Hash Tables
+
+Hash tables have multiple ways to access, set, and add data. This task will explore the different options for each.
+
+1. [] **Values** within a hash table can be returned by calling the **key** that it is associated to. You can use index notation, with square brackets, and specify the key to return it&#39;s value. Use the hash table you created in the previous task, $EUCapitals, to display the capital for **Finland**.
+
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    $EUCapitals[&#39;Finland&#39;]
+    ```
+    </details>
+
+    > [!Knowledge] Since these keys are strings, the key must be inside of quotation marks when using this approach.
+
+1. [] Hash tables can also be accessed using **dot notation**. Using the **key** as if it were a property, will return the **value** associated with it. Use dot notation and the previous hash table to return the capital of Finland.
+
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    $EUCapitals.Finland
+    ```
+    </details>
+
+    > [!Tip] This approach is convenient, but more ambiguous. Since it looks like any other object, it might be harder to maintain if it is not clear that it is a hash table.
+
+1. [] If a key doesn&#39;t exist, **NULL** data will be returned instead of an error. This can be seen when accessing the capital of the Netherlands from the $EUCapitals hash table.
+
+    ```PowerShell-notab
+    $EUCapitals.Netherlands
+    ```
+
+1. [] If a value is assigned to a key that does not exist, the key/value pair is **added** to the hash table. If the key/value pair does exist, the value is **updated**.
+
+    ```PowerShell-notab
+    $EUCapitals.Netherlands = &#39;Amsterdam&#39;
+    $EUCapitals.Netherlands
+    ```
+
+1. [] The same behavior is true when using **index notation**, which can be seen by trying to access the **&quot;Poland&quot;** key, before and after assigning it a value.
+
+    ```PowerShell-notab
+    $EUCapitals[&quot;Poland&quot;]
+    $EUCapitals[&quot;Poland&quot;] = &#39;Warsaw&#39;
+    $EUCapitals[&quot;Poland&quot;]
+    ```
+
+1. [] Try adding a *key* for **&quot;Spain&quot;** with the *value* of **&quot;Madrid&quot;** using either approach.
+
+    <details>
+    <summary>Using Index Notation</summary>
+
+    ```PowerShell-notab
+    $EUCapitals[&quot;Spain&quot;] = &#39;Madrid&#39;
+    ```
+    </details>
+
+    <details>
+    <summary>Using Dot Notation</summary>
+
+    ```PowerShell-notab
+    $EUCapitals.Spain = &#39;Madrid&#39;
+    ```
+    </details>
+
+1. [] Hash tables also have an **Add()** method, which will raise an **error** if the key is already present, to avoid overwriting data that is already stored. When trying to add the **&quot;Austria&quot;** *key* using this method, an error should appear, because it **already** exists.
+
+    ```PowerShell-notab
+    $EUCapitals.Add(&#39;Austria&#39;, &#39;Finland&#39;)
+    ```
+
+1. [] Use the **Add()** method to add a new *key* named **&quot;Sweden&quot;** with the *value* of **&quot;Stockholm&quot;**
+
+    <details>
+    <summary>Using the Add() Method</summary>
+
+    ```PowerShell-notab
+    $EUCapitals.Add(&#39;Sweden&#39;, &#39;Stockholm&#39;)
+    ```
+    </details>
+
+===
+
+# Task 1.3: Hash Table Members
+
+In addition to the Add() method, there are many other useful **members** inside of a Hash Table object.
+
+1. [] To see the full list of members, run +++$EUCapitals | Get-Member+++. This task will explore some of the more useful members available.
+
+1. [] The **Remove()** method can remove a key and its value. Access the **&quot;Croatia&quot;** key, then **remove** it.
+
+    ```PowerShell-notab
+    $EUCapitals[&#39;Croatia&#39;]
+    $EUCapitals.Remove(&#39;Croatia&#39;)
+    ```
+
+1. [] To **ensure** the key is removed, try **accessing** it again. Nothing should be returned.
+
+    ```PowerShell-notab
+    $EUCapitals[&#39;Croatia&#39;]
+    $EUCapitals.Croatia
+    ```
+
+1. [] **TRUE** and **FALSE** values become very useful for **automation**, and sometimes just knowing whether something exists or not is all that is necessary. Hash tables have **search** options for *keys* or *values*.
+
+    ```PowerShell-notab
+    $EUCapitals.ContainsKey(&#39;Belgium&#39;)
+    $EUCapitals.ContainsValue(&#39;Berlin&#39;)
+    ```
+
+    > [!Tip] Hash tables are **optimized** to work with **keys**. Large data sets will perform **poorly** when searching for **values**, but with smaller data sets a performance difference won&#39;t be visible.
+
+1. [] The **count** property exists to show how many key/value pairs are **present**:
+
+    ```PowerShell-notab
+    $EUCapitals.Count
+    ```
+
+1. [] If only the keys in a hash table need to be worked with, the **Key property** will return the list of keys, which can be useful for work on the pipeline or with other automation.
+
+    ```PowerShell-notab
+    $EUCapitals.Keys
+    $EUCapitals.Keys | Sort-Object | Out-Gridview
+    ```
+
+1. [] Just like with searching, the same option exists for working with a list of the **values**, using a **property Values**.
+
+    ```PowerShell-notab
+    $EUCapitals.Values
+    $EUCapitals.Values | Sort-Object | Out-Gridview
+    ```
+
+===
+
+# Task 1.4: Nested Hash Tables
+
+The keys and values in a hash table can store **any** .NET object **type** and a single hash table can have keys and values of **multiple** types.
+
+1. [] Hash table values can contain any object type, including *another hash table*. This is called a **nested hash table**. Run the following code to create two more hash tables, that will be used in the following steps.
+
+    ```PowerShell-notab
+    $APCapitals = @{
+        &#39;China&#39;       = &#39;Beijing&#39;
+        &#39;Indonesia&#39;   = &#39;Jakarta&#39;
+        &#39;Japan&#39;       = &#39;Tokyo&#39;
+        &#39;Malaysia&#39;    = &#39;Kuala Lumpur&#39;
+        &#39;Singapore&#39;   = &#39;Singapore&#39;
+        &#39;South Korea&#39; = &#39;Seoul&#39;
+        &#39;Taiwan&#39;      = &#39;Taipei&#39;
+        &#39;Vietnam&#39;     = &#39;Hanoi&#39;
+    }
+
+    $SACapitals = @{
+        &#39;Chile&#39;            = &#39;Santiago&#39;
+        &#39;Peru&#39;             = &#39;Lima&#39;
+        &#39;Brazil&#39;           = &#39;Brasilia&#39;
+        &#39;Equador&#39;          = &#39;Quito&#39;
+        &#39;Venezuela&#39;        = &#39;Caracas&#39;
+        &#39;Falkland Islands&#39; = &#39;Stanley&#39;
+        &#39;Uruguay&#39;          = &#39;Montevideo&#39;
+        &#39;Argentina&#39;        = &#39;Buenos Aires&#39;
+        &#39;Guyana&#39;           = &#39;Georgetown&#39;
+        &#39;Paraquay&#39;         = &#39;Asuncion&#39;
+    }
+    ```
+
+1. [] Before creating a nested hash table, create a new empty hash table called: **$WorldCapitals**.
+
+    <details>
+    <summary>Create an empty hash table</summary>
+    ```PowerShell-notab
+    $WorldCapitals = @{}
+    ```
+    </details>
+
+1. [] The new hash table can contain key/value pairs that use the previously created hash tables *as* the values. **Assign** the previous hash tables as values within the Capitals hash table with the following key/value pairs:
+
+    | Key | Value |
+    |:---|:---|
+    | &quot;EU&quot; | $EUCapitals |
+    | &quot;AP&quot; | $APCapitals |
+    | &quot;SA&quot; | $SACapitals |
+
+    > [!Knowledge] Index notation, dot notation, and the Add() method can all accomplish this goal.
+
+    <details>
+    <summary>Answer With Index Notation</summary>
+
+    ```PowerShell-notab
+    $WorldCapitals[&quot;EU&quot;] = $EUCapitals
+    $WorldCapitals[&quot;AP&quot;] = $APCapitals
+    $WorldCapitals[&quot;SA&quot;] = $SACapitals
+    ```
+    </details>
+
+    <details>
+    <summary>Answer With Dot Notation</summary>
+
+    ```PowerShell-notab
+    $WorldCapitals.EU = $EUCapitals
+    $WorldCapitals.AP = $APCapitals
+    $WorldCapitals.SA = $SACapitals
+    ```
+    </details>
+
+    <details>
+    <summary>Answer With Add Method</summary>
+
+    ```PowerShell-notab
+    $WorldCapitals.Add(&quot;EU&quot;, $EUCapitals)
+    $WorldCapitals.Add(&quot;AP&quot;, $APCapitals)
+    $WorldCapitals.Add(&quot;SA&quot;, $SACapitals)
+    ```
+    </details>
+
+1. [] **Nested** hash tables return *values* the same way as non-nested hash tables. Return the value for the **EU** key, on the **$WorldCapitals** hash table.
+
+    ```PowerShell-notab
+    $WorldCapitals.EU
+    ```
+
+1. [] To view the values of the **nested** hash tables you would append the **secondary** key to the first. This can be done by using either dot notation **or** index notation. Try returning the values for the capitals of *Finland*, *Denmark*, *Taiwan*, and *Brazil*.
+
+    ```PowerShell-notab
+    $WorldCapitals.EU.Finland
+    $WorldCapitals.EU[&quot;Denmark&quot;]
+    $WorldCapitals[&quot;AP&quot;].&#39;Taiwan&#39;
+    $WorldCapitals[&quot;SA&quot;][&quot;Brazil&quot;]
+    ```
+
+===
+
+# Exercise 2: Hash Table Usage
+
+Hash tables are **designed** for constant lookup speeds using keys. However, they can also be used for many other **features** in PowerShell, such as generating *custom objects*. This exercise will explore 4 common use cases for hash tables.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Create calculated properties
+- Generate custom objects
+- Understand splatting
+- Set default parameter values for cmdlets
+
+===
+
+# Task 2.1: Calculated Properties
+
+PowerShell provides the ability to dynamically add **new** properties and **alter** the formatting of objects output to the pipeline. These are created with **hash tables** and known as **calculated properties**.
+
+Calculated properties are used to create a **new** property **during** pipeline operations. To make the property, a hash table with 2 key/value pairs is required.
+
+| Key | Value |
+|:---|:---|
+| &quot;Name&quot; | The name of the property |
+| &quot;Expression&quot; | A script block generating the value |
+
+1. [] Create a variable named **$TestProp**, that has a hash table for a basic calculated property matching this table:
+
+    | Key | Value |
+    |:---|:---|
+    | &quot;Name&quot; | &quot;NewProperty&quot; |
+    | &quot;Expression&quot; | {&quot;Calculated Value&quot;} |
+
+    <details>
+    <summary>Calculated property</summary>
+
+    ```PowerShell-notab
+    $TestProp = @{
+        Name = &quot;NewProperty&quot;
+        Expression = {&quot;Calculated Value&quot;}
+    }
+    ```
+    </details>
+
+1. [] In order to use the calculated property, one of the supported cmdlets has to be used, such as Format-Table. Use **Get-ChildItem** to look at all the **files** in *C:\Windows*, then use **Format-Table** to display the *name*, *length*, and **$TestProp** properties.
+
+    ```PowerShell-notab
+    Get-ChildItem C:\Windows -File | Format-Table Name, Length, $TestProp
+    ```
+
+    Notice that every file was assigned a property named **NewProperty**, which has the **&quot;Calculated Value&quot;** string from the **$TestProperty** hash table. Plain strings for values are not very useful, but the script blocks can be used to interact with each object&#39;s properties and methods.
+
+1. [] To interact with each object, the variable **$\_** can be used within the expression script block. **$_ is used heavily on the pipeline and is covered in the Advanced Pipeline section, but will be used in this example.**
+
+    The *length* property in the earlier output is the file size. File sizes can be frustrating in PowerShell because they are displayed in *bytes*. A **calculated property** can be used to calculate the value as *kilobytes* or any other multiplier. Try executing the following code to see what that looks like:
+
+    ```PowerShell-notab
+    $kb = @{
+        Name = &quot;kb&quot;
+        Expression = {$_.Length / 1kb}
+    }
+    Get-ChildItem C:\Windows -File | Format-Table Name, Length, $kb
+    ```
+
+    >[!tip] Other sections in this course will cover convenient ways to round numbers.
+
+<br />
+___
+
+### If you are already familiar with $_, try to solve this problem, but if not just move on. The details of that are covered in the Advanced Pipeline sections.
+
+<details>
+<summary>I understand $_</summary>
+
+**Goal:** Find the age, in days, of each item in the C:\Windows directory.
+
+**Hints**
+- $_ can be used inside the expression script block to represent the object
+- Get-Date can find the current date and time as a DateTime object
+- The CreationTime property on files and directories will also be DateTime objects
+- DateTimes can be subtracted from one another
+- DateTimes have a Days property
+
+<details>
+<summary>One solution</summary>
+
+```PowerShell-notab
+$Age = @{
+    Name=&#39;Age(Days)&#39;
+    Expression={((Get-Date)-$_.CreationTime).Days}
+}
+
+Get-ChildItem C:\Windows | Format-Table Name,$Age
+```
+</details>
+
+<details>
+<summary>Another solution</summary>
+
+```PowerShell-notab
+$dateBlock = {
+    $Date = Get-Date
+    $Difference = $date - $_.CreationTime
+    $Difference.days
+}
+
+$Age = @{
+    Name=&#39;Age(Days)&#39;
+    Expression=$dateBlock
+}
+
+Get-ChildItem C:\Windows | Format-Table Name,$Age
+```
+</details>
+
+</details>
+
+
+>[!KNOWLEDGE] Calculated properties are **only** supported by a small list of **cmdlets**, which are focused on sorting, and formatting data on the pipeline. A list of the cmdlets can be found in the [documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_calculated_properties?view=powershell-5.1)
+
+===
+
+# Task 2.2: New-Object Properties
+
+PowerShell has special **PSCustomObject** class that exists specifically to be used with hash tables. Using this class with a hash table will allow you to create your own objects with specified properties.
+
+
+1. [] Custom objects can be created in PowerShell by starting with a hash table to define property names and values as the key/value pairs. Create a hash table named **$MyProperties** with the following key value pairs, this will be used to **generate** a custom object during this task.
+
+    | Key | Value |
+    |:---|:---|
+    | &quot;Name&quot; | &quot;Nichole Norris&quot; |
+    | &quot;UserName&quot; | &quot;NNorris&quot; |
+    | &quot;Division&quot; | &quot;IT&quot; |
+    | &quot;Laptop&quot; | &quot;Surface&quot; |
+    | &quot;Office&quot; | &quot;Remote&quot; |
+
+    <details>
+    <summary>Hash Table</summary>
+
+    ```PowerShell-notab
+    $MyProperties = @{
+        Name = &quot;Nichole Norris&quot;
+        UserName = &quot;NNorris&quot;
+        Division = &#39;IT&#39;
+        Laptop = &#39;Surface&#39;
+        Office = &quot;Remote&quot;
+    }
+    ```
+    </details>
+
+1. [] Take a look at the hash table results and check the **type**.
+
+    ```PowerShell-notab
+    $MyProperties
+    $MyProperties.GetType().FullName
+    $MyProperties | Get-Member
+    ```
+
+1. [] If someone recieves a hash table from a function or cmdlet, and sends it into Get-Member, it *doesn&#39;t* give them convenient information to read through. Instead, a custom object can be used. **New-Object** allows specifying **any** .NET object type, and providing a hash table of *appropriate* properties. **PSCustomObject** is a data type made specifically to recieve *any* properties and make a custom object.
+
+    Make a variable named **$MyUSerObject**, and use New-Object to generate a custom object, using the previously created **$MyProperties** variable.
+
+    ```PowerShell-notab
+    $MyUserObject = New-Object -TypeName PSCustomobject -Property $MyProperties
+    ```
+
+    > [!Tip] PowerShell 2.0 used **PSObject**, but 3.0+ improved the behavior and changed it to **PSCustomObject**. If PSObject is used from 3.0+ it will actually create a PSCustomObject instead.
+
+1. [] Write **$MyUserObject** out to the console to see that it will display as a format list (or table) instead of the way the hash table was displayed previously. Then, check the type.
+
+    ```PowerShell-notab
+    $MyUserObject
+    $MyUserObject.GetType().FullName
+    ```
+
+1. [] If this is used as the **output** of a function, then the reciever can pipe directly to **Get-Member** and see the available **properties**.
+
+    ```PowerShell-notab
+    $MyUserObject | Get-Member
+    ```
+
+1. [] There is a more **convenient** technique than using New-Object, by using a **shortcut** called typecasting. *This is covered in detail in another section, but can be seen in this example*:
+
+    ```PowerShell-notab
+    $MyUserObject2 = [PSCustomObject]$MyProperties
+    $MyUserObject2
+    $MyUserObject2.GetType().FullName
+    ```
+
+1. [] When creating a hash table, the values do **not** have to be **staticly** defined, they can also accept objects from cmdlets. Try running the below to create another custom object.
+
+    ```PowerShell-notab
+    $System = [PSCustomObject]@{
+        &quot;Static&quot; = &quot;Static Value&quot;
+        &quot;Service&quot; = Get-Service -Name WinRM
+        &quot;Process&quot; = Get-Process -Name Idle
+        &quot;Files&quot; = Get-ChildItem c:\Windows -File
+    }
+    ```
+
+1. [] Look at the new **$System** object and observe the new properties and their values.
+
+    ```PowerShell-notab
+    $System
+    $System | FL
+    ```
+
+1. [] Access each of the individual **properties** on the $System object.
+
+    ```PowerShell-notab
+    $System.Static
+    $System.Service
+    $System.Process
+    $System.Files
+    ```
+
+1. [] **Pipe** $System into **Get-Member** and notice the data types for the property definitions.
+
+    ```PowerShell-notab
+    $System | Get-Member
+    ```
+
+===
+
+# Task 2.3: Splatting
+
+Some cmdlets have *many* parameters, which can make them hard to reach when they&#39;re all defined on a single line. Because line breaks aren&#39;t allowed, there are a couple different options to improve **readability**. **Splatting** makes your commands *shorter* and *easier* to read
+
+**Splatting** allows definining parameter values in a **hash table** as *key/value* pairs in an easy to read column, then providing those values to a cmdlet.
+
+1. [] To use **splatting** you need to save the the *parameter names* and *parameter values* in the *key/value* structure of a hash table. Create a hash table named **$Params** with the following parameter names and values that will be used with the **Get-ChildItem** cmdlet.
+
+    | Key | Value |
+    |:---|:---|
+    | &quot;Path&quot; | &quot;C:\Windows\System32\WindowsPowerShell\v1.0&quot; |
+    | &quot;Filter&quot; | &quot;*.ps1&quot; |
+    | &quot;Recurse&quot; | $True |
+    | &quot;Name&quot; | &quot;$True&quot; |
+
+    <details>
+    <summary>Create a Parameter Hash Table</summary>
+
+    ```PowerShell-notab
+    $Params = @{
+        Path = &#39;C:\Windows\System32\WindowsPowerShell\v1.0&#39;
+        Filter = &#39;*.ps1&#39;
+        Recurse = $true
+        Name = $true
+    }
+    ```
+    </details>
+
+1. [] Because some cmdlets will want to use **positional** parameters that recieve hash tables, and **all** cmdlets need to support splatting, the **$** *isn&#39;t* used. Instead, the **@** symbol *is* used to tell the cmdlet to turn **all** the key/value pairs into parameters and their values.
+
+    ```PowerShell-notab
+    Get-ChildItem @Params
+    ```
+
+1. [] Cmdlets can also accept additional parameters along with the parameters supplied by the hash table. Run the previous command and use the **Exclude** any files that contain **Profile**.
+
+    ```PowerShell-notab
+    Get-ChildItem @Params -Exclude *Profile*
+    ```
+
+===
+
+# Task 2.4: Default Parameter Values
+
+The **$PSDefaultParameterValues** variable can specify custom default values for **parameters** on any **cmdlet** or advanced function. Cmdlets and functions use the custom default value unless you specify another value in the command.
+
+1. [] Write-Host uses a **default** foreground color of white. +++Write-Host &quot;Hello World&quot;+++
+
+1. [] To **set** a default, a key/value pair must be added to **$PSDefaultParameterValues**. The Syntax for the **Key/Value** pair uses a specific syntax:
+
+    | Key | Value |
+    |:---|:---|
+    | &#39;CommandName:ParameterName&#39; | &quot;Default Value&quot; |
+
+    Add a key for **Write-Host** to set the default **ForegroundColor** parameter value to **Cyan**
+
+    <details>
+    <summary>Default value</summary>
+
+    ```PowerShell-notab
+    $PSDefaultParameterValues[&quot;Write-Host:ForegroundColor&quot;] = &quot;Cyan&quot;
+    Write-Host Test
+    ```
+    </details>
+
+1. [] Run **Test-Connection** against the machine MS to see the **default** behavior.
+
+    +++Test-Connection -ComputerName &quot;MS&quot;+++
+
+1. [] Add a key to set the default for **Test-Connection** that has the **Quiet** parameter set to **$True**
+
+    <details>
+    <summary>Default value</summary>
+
+    ```PowerShell-notab
+    $PSDefaultParameterValues.Add(&#39;Test-Connection:Quiet&#39;,$True)
+    Test-Connection -ComputerName &quot;MS&quot;
+    ```
+    </details>
+
+1. [] To remove **all** the settings, call the **Clear()** method and observe the defaults go away.
+
+    ```PowerShell-notab
+    $PSDefaultParameterValues.Clear()
+
+    Write-Host &quot;Hello World&quot;
+
+    Test-Connection -ComputerName &quot;MS&quot;
+    ```
+
+    >[!NOTE] $PSDefaultPatameterValues does not persist state across PowerShell sessions, so it needs to be defined each time, or put inside of a profile.
+
+===
+
+# Self test (Optional part of the course)
+
+## Self test information
+
+The following self test is an optional part of this course and can be used to evaluate if your knowledge of the subject matter is sufficient. You can use this self test to re-evaluate your knowledge after taking the course or test your knowledge before you take / retake the course.
+
+This self test uses 10 questions and or exercises. To get a fair result you should complete this self test using your knowledge only and not using any internet search engines.
+
+##  Self test duration
+
+Although the self test is not timed this test should be completed in approximately 15 minutes.
+
+To start the self test continue to the next page.
+
+===
+
+# Self test Questions and Exercises
+
+1. <Removed>
+___
+
+
+2. <Removed>
+___
+
+
+3. <Removed>
+___
+
+
+4. <Removed>
+___
+
+
+5. <Removed>
+___
+
+
+6. <Removed>
+___
+
+
+7. <Removed>
+___
+
+
+8. <Removed>
+___
+
+
+9. <Removed>
+___
+
+
+10. <Removed>
+___
+
+===
+# Congratulations!
+
+You have successfully completed this module. To mark the lab as complete, click **End**.
+">
+    <input type="hidden" id="activities" value="[]">
+    <input type="hidden" id="replacementTokens" value="[{&quot;Token&quot;:&quot;@lab.LabProfile.Id&quot;,&quot;Replacement&quot;:&quot;38671&quot;},{&quot;Token&quot;:&quot;@lab.CtrlAltDelete&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;ctrlAltDeleteLink&#39;&gt;Ctrl+Alt+Delete&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;63124&#39;&gt;WIN10&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54597&#39;&gt;MS&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54598&#39;&gt;DC&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Username&quot;,&quot;Replacement&quot;:&quot;Administrator&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.OpticalMedia(5638).LoadLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;loadMediaLink opticalMedia&#39; data-data=&#39;5638&#39;&gt;Introduction to Commands - 0050&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.Id&quot;,&quot;Replacement&quot;:&quot;[ID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.GlobalId&quot;,&quot;Replacement&quot;:&quot;[lodID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.StartDate&quot;,&quot;Replacement&quot;:&quot;20190108&quot;},{&quot;Token&quot;:&quot;@lab.User.Id&quot;,&quot;Replacement&quot;:&quot;[USERID]&quot;},{&quot;Token&quot;:&quot;@lab.User.FirstName&quot;,&quot;Replacement&quot;:&quot;[FIRSTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.LastName&quot;,&quot;Replacement&quot;:&quot;[LASTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.Email&quot;,&quot;Replacement&quot;:&quot;[EMAIL]&quot;},{&quot;Token&quot;:&quot;@lab.User.ExternalId&quot;,&quot;Replacement&quot;:&quot;[EXTERNALID]&quot;},{&quot;Token&quot;:&quot;@lab.Tag&quot;,&quot;Replacement&quot;:&quot;[TAG]&quot;}]">
+
+    <textarea id="copyInput" value="" style="position: absolute; left:-10000px; top:-10000px; "></textarea>
+
+    <script type="text/javascript"> 
+    
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        var childWindows = [];
+
+        function showClickFeedbackMessage(text, x, y, duration) {
+            var $message = $("<div class='clickFeedbackMessage noselect'>" + text + "</div>");
+            $message.appendTo($("body")).hide();
+            $message.css({ left: x, top: y });
+            $message.fadeIn("fast");
+            window.setTimeout(function () {
+                $message.fadeOut("fast", function () { $message.remove(); });
+            }, duration);
+        }
+
+        function copyableClicked(element) {
+            //only copy if we are clicking, not if we have used the mouse to select the text manually.
+            var selectedText;
+            if (window.getSelection) {
+                selectedText = window.getSelection().toString();
+            } else if (document.selection && document.selection.type !== "Control") {
+                selectedText = document.selection.createRange().text;
+            }
+            if (selectedText) { return };
+
+            var $element = $(element);
+            var text = $element.text();
+            $("#copyInput").val(text).select();
+            var offset = $element.offset();
+            var x = offset.left;
+            var y = offset.top - 40;
+            try {
+                var successful = document.execCommand("copy");
+                if (successful) {
+                    showClickFeedbackMessage("Copied to clipboard", x, y, 2000);
+                } else {
+                    showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                }
+            } catch (err) {
+                showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                console.log("Unable to copy. " + err);
+            }
+        }
+
+        function setupKnowledgeExpanders() {
+            $(".knowledge").each(function () {
+                var knowledge = this;
+                var $knowledge = $(this);
+                var $moreKnowledge = $knowledge.next();
+                if ($moreKnowledge.is(".moreKnowledge")) {
+                    var maxHeight = 100;
+                    var leeway = 100;
+                    var diff = knowledge.scrollHeight - maxHeight;
+                    if (diff < leeway) {
+                        $knowledge.removeClass("collapsed");
+                        $moreKnowledge.find("a").hide();
+                    } else {
+                        //this is tall content, let's show the 'more' link
+                        $moreKnowledge.find("a").show();
+                        $knowledge.addClass("collapsed");
+                    }
+                }
+            });
+        }
+
+        var variables = {};
+
+        function processVariables() {
+            $("span.variable").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.html(variables[name]);
+                } else {
+                    $this.text("<" + name + ">");
+                }
+            });
+            $("input.variableTextBox").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.val(variables[name]);
+                } else {
+                    $this.val("");
+                }
+            });
+            $("code").each(function () {
+                var originalHtml = this.originalHtml ? this.originalHtml : this.innerHTML;
+                var newHtml = originalHtml;
+                for (var name in variables) {
+                    var val = variables[name];
+                    var regex = new RegExp('<span class="nocode">&lt;' + name + '&gt;</span>', 'g');
+                    newHtml = newHtml.replace(regex, val);
+                }
+                if (originalHtml != newHtml || originalHtml != this.innerHTML) {
+                    this.originalHtml = originalHtml;
+                    this.innerHTML = newHtml;
+                }
+            });
+        }
+        
+        window.onload = function () {
+
+            var rawContent = document.getElementById("rawContent").value;
+            var contentRoot = "./Content/"
+            var activitiesString = document.getElementById("activities").value;
+            var activities = (activitiesString == null || activitiesString.length == 0) ? [] : JSON.parse(activitiesString);
+            var replacementTokensString = document.getElementById("replacementTokens").value;
+            var replacementTokens = (replacementTokensString == null || replacementTokensString.length == 0) ? [] : JSON.parse(replacementTokensString);
+            instructionsProcessor.process(rawContent, "instructions", false, contentRoot, replacementTokens,
+                function ($page) {
+                    setupKnowledgeExpanders();
+                },
+                activities
+            );
+            $(".page").each(function () {
+                var $page = $(this);
+                if ($page.find("iframe.externalManual").length > 0) {
+                    $page.css("padding", 0);
+                }
+            });
+
+            $("body").on("click", ".moreKnowledgeLink", function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var $knowledge = $link.parent().prev();
+                if ($knowledge.hasClass("expanded")) {
+                    $knowledge.removeClass("expanded");
+                    $link.text("more...");
+                } else {
+                    $knowledge.addClass("expanded");
+                    $link.text("...less");
+                }
+            }).on("click", ".copyable, code:not(.nocopy)", function (e) {
+                copyableClicked(this);
+            }).on("click", ".dialogLink", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var $dialogLink = $(this);
+                var title = $dialogLink.attr("title");
+                var target = $dialogLink.attr("data-target");
+                if (target) {
+                    var $hiddenDialog = $("blockquote.referenceContent[data-id='" + target + "']");
+                    if ($hiddenDialog.length === 0) {
+                        alert('CONTENT ERROR: Unable to find a reference content "' + target + '"');
+                    } else {
+                        showDialog({title:title, content: $hiddenDialog.html() });
+                    }
+                }
+                else {
+                    showDialog({title:title, url: $dialogLink.attr("href"), isInstructions: $dialogLink.hasClass("instructions") });
+                }
+            }).on("click", ".videoLink, video", function (e) {
+                e.preventDefault();
+                var videoUrl = $(this).hasClass("videoLink") ? this.href : this.src;
+                var url = "./Content/" + videoUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var videoWindow = window.open(url, "videoWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(videoWindow);
+                try {
+                    videoWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".imageLink, img", function (e) {
+                var $this = $(this);
+                if ($this.parent().is("a")) return;
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var imgUrl = $this.hasClass("imageLink") ? this.href : this.src;
+                var url = "./Content/" + imgUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var imageWindow = window.open(url, "imageWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(imageWindow);
+                try {
+                    imageWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".tipLink", function (e) {
+                e.preventDefault();
+                var $tiplink = $(this);
+                var $hiddenTip = $tiplink.next();
+                var offset = $(this).offset();
+                var x = offset.left;
+                var y = offset.top + 25;
+                showClickFeedbackMessage($hiddenTip.html().replaceAll('<code title="Copy to clipboard" class="prettyprint">','<code title="Copy to clipboard" style="background-color:#8888;" class="prettyprint">').replaceAll("class",'style="background-color:#8888;" class'), x, y, 5000);
+            }).on("change", ".variableTextBox", function () {
+                var $textBox = $(this);
+                var name = $textBox.attr("data-name");
+                var val = $textBox.val();
+                if (val == null || val.length == 0) {
+                    if (name in variables) {
+                        delete variables[name];
+                    }
+                } else {
+                    variables[name] = val;
+                }
+                processVariables();
+            });;
+
+            $(window).resize(function () {
+                setupKnowledgeExpanders();
+            }).unload(function () {
+                closeAllChildWindows();
+            });
+
+            function closeAllChildWindows() {
+                for (var i = 0; i < childWindows.length; i++) {
+                    try {
+                        childWindows[i].close();
+                    } catch (e) {
+                    }
+                }
+                childWindows = [];
+            }
+
+            function showDialog(options) {
+                if (!options) return;
+                var $dialog = $("#modalDialog");
+                var isUpdatedContent = false;
+                if ($dialog.length > 0) {
+                    $dialog.find(".dialogContent").html("");
+                    $dialog.find(".dialogButtons").html("");
+                    isUpdatedContent = true;
+                } else {
+                    var $dialog = $('<div id="modalDialog" class="dialog"><div class="dialogMask"></div><div class="dialogBox"><div class="dialogCloseButton"></div><div class="dialogTitle"></div><div class="dialogContent"></div><div class="dialogButtons"></div></div></div>');
+                }
+                var $dialogBox = $dialog.find(".dialogBox");
+                var close = function () {
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", 0).animate({ marginTop: -h - offset.top }, 300);
+                    $dialog.delay(200).fadeOut("fast", function () { $dialog.remove(); });
+                }
+                $dialog.find(".dialogCloseButton").click(close);
+
+                if (options.title) {
+                    $dialog.find(".dialogTitle").html(options.title).show();
+                } else {
+                    $dialog.find(".dialogTitle").hide();
+                    $dialog.addClass("noTitle");
+                }
+                if (options.content) {
+                    $dialog.find(".dialogContent").removeClass("noScroll").append(options.content);
+                } else if (options.url) {
+                    var urlLower = options.url.toLowerCase();
+                    if (urlLower.indexOf(".mp4") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<video src="' + options.url + '" controls autoplay></video>');
+                        var $video = $("#contentDialogVideo");
+                        try {
+                            $video[0].play();
+                        } catch (e) {
+                            //
+                        }
+                    } else if (urlLower.indexOf(".png") !== -1 || urlLower.indexOf(".jpg") !== -1 || urlLower.indexOf(".jpeg") !== -1 || urlLower.indexOf(".gif") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<img src="' + options.url + '" controls></iframe>');
+                    } else if (options.isInstructions || urlLower.indexOf(".md") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<div id="instructionsDialog"></div>');
+                        window.setTimeout(function () {
+                            instructionsProcessor.processUrl(options.url, "instructionsDialog");
+                            if (options.url.indexOf("#") >= 0) {
+                                window.setTimeout(function () {
+                                    var hash = options.url.substr(options.url.indexOf("#"));
+                                    var $element = $("#instructionsDialog " + hash);
+                                    if ($element.length > 0) {
+                                        $dialog.find(".dialogContent").scrollTop($element.position().top);
+                                    }
+                                }, 400); //leave time for the content to layout... the dialog takes 400ms to animate anyway, which should be sufficient.
+                            }
+                        }, 1);
+                    } else {
+                        $dialog.find(".dialogContent").addClass("noScroll").append('<iframe id="contentDialogIFrame" src="' + options.url + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>');
+                    }
+                } else {
+                    $dialog.find(".dialogContent").hide();
+                }
+                if (options.buttons && options.buttons.length > 0) {
+                    $dialog.addClass("hasButtons");
+                    var $dialogButtons = $dialog.find(".dialogButtons");
+                    var numButtons = options.buttons.length;
+                    for (var i = 0; i < numButtons; i++) {
+                        var button = options.buttons[i];
+                        var $button = $("<input type='button' value='" + button.text + "' />");
+                        if (button.click) {
+                            $button.click(button.click);
+                        }
+                        if (button.primary) {
+                            $button.addClass("primary");
+                        }
+                        if (button.closeDialog) {
+                            $button.click(close);
+                        }
+                        $dialogButtons.append($button);
+                    }
+                }
+                if (!isUpdatedContent) {
+                    $("body").append($dialog);
+                    $dialog.hide().fadeIn("fast", function () {
+                        if (options.open) {
+                            options.open();
+                        }
+                    });
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", -h - offset.top).animate({ marginTop: 0 }, 400);
+                }
+                return {
+                    close: close
+                };
+            }
+
+        }
+
+        function getScrollTop() {
+            return document.body.scrollTop;
+        }
+
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+﻿
+#header, #topNav {
+    background-color: #0078d7;
+}
+
+#fullScreenMessageLoadingIcon, .loadingAnimation-medium, .loadingAnimation-small, .loadingAnimation-large {
+    border-top-color: #0078d7;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+    outline-color: #0078D7;
+}
+
+#instructionsEditBar {
+    background-color: #0078d7;
+}
+
+.editInputWrapper {
+    border-right-color: #0078d7;
+}

@@ -1,0 +1,1885 @@
+@font-face {
+    font-family: "labclient";
+    src: url("/fonts/labclient.woff?v=17") format("woff"), 
+         url("/fonts/labclient.ttf?v=17") format("truetype"), 
+         url("/fonts/labclient.svg?v=17") format("svg");
+}
+
+body, html {
+    font-family: Segoe UI,Tahoma,Verdana,Arial,sans-serif;
+    font-size:14px;
+    padding:0;
+    margin:0;
+    overflow: hidden;
+    background-color: #fff;
+    color: #000;
+}
+
+ul li, ol li {
+    margin: 5px 0;
+}
+
+#header {
+    padding: 15px 15px 11px 15px;
+    white-space: nowrap;
+    min-height: 72px;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+#labName {
+    margin-right:25px;    
+}
+
+
+#timerWrapper {
+    display: inline-block;
+    margin-top: 5px;
+}
+
+#timer {
+    display: inline-block;
+    font-size: 12px;
+}
+
+#timerWrapper.expiring {
+    transition: background-color .5s linear, padding .5s linear;
+    background-color: #b52937;
+    padding: 1px 8px 3px 8px;
+    border-radius: 5px;
+}
+
+.expiring #timer {
+    animation-name: pulse_animation;
+    animation-duration: 3500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    font-weight: bold;
+}
+
+@keyframes pulse_animation {
+    0% {
+        transform: scale(1) translateZ(0) perspective(1px);
+    }
+
+    30% {
+        transform: scale(1) translateZ(0) perspective(1px);
+    }
+
+    40% {
+        transform: scale(1.04) translateZ(0) perspective(1px);
+    }
+
+    52% {
+        transform: scale(1) translateZ(0) perspective(1px);
+    }
+
+    58% {
+        transform: scale(1) translateZ(0) perspective(1px);
+    }
+
+    70% {
+        transform: scale(1.04) translateZ(0) perspective(1px);
+    }
+
+    80% {
+        transform: scale(1) translateZ(0) perspective(1px);
+    }
+
+    100% {
+        transform: scale(1) translateZ(0) perspective(1px);
+    }
+}
+
+#topNav {
+    position: absolute;
+    right: 0px;
+    top: 15px;
+    padding-right: 15px;
+    padding-left:15px;
+}
+
+#mainMenuButton {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+}
+
+#mainMenuButton::before {
+    content: "\e700";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 20px;
+}
+
+#mainMenu {
+    position: absolute;
+    background-color: #efefef;
+    color: #000;
+    right: 15px;
+    z-index: 1;
+    margin-top: 5px;
+    box-shadow: rgba(0, 0, 0, 0.5) 2px 4px 8px;
+}
+
+#mainMenu .menuItem {
+    padding:12px 20px 12px 15px;
+    cursor:pointer;
+}
+
+#mainMenu .menuItem::before {
+    margin-right:9px;
+}
+    
+#mainMenu .menuItem:hover {
+    background-color: #cccccc;
+}
+
+#exit::before, #disconnect::before {
+    content: "\e711";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 18px;
+}
+
+#save::before {
+    content: "\f0c7";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 16px;
+    margin-top:1px;
+    margin-right:10px;
+}
+
+#editInstructions::before {
+    content: "\e70f";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 16px;
+    margin-top: 1px;
+}
+
+
+#editInstructions.selected {
+    color:#fff;
+    background-color: #de5454 !important;
+}
+
+
+
+#notificationsButton {
+    margin-right: 25px;
+    cursor: pointer;
+    display: none;
+}
+
+#notificationsButton.active {
+    display: inline-block;
+}
+
+#notificationsButton::before {
+    content: "\e715";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 20px;
+    margin-top:1px;
+}
+
+#tabHeadings {
+    white-space: nowrap;
+    min-height: 40px;
+    box-sizing: border-box;
+    background-color: #efefef;
+}
+
+.tabHeading {
+    padding: 10px;
+    display: inline-block;
+    cursor: pointer;
+    min-height: 40px;
+    box-sizing: border-box;
+    color: #888;
+}
+
+.tabHeading.selected {
+    color: #000;
+}
+
+.tab {
+    display: none;
+}
+
+.tab.selected {
+    display: block;
+}
+
+.tabContent {
+    padding: 15px;
+    overflow-y: auto;
+    overflow-x:auto;
+    position: absolute;
+    bottom:0;
+    right:0;
+    left:0;
+    top:110px;
+}
+
+.tabContent.externalManual{
+    padding: 0px;
+    overflow-y: inherit;
+    overflow-x:inherit;
+}
+
+.externalManualWrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color:#fff;
+}
+
+iframe.externalManual {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+#zoomWrapper {
+    position:absolute;
+    right:0;
+    padding-top:7px;
+    margin-right: 15px;
+    font-size:12px;
+}
+
+#zoomWrapper::before {
+    content: "\e71e";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 15px;
+    margin-top: 3px;
+    margin-right: 2px;
+}
+
+#zoom {
+    width: 50px;
+    margin:0;
+    padding:0;
+}
+
+@media only screen and (min-width: 400px) {
+    #zoom {
+        width: 100px;
+    }
+}
+
+@media only screen and (max-width: 345px) {
+    #zoomWrapper {
+        display: none;
+    }
+}
+
+.zoomable {
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+}
+
+#instructionsContent.withNavigation {
+    bottom: 60px;
+}
+
+#instructionsContent.withTaskProgress {
+    bottom: 20px;
+}
+
+#instructionsContent.withNavigation.withTaskProgress {
+    bottom: 80px;
+}
+
+.page {
+    display: none;
+}
+
+.page.selected {
+    display: block;
+}
+
+
+
+
+
+
+#instructionsFooter {
+    width: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    /*padding: 15px;*/
+    background-color: #efefef;
+    text-align: center;
+}
+
+#previous, #next {
+    cursor: pointer;
+    padding: 9px 20px;
+    display: inline-block;
+    line-height: 42px;
+}
+
+#previous.disabled {
+    display:none;
+}
+
+#next.disabled {
+    cursor: default;
+    opacity: .5;
+}
+
+#previous {
+    padding-left: 36px;
+    float:left;
+}
+
+#previous::before {
+    content: "\e76b";
+    font-family: "labclient";
+    position: absolute;
+    margin-top: 1px;
+    margin-left: -20px;
+}
+
+#next {
+    float:right;
+    padding-right:36px;
+}
+
+#previous:hover, #next:hover {
+    background-color: #d4d3d3;
+}
+
+#previous.disabled:hover, #next.disabled:hover {
+    background-color: transparent;
+}
+
+#next::after {
+    content: "\e76c";
+    font-family: "labclient";
+    margin-left: 4px;
+    position: absolute;
+    margin-top: 1px;
+}
+
+
+
+
+#taskProgressBar {
+    user-select: none;
+    height: 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.progressBar {
+    height: 20px;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #b7b7b7;
+}
+
+.progress {
+    height: 20px;
+    text-align: center;
+    background-color: #0078d7;
+}
+
+.progressText {
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 20px;
+    font-size: 12px;
+    position: absolute;
+}
+
+blockquote,
+.knowledge,
+.note,
+.simpleBox
+{
+    margin: 10px 0;
+    background-color: #efefef;
+    padding: 10px;
+    display: block;
+}
+
+.alert {
+    margin: 10px 0;
+    background-color: #ffe0e0;
+    padding: 10px;
+    display: block;
+    padding-left: 32px;
+}
+
+.alert::before {
+    font-weight: normal;
+    content: "\e7ba";
+    font-family: "labclient";
+    font-size: 18px;
+    position: absolute;
+    margin-top: 1px;
+    margin-left: -24px;
+}
+
+blockquote.help, blockquote.hint, blockquote.note {
+    padding-left: 32px;
+}
+
+blockquote.help::before, blockquote.hint::before, blockquote.note::before {
+    font-weight: normal;
+    font-family: "labclient";
+    font-size: 18px;
+    position: absolute;
+    margin-top: 1px;
+    margin-left: -24px;
+}
+
+blockquote.help::before{
+    content: "\f29c";
+}
+
+blockquote.hint::before{
+    content: "\e920";
+}
+
+blockquote.note::before{
+    content: "\2139";
+}
+
+code {
+    background-color: #efefef;
+    padding: 2px 5px;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+}
+
+.alert code {
+    background-color: #fff;
+}
+
+.codeTitle {
+    margin-top: 10px;
+    margin-left: 22px;
+    font-size: 13px;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+    background-color: #efefef;
+    padding:4px 10px;
+    display:inline-block;
+}
+
+pre code {
+    padding: 10px;
+    display: block;
+    overflow: auto;
+}
+
+code:not(.nocopy) {
+    margin-left: 24px;
+}
+
+pre code:not(.nocopy) {
+    margin-left: 22px;    
+}
+
+
+code:not(.nocopy)::before {
+    font-weight: normal;
+    content: "\23F5";
+    font-family: "labclient";
+    font-size: 15px;
+    position: absolute;
+    margin-top: 2px;
+    margin-left: -24px;
+    cursor: pointer;
+}
+
+pre code:not(.nocopy)::before {
+    margin-left: -32px;
+    margin-top: 1px;
+}
+
+.childClient code:not(.nocopy) {
+    margin-left: 24px;
+}
+
+.childClient code:not(.nocopy)::before {
+    border: solid 1px;
+    content: "T";
+    font-family: "font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;";
+    padding: 0px 4px;
+    margin-left: -28px;
+    margin-top:1px;
+}
+
+.childClient pre code:not(.nocopy)::before {
+    margin-left: -34px;
+    margin-top: -2px;
+}
+
+.knowledge {    
+    padding-left: 32px;    
+    padding-bottom:0;
+}
+
+.knowledge::before {
+    font-weight: normal;
+    content: "\e902";
+    font-family: "labclient";
+    font-size: 18px;
+    position: absolute;
+    margin-left: -24px;
+}
+
+.knowledge.collapsed {
+    position:relative;
+    max-height: 100px;
+    overflow: hidden;
+}
+
+.knowledge.collapsed::after {
+    content:"";
+    font-size:0;    
+    position:absolute;
+    left:0;
+    bottom:0;
+    background:linear-gradient(transparent, #efefef);
+    height:60px;
+    width:100%;
+}
+
+.knowledge.expanded {
+    overflow: auto;
+    max-height:inherit;    
+}
+
+.knowledge.expanded::after {
+    height:0;
+    display:none;
+}
+
+.moreKnowledge {
+    display:block;
+    margin-top: -10px;
+    background-color: #efefef;
+    padding-left: 32px;
+    min-height: 10px;
+    box-sizing: border-box;
+}
+
+.moreKnowledge a {
+    display:inline-block;
+    margin:10px 0;
+}
+
+
+
+
+video::-internal-media-controls-download-button {
+    display: none;
+}
+
+video::-webkit-media-controls-enclosure {
+    overflow: hidden;
+}
+
+video::-webkit-media-controls-panel {
+    width: calc(100% + 30px); /* Adjust as needed */
+}
+
+.videoLink::before {
+    font-weight: normal;
+    content: "\e904";
+    font-family: "labclient";
+    font-size: 110%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 4px;
+    margin-top: 2px;
+}
+
+.imageLink::before {
+    font-weight: normal;
+    content: "\e722";
+    font-family: "labclient";
+    font-size: 110%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 4px;
+    margin-top: 2px;
+}
+
+.helpLink::before {
+    font-weight: normal;
+    content: "\f29c";
+    font-family: "labClient";
+    font-size: 110%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 2px;
+    margin-top: 2px;
+}
+
+.hintLink::before {
+    font-weight: normal;
+    content: "\e920";
+    font-family: "labClient";
+    font-size: 110%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 2px;
+    margin-top: 2px;
+}
+
+.knowledgeLink::before {
+    font-weight: normal;
+    content: "\e902";
+    font-family: "labClient";
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 3px;
+    margin-top: 2px;
+}
+
+.fileLink::before {
+    font-weight: normal;
+    content: "\2139";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 2px;
+    margin-top: 2px;
+}
+
+.copyable {
+    color: green;
+    cursor: pointer;
+}
+
+.copyable::before {
+    font-weight: normal;
+    content: "\23F5";
+    font-family: "labclient";
+    margin-right:2px;
+    vertical-align:middle;
+}
+
+.typeText {
+    color: green;
+    cursor: pointer;
+}
+
+.typeText::before {
+    font-weight: normal;
+    border:solid 1px;
+    content: "T";
+    font-family: "font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;";
+    margin-right:4px;
+    display:inline-block;
+    vertical-align:top;
+    padding: 1px 4px 0px 4px;
+}
+
+.copyable.typeText::before {
+    font-weight: normal;
+    content: "\23F5  T";
+    font-family: "labclient";
+    margin-right: 4px;
+    vertical-align: top;
+    padding: 2px 4px 0px 4px;
+}
+
+.clickFeedbackMessage {
+    position: absolute;
+    background-color: #333;
+    color:#ffffff;
+    font-size:12px;
+    padding:10px;
+    z-index: 3000;
+}
+
+input[type=button], button, label.button {
+    cursor: pointer;
+    font-size: 13px;
+    display: inline-block;
+    padding: 6px 20px;
+    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #000;
+    border: solid 1px transparent;
+    overflow: hidden;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: bottom;
+    outline: 1px dashed transparent;
+    -webkit-appearance: none;
+}
+
+input[type=button]:hover, button:hover, label.button:hover {
+    border: solid 1px #777;
+}
+
+input[type=button]:active, button:active, label.button:active {
+    background-color: #999999;
+}
+
+input[type=submit], input[type=button].primary, button.primary {
+    color: #ffffff;
+    background-color: #0078d7;
+    border: solid 1px #0078d7;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+input[type=submit]:hover, input[type=button].primary:hover, button.primary:hover {
+    background-color: #006cc2;
+    border: solid 1px #004175;
+}
+
+input[type=submit]:active, input[type=button].primary:active, button.primary:active {
+    background-color: #005497;
+}
+
+input[type=submit]:focus, input[type=button].primary:focus, button.primary:active {
+    outline: 0;
+}
+
+input[type=submit]:disabled, input[type=button]:disabled, button:disabled {
+    opacity: .50;
+    border: solid 1px transparent;
+}
+
+#fullScreenMessage {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#fullScreenMessageMask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+}
+
+#fullScreenMessageCenter {
+    /*position: absolute;
+    width: 100%;
+    top: 50%;
+    margin-top: -70px;*/
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    min-height: 220px;
+}
+
+#fullScreenMessageTextWrapper {
+    padding: 40px;
+    background-repeat: no-repeat;
+}
+
+#fullScreenMessageTitle {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+#fullScreenMessageText {
+    font-size: 14px;
+}
+
+#fullScreenMessageButtonWrapper {
+    margin-top:15px;    
+}
+
+#fullScreenMessageButtonWrapper input[type=button] {
+    margin-right: 8px;
+}
+
+#fullScreenProgressBar {
+    width: 600px;
+    height: 6px;
+    margin-top: 15px;
+    background-color: #ddd;
+}
+
+#fullScreenProgressFill {
+    background-color: #0078d7;
+    height: 6px;
+    width: 0;
+}
+
+#fullScreenProgressText {
+    margin-top:15px;
+    font-size: 14px;
+}
+
+#fullScreenMessage.withLoadingImage #fullScreenMessageTextWrapper {
+    margin-left: 32px;
+}
+
+#fullScreenMessageLoadingIcon {
+    display: none;
+    position: absolute;
+    margin-left: -32px;
+    margin-top: 3px;
+    border: 4px solid #dfdfdf;
+    border-top: 4px solid #000;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+}
+
+#fullScreenMessage.withLoadingImage #fullScreenMessageLoadingIcon {
+    display: block;
+}
+
+.loadingAnimation-large {
+    display: inline-block;
+    border: 8px solid #dfdfdf;
+    border-top: 8px solid #000;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+}
+
+.loadingAnimation-medium {
+    display: inline-block;
+    border: 4px solid #dfdfdf;
+    border-top: 4px solid #000;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    animation: spin 1s linear infinite;
+}
+
+.loadingAnimation-small {
+    display: inline-block;
+    border: 3px solid #dfdfdf;
+    border-top: 3px solid #000;
+    border-radius: 50%;
+    width: 6px;
+    height: 6px;
+    animation: spin 1s linear infinite;
+}
+
+
+
+
+.page img, .dialogContent img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+.page video, .dialogContent video {
+    display: block;
+    margin: 15px 0;
+    max-width: 100%;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.noselect {
+    cursor:default;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* IE/Edge */
+    user-select: none;           /* non-prefixed version, currently not supported by any browser */
+}
+
+h2 {
+    margin-top:20px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+h2:first-child {
+    margin-top: 0;
+}
+
+#helpTab h2 {
+    margin-bottom:10px;
+}
+
+.description {
+    font-size: 13px;
+    font-style: italic;
+}
+div.cloudCredential {
+    margin-bottom: 20px;
+}
+
+#helpTab select {
+    width: 100%;
+}
+
+select {
+    border: solid 1px #000;
+    padding: 4px;
+    font-size: 13px;
+}
+
+input[type="text"], input[type="password"], input[type="number"], select, textarea {
+    font-family: Segoe UI,'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    padding: 5px 8px;
+    border: 1px solid #000000;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    outline: 0;
+    background: #FFF;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+input[data-val-required] + span:before, input.required + span:before, select.required + span:before {
+    content: " * ";
+}
+
+input[type="text"], input[type="password"], input[type="number"], select {
+    height: 32px;
+}
+
+input[type="number"] {
+    min-width: 60px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+    border-color: #000;
+    outline: 2px solid #000;
+}
+
+table.fields {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table.fields td.fieldName {
+    opacity: .8;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 90%;
+}
+
+table.fields td {
+    padding: 4px;
+}
+
+#helpTab table.fields td {
+    padding: 1px 4px;
+}
+
+
+#helpTab table.fields td.fieldName {
+    vertical-align: bottom;
+}
+
+
+a {
+    color: #0078D7;
+    text-decoration: none;
+    margin: 0;
+}
+
+a:visited {
+    color: #0078D7;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.bugIcon::before {
+    content: "\e96d";
+    font-family: "labClient";
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 3px;
+}
+
+.questionIcon::before {
+    content: "\f29c";
+    font-family: "labClient";
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 3px;
+}
+
+.supportIcon::before {
+    content: "\e9b6";
+    font-family: "labClient";
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 3px;
+}
+
+.iconLinksList {
+    list-style-type: none;
+    padding: 0px 0 0 22px;
+    margin: 0 0 0 0;
+}
+
+.iconLinksList li {
+    margin: 18px 0;
+}
+
+.iconLinksList a {
+    /*color: black;*/
+}
+
+.iconLinksList .description{
+    font-size:85%;   
+}
+
+.iconLinksList li::before {
+    position: absolute;
+    margin-left:-22px;
+}
+
+
+
+
+
+input[type=range] {
+    -webkit-appearance: none;
+    background-color: transparent;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: #999;
+    margin-top: -5px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+input[type=range]::-moz-range-track {
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-moz-range-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #999;
+}
+
+input[type=range]:-moz-focusring {
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+
+input[type=range]::-ms-track {
+    margin-top:4px;
+    height: 5px;
+    background: transparent;
+    border-color: transparent;
+    border-width: 5px 0;
+    color: transparent;
+}
+
+input[type=range]::-ms-fill-lower {
+    background: #777;
+    border-radius: 10px;
+}
+
+input[type=range]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+input[type=range]::-ms-thumb {
+    border: none;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: #777;
+    margin-top: 0px;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+    background: #888;
+}
+
+input[type=range]:focus::-ms-fill-upper {
+    background: #ccc;
+}
+
+@supports (-ms-ime-align: auto) {
+    input[type=range]::-ms-track {
+        border-width: 0;
+    }
+}
+
+
+#notificationContainer {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    margin-right: 32px;
+    margin-bottom: 85px;
+    margin-left: 15px;
+}
+
+.notification {
+    padding: 20px;
+    background-color: #323232;
+    color: #fff;
+    margin-top: 10px;
+    position: relative;
+    max-width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.5) 2px 4px 8px;
+}
+
+@media only screen and (min-width: 238px) {
+    .notification {
+        width: 150px;
+    }
+}
+
+@media only screen and (min-width: 288px) {
+    .notification {
+        width: 200px;
+    }
+}
+
+@media only screen and (min-width: 338px) {
+    .notification {
+        width: 250px;
+    }
+}
+
+@media only screen and (min-width: 387px) {
+    .notification{width:300px;}
+}
+
+.closeNotification {
+    cursor: pointer;
+}
+
+.closeNotification::before {
+    content: "\e711";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 16px;
+    position: absolute;
+    right: 8px;
+    top: 8px;    
+}
+
+.notificationButtonWrapper {
+    margin-top: 15px;
+}
+
+.notification input[type=button], .notification button {
+    background-color: #efefef;
+    color: #323232;
+    margin-right:10px;
+}
+
+.notification input[type=button]:hover, .notification button:hover {
+    background-color: #fff;
+    border: solid 1px #fff;
+}
+
+.notification input[type=button]:active, .notification button:active {
+    border: solid 1px #0182e9;
+    background-color: #e1dfdf;
+}
+
+.notification input[type=submit], .notification input[type=button].primary, .notification button.primary {
+    color: #ffffff;
+    background-color: #0182e9;
+    border: solid 1px #0182e9;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.notification input[type=submit]:hover, .notification input[type=button].primary:hover, .notification button.primary:hover {
+    background-color: #008eff;
+    border: solid 1px #008eff;
+}
+
+.notification input[type=submit]:active, .notification input[type=button].primary:active, .notification button.primary:active {
+    background-color: #0078d7;
+}
+
+.notification input[type=submit]:focus, .notification input[type=button].primary:focus, .notification button.primary:active {
+    outline: 0;
+}
+
+.notification .copyable {
+    color: #00ff14;
+}
+
+.dialog {
+    z-index: 2000;
+    position: absolute;
+    top:0;
+    width:100%;
+    height:100%;
+}
+
+.dialogMask {
+    opacity: .5;
+    background-color: #000000;
+    width:100%;
+    height:100%;
+    position: absolute;
+}
+
+.dialogBox {
+    background-color: #fff;
+    border: solid 1px #0078d7;
+    box-sizing: border-box;
+    height: 95%;
+    width: 90%;
+    margin: auto;
+    background-color: #fff;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dialogCloseButton {
+    position: absolute;
+    right:25px;
+    top:20px;
+    cursor:pointer;
+}
+
+.dialogCloseButton::before {
+    content: "\e711";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 16px;
+}
+
+.dialogBox .upperRightButtons {
+    position: absolute;
+    right: 50px;
+    top: 20px;
+    cursor: pointer;
+}
+
+.dialogCloseCountDown {
+    position: absolute;
+    left: 25px;
+    top: 20px;
+}
+
+.dialogTitle {
+    font-size: 20px;
+    margin: 20px 25px;
+}
+
+.dialogContent {
+    overflow:auto;
+    position: absolute;
+    top:65px;
+    bottom:20px;
+    left:25px;
+    right:5px;
+    padding-right:20px;
+}
+
+.dialogContent.noScroll {
+    overflow: inherit;
+}
+
+.dialog.hasButtons .dialogContent {
+    bottom:70px;
+}
+
+.dialogButtons {
+    display:none;
+}
+
+.dialog.hasButtons .dialogButtons {
+    display: block;
+    position: absolute;
+    bottom:25px;
+    right:25px;
+}
+
+.dialogButtons input[type='button'] {
+    margin-left:10px;
+}
+
+.listedNotification {
+    background-color: #efefef;
+    padding: 10px;
+}
+
+.listedNotification:not(:first-child) {
+    margin-top: 15px;
+}
+
+.listedNotificationDate {
+    font-style: italic;
+    margin-bottom: 10px;
+    font-size:10px;
+}
+
+
+
+table.fields td.cloudResource {
+    padding-bottom:5px;
+}
+
+blockquote {
+    min-height: 1em;
+}
+
+
+h1 {
+    font-size: 22px;
+    margin: 20px 0;
+    font-weight: normal;
+    border-bottom: solid #000 1px;
+    padding-bottom: 15px;
+}
+
+h2 {
+    font-size: 20px;
+    margin: 20px 0;
+    font-weight: normal;
+}
+
+h3 {
+    font-size: 18px;
+    margin: 20px 0;
+    font-weight: normal;
+}
+
+h4 {
+    font-size: 16px;
+    margin: 20px 0;
+    font-weight: normal;
+}
+
+h5 {
+    margin: 20px 0;
+    font-weight: normal;
+    font-size: 15px;
+}
+
+h6 {
+    margin: 20px 0;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
+    margin-top: 0;
+}
+
+
+ol.taskList {
+    padding-left: 15px;
+    margin-left: 0;
+}
+
+ol .task-list-item {
+    position: relative;
+    margin: 10px 0 10px 30px;
+}
+
+ul.taskList {
+    padding-left: 25px;
+    margin-left: 0;
+}
+
+ul .task-list-item {
+    position: relative;
+    margin: 10px 0 10px 0px;
+    list-style-type: none;
+}
+
+.task-list-item label.checkbox {
+    position: absolute;
+}
+
+.task-list-item input[type="checkbox"] {
+    display: none;
+}
+
+.task-list-item .checkbox span::before {
+    display: inline-block;
+    margin-top: 3px;
+    vertical-align: top;
+    color: white;
+    background-color: #fff;
+    content: "\e73e";
+    font-family: "labclient";
+    font-size: 12px;
+    padding: 0;
+    border: solid 1px #000;
+}
+
+ol .task-list-item .checkbox span::before {
+    margin-left: -45px;
+}
+
+ul .task-list-item .checkbox span::before {
+    margin-left: -25px;
+}
+
+.task-list-item .checkbox input:checked + span::before {
+    background-color: green;
+    border-color: green;
+}
+
+.page blockquote p {
+    margin-bottom: 0;
+}
+
+.page blockquote p:first-child {
+    margin-top: 0;
+}
+
+.page table {
+    border-collapse: collapse;
+}
+
+.page table tr {
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.page table th:not(:empty) {
+    font-weight: bold;
+    font-size: 13px;
+    padding:8px 12px;
+}
+
+.page table td {
+    padding:12px 12px;
+}
+
+div.contentError {
+    background-color: red;
+    padding: 5px;
+    color:#fff;
+}
+
+.page ol {list-style-type: decimal}
+.page ol li ol {list-style-type: lower-alpha}
+.page ol li ol li ol {list-style-type: lower-roman}
+.page ol li ol li ol li ol {list-style-type: decimal}
+.page ol li ol li ol li ol li ol {list-style-type: lower-alpha}
+.page ol li ol li ol li ol li ol li ol {list-style-type: lower-roman}
+
+
+
+
+
+
+
+
+
+
+/*Virtualization*/
+
+div.machine, div.contentResource {
+    padding: 10px;
+    margin: 0 0 15px 0;
+
+}
+
+div.machine.selected, div.contentResource.selected {
+    background-color:#efefef;
+}
+
+div.machine:hover, div.contentResource:hover {
+    cursor: pointer;
+}
+
+div.machine.selected:hover, div.contentResource.selected:hover {
+    cursor: auto;
+}
+
+img.thumbnail {
+    position: absolute;
+}
+
+.contentResource img.thumbnail {
+    max-width: 64px;
+    max-height: 48px;
+}
+
+div.machineName {
+    font-size: 15px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    padding-left: 70px;
+}
+
+div.machineNameCenter {
+    height: 48px;
+    font-weight: bold;
+    display: table;
+    width: 100%;
+}
+
+div.machineInfo {
+}
+
+div.machine .ctrlAltDel {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    padding: 8px 10px;
+}
+
+div.selectHeading {
+    margin: 5px 0 1px 0;
+}
+
+div.machine table.credentials {
+    margin: 8px 0;
+}
+
+div.machine table.credentials td.fieldName {
+    padding-left: 0;
+}
+
+div.inputRelease {
+    margin-top: 10px;
+    display: none;
+}
+
+ #remoteControllerLowPerformance {
+    margin-top: 5px;
+}
+
+#remoteControllerLowPerformance::before {
+    font-weight: normal;
+    content: "\e7ba";
+    font-family: "labclient";
+    margin-right:4px;
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 3px;
+}
+
+
+.loadDeveloperFiles::before {
+    display: inline-block;
+    content: "\25B3";
+    margin-right: 3px;
+    font-size: 120%;
+}
+
+
+
+.notification .pasteable, .notification .typeText {
+    color: #84f651;
+}
+
+.commandLink::before {
+    font-weight: normal;
+    content: "\e944";
+    font-family: "labclient";
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 3px;
+}
+
+.command {
+    display:none;
+}
+
+.ctrlAltDeleteLink {
+    border: solid 1px;
+    padding: 2px 4px;
+    font-size:90%;
+}
+
+.ctrlAltDeleteLink:hover {
+    text-decoration:none;   
+}
+
+.selectMachineLink::before {
+    font-family: "labclient";
+    content: "\e915";
+    padding: 0 4px;
+    font-size: 125%;
+    display: inline-block;
+    margin-top: 1px;
+    vertical-align: top;
+}
+
+.loadMediaLink.floppyMedia::before {
+    font-family: "labclient";
+    content: "\f0c7";
+    padding: 0 4px;
+    font-size: 112%;
+    display: inline-block;
+    margin-top: 2px;
+    vertical-align: top;
+}
+
+.loadMediaLink.opticalMedia::before {
+    font-family: "labclient";
+    content: "\e906";
+    padding: 0 4px;
+    font-size: 112%;
+    display: inline-block;
+    margin-top: 2px;
+    vertical-align: top;
+}
+
+
+#resourcesTab select {
+    max-width:100%;
+}
+
+.negative {
+    color:red;
+}
+
+.positive {
+    color: green;
+}
+
+.activity {
+    margin: 1em 0;
+}
+
+.activity .questionText {
+    margin-bottom: 8px;
+    white-space:pre-line;
+}
+
+.activity .answer {
+    margin: 5px 0;
+}
+
+.activity .answerText{
+    max-width:100%;
+    min-width:200px;
+    width:300px;    
+}
+
+.activity.requiredError::after {
+   content:"Required";
+   color:red;
+   display:block;
+   margin-top:5px;
+}
+
+.activity .evaluate {
+    margin-top:10px;
+    margin-right:10px;
+}
+
+
+.activity .feedback {
+    margin: 10px 0;
+    background-color: #efefef;
+    padding: 10px;
+    display: block;
+    min-height: 16px;
+    overflow:auto;
+}
+
+.activity .feedback.positive {
+    background-color: green;
+    color:white;
+    padding-left:35px;
+    
+}
+
+.activity .feedback.positive:before {
+    margin-left:-25px;
+    position:absolute;
+    content: "\e73e";
+    font-family: "labclient";
+    font-size:18px;
+}
+
+.activity .feedback.negative {
+    background-color: darkred;
+    color:white;
+    padding-left:35px;
+}
+
+.activity .feedback.negative:before {
+    margin-left:-25px;
+    position:absolute;
+    content: "\e7ba";
+    font-size:18px;
+    font-family: "labclient";
+}
+
+.activity .automatedActivityText{
+    white-space:pre-line;
+}
+
+.activity .scriptResponse {
+    white-space:pre-wrap;
+}
+
+.activity .scriptResponse:not(:first-child) {
+    margin-top: 10px;
+}
+
+.activity .scriptTaskList {
+    margin: 10px 0;
+    background-color: #efefef;
+    padding: 10px;
+    display: block;
+}
+
+.activity .scriptTask .response {
+    margin-top: 10px;
+}
+
+.activity .scriptTask.pass .response {
+    color: green
+}
+
+.activity .scriptTask.fail .response, .activity .scriptTask.error .response {
+    color: darkred;
+}
+
+.activity .scriptTask:not(:first-of-type) {
+    margin-top: 10px;
+}
+
+.activity .scriptTask .status {
+    position:absolute;
+    margin-left:-25px;
+}
+
+.activity .scriptTask {
+    margin-left: 25px;
+}
+
+.activity .scriptTask .running {
+    display:none;
+}
+
+.activity .scriptTask.running .running {
+    display:inline-block;
+}
+
+.activity .scriptTask.running .result {
+    display:none;
+}
+
+.activity .scriptTask .result:before {
+    border:solid black 1px;
+    content:"?";
+    width:15px;
+    height:15px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 1px;    
+    text-align: center;
+    line-height: 15px;
+}
+
+.activity .scriptTask.pass .result:before {
+    border:solid green 1px;
+    content: "\e73e";
+    font-family: "labclient";
+    color:green;
+    font-size:15px;
+}
+
+.activity .scriptTask.fail .result:before {
+    border:solid red 1px;
+    content: "\e711";
+    font-family: "labclient";
+    color:red;
+    font-size:15px;
+}
+
+.activity .scriptTask .loading {
+    margin-top:1px;
+}
+
+.variableTextBox {
+    width: 250px;
+    max-width: 100%;
+}
+
+#splitWindows::before {
+    content: "\e100";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 16px;
+    margin-top: 2px;
+}
+
+#joinWindows::before {
+    content: "\e101";
+    font-family: "labclient";
+    display: inline-block;
+    vertical-align: top;
+    font-size: 16px;
+    margin-top: 2px;
+}

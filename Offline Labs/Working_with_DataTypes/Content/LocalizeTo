@@ -1,0 +1,931 @@
+var instructionsProcessor = function () {
+    
+    var cachedPages = [];
+    var cachedContainerId = null;
+    var $container = null;
+    var contentRootPath = null;
+
+    var insertPositionMarkers = false;
+
+    var showDownInitialized = false;
+    var converter;
+    var variableNames = [];
+
+    function initializeShowdown() {
+        if (showDownInitialized) return;
+        showdown.extension('instructionsInclude', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.after': function (event, text, options, globals) {
+                        return text.replace(/!INSTRUCTIONS\s*\[((?:[^\]])*)\]\(([^\)]+)\)/g, "\n<include data-name='$1' src='$2'></include>");
+                    }
+                }
+            }];
+        });
+        showdown.extension('instructionsDialogLink', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.after': function (event, text, options, globals) {
+                        return text.replace(/\^INSTRUCTIONS\s*\[((?:[^\]])*)\]\s*\(([^\)"]+)\s*(?:["'](.*)["'])?\)/g, "\n<a class='dialogLink instructions' href='$2' title='$3'>$1</a>");
+                    }
+                }
+            }];
+        });
+        showdown.extension('ms_include', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.after': function (event, text, options, globals) {
+                        return text.replace(/\[!INCLUDE\s*\[((?:[^\]])*)\]\(([^\)]+)\)\]/g, "\n<include data-name='$1' src='$2'></include>");
+                    }
+                }
+            }];
+        });
+        showdown.extension('typeTextAndCopyable', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'autoLinks.after': function (event, text, options, globals) {
+                        var replaceInlineEnclosures = function (markdownString, enclosureChar, enclosureLength, className) {
+                            var escapedEnclosureChar = enclosureChar.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                            var greedySearch = new RegExp('(' + escapedEnclosureChar + '{' + enclosureLength + '})(\\S[^]+\\S|\\S+)(?=\\1)\\1', 'g');
+                            var ungreedySearch = new RegExp('(' + escapedEnclosureChar + '{' + enclosureLength + '})(\\S+|\\S[^]+?\\S)(?=\\1)\\1(?!\\S+?\\1)', 'g');
+                            var greedyMatch;
+                            if ((greedyMatch = greedySearch.exec(markdownString)) != null) {
+                                var ungreedyMatch;
+                                var ungreedyMatches = [];
+                                while ((ungreedyMatch = ungreedySearch.exec(markdownString)) != null) {
+                                    ungreedyMatches.push(ungreedyMatch);
+                                }
+                                var ungreedyMatchCount = ungreedyMatches.length;
+                                var firstUngreedyMatch = ungreedyMatches[0];
+                                var lastUngreedyMatch = ungreedyMatches[ungreedyMatches.length - 1];
+                                if ((ungreedyMatchCount == 1) ||
+                                    (firstUngreedyMatch.index != greedyMatch.index) ||
+                                    ((lastUngreedyMatch.index + lastUngreedyMatch[0].length) != (greedyMatch.index + greedyMatch[0].length))) {
+                                    return markdownString.substring(0, greedyMatch.index) + '<span class="' + className + '">' + greedyMatch[2] + '</span>' + markdownString.substring(greedyMatch.index + greedyMatch[0].length, markdownString.length);
+                                }
+                                var ungreedyReplaceResults = markdownString.substring(0, firstUngreedyMatch.index);
+                                for (var i = 0; i < ungreedyMatchCount; i++) {
+                                    var copyToIndex;
+                                    ungreedyMatch = ungreedyMatches[i];
+                                    if (i < ungreedyMatchCount - 1) {
+                                        copyToIndex = ungreedyMatches[i + 1].index;
+                                    } else {
+                                        copyToIndex = markdownString.length;
+                                    }
+                                    ungreedyReplaceResults += '<span class="' + className + '">' + ungreedyMatch[2] + '</span>' + markdownString.substring(ungreedyMatch.index + ungreedyMatch[0].length, copyToIndex);
+                                }
+                                return ungreedyReplaceResults;
+                            }
+                            return markdownString;
+                        };
+                        var processChunks = function (chunk, enclosureChar, enclosureLength, className) {
+                            // create a variable to store the return string
+                            var resultString = '';
+                            // split on any HTML tags to break the string up into chunks
+                            var chunkSegments = chunk.split(/(<([^ >]+)[^>]*?>.+?<\/\2>)/g);
+                            for (var i = 0; i < chunkSegments.length; i++) {
+                                var chunkSegment = chunkSegments[i];
+                                // leave whitespace segments as is
+                                if (chunkSegment.match(/^\s*$/g) !== null) {
+                                    resultString += chunkSegment;
+                                    continue;
+                                }
+                                // leave HTML segments as is, and skip the next item because it's the HTML tag itself
+                                if (chunkSegment.match(/^<([^ >]+)[^>]*?>.+?<\/\1>$/g) !== null) {
+                                    i++;
+                                    resultString += chunkSegment;
+                                    continue;
+                                }
+                                // replace enclosures in non-span segments
+                                resultString += replaceInlineEnclosures(chunkSegment, enclosureChar, enclosureLength, className);
+                            }
+                            return resultString;
+                        };
+                        var bothReplaced = processChunks(text, '+', 4, 'copyable typeText');
+                        var typeTextReplaced = processChunks(bothReplaced, '+', 3, 'typeText');
+                        var copyableReplaced = processChunks(typeTextReplaced, '+', 2, 'copyable');
+                        return copyableReplaced;
+                    }
+                }
+            }];
+        }); 
+        showdown.extension('youtubevideo', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.after': function (event, text, options, globals) {
+                        var link = text.replace(/!VIDEO\s*\[((?:[^\]])*)\]\s*\(([^\)"]+(?:youtube\.com|youtu\.be)[^\)"]+)\s*(?:["'](.*)["'])?\)/g, "\n<div style='position:relative; height:0; padding-bottom:56.21%' class='youTubeVideo' title='$1'><iframe src='$2' style='position:absolute;width:100%;height:100%;' frameborder='0' allowfullscreen></iframe></iframe></div>");
+                        link = link.replace("/watch?v=", "/embed/");
+                        link = link.replace("//youtu.be/", "//www.youtube.com/embed/");
+                        return link;
+                    }
+                }
+            }];
+        });
+        showdown.extension('video', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.after': function (event, text, options, globals) {
+                        //return text.replace(/!VIDEO\s*\[((?:[^\]])*)\]\s*\(([^\)"]+)\s*(?:["'](.*)["'])?\)/g, "\n<video title='$1' src='$2' title='$3' controls></video>");
+                        return text.replace(/!VIDEO\s*\[((?:[^\]])*)\]\s*\(([^\)"]+)\s*(?:["'](.*)["'])?\)/g, function (g1, g2, g3, g4, g5) {
+                            src = g3.replace(/^\s+|\s+$/gm, '');
+                            src = getContentUrl(src, contentRootPath);
+                            var html = "\n<video src='" + src + "'"; //not currently using g2, which is typically a link text or image alt
+                            if (g4) {
+                                html += " title='" + g4 + "'";
+                            }
+                            html += "/>";
+                            return html;
+                        });
+                    }
+                }
+            }];
+        });
+        showdown.extension('image', function () { //this handles !IMAGE and GFM image syntax. We cannot rely on Showdown to handle GFM images because showdown doesn't suppot whitespaces in URLs, which occur a lot in the wild.
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.before': function (event, text, options, globals) {
+                        return text.replace(/(?:!IMAGE|!)\s*\[((?:[^\]])*)\]\s*\(([^\)"]+)\s*(?:["'](.*)["'])?\)(?:{([^}]+)})?/g, function (g1, g2, g3, g4, g5) {
+                            src = g3.replace(/^\s+|\s+$/gm, '');
+                            src = getContentUrl(src, contentRootPath);
+                            var html = "\n<img src='" + src + "'";
+                            if (g2) {
+                                html += " alt='" + g2 + "'";
+                            }
+                            if (g4) {
+                                html += " title='" + g4 + "'";
+                            }
+                            if (g5) {
+                                if (!isNaN(g5)) {
+                                    html += "style='width:" + g5 + "px'";
+                                } else if (g5.indexOf("x") > 0) {
+                                    var dimensions = g5.split("x");
+                                    if (dimensions.length > 1) {
+                                        var width = dimensions[0].trim();
+                                        var height = dimensions[1].trim();
+                                        html += "style='width:" + width + "px; height:" + height + "px'";
+                                    }
+                                }                                
+                            }
+                            html += "/>";
+                            return html;
+                        });
+                    }
+                }
+            }];
+        });
+        showdown.extension('link', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.after': function (event, text, options, globals) {
+                        var regex = /([\^|\<]\s*)?((?:VIDEO|IMAGE|HELP|HINT|KNOWLEDGE|FILE)\s*)?\[((?:[^\]])*)\]\s*\(([^\)"']+)\s*((["'])([^\)"']+)(?:\6))?\s*\)/ig;
+                        return text.replace(regex, function (g1, g2, g3, g4, g5, g6, g7, g8) {
+                            var url = getContentUrl(g5, contentRootPath);
+                            if (url) { url = url.trim(); }
+                            var html = "<a";
+                            if (g2 || g3) {
+                                html += " class='";
+                                if (g2) {
+                                    if (g2.indexOf("^") === 0) {
+                                        html += "dialogLink ";
+                                    } else if (g2.indexOf("<") === 0) {
+                                        html += "portalLink ";
+                                    }
+                                }         
+                                if (g3) {
+                                    if (/video/i.test(g3)) {
+                                        html += "videoLink"
+                                    } else if (/image/i.test(g3)) {
+                                        html += "imageLink"
+                                    } else if (/help/i.test(g3)) {
+                                        html += "helpLink"
+                                    } else if (/hint/i.test(g3)) {
+                                        html += "hintLink"
+                                    } else if (/knowledge/i.test(g3)) {
+                                        html += "knowledgeLink"
+                                    } else if (/file/i.test(g3)) {
+                                        html += "fileLink"
+                                    } 
+                                }
+                                html += "'";
+                            }  
+                            html += " href='" + url + "'";
+                            if (g8) {
+                                html += " title='" + g8 + "'";
+                            }
+                            if (url.indexOf("#") !== 0 && url.indexOf("mailto:") !== 0) {
+                                html += " target='_blank'";
+                            } 
+                            html += ">" + g4 + "</a>";
+                            return html;
+                        });
+                    }
+                }
+            }];
+        });
+
+        var referenceLinks = null;     
+
+        showdown.extension('referenceLink', function () {
+            return [
+                {
+                    type: 'lang', //we have to do this early in the processing to capture all the references
+                    filter: function (text, converter, options) {
+                        referenceLinks = [];
+                        var regex = /(>)?[^\S\n]*\[([a-zA-Z0-9_-]+)\]:\s*([^"'\r\n\s]+)/g;
+                        var m;
+                        while (m = regex.exec(text)) {
+                            if (m[1] && m[1].substring(0, 1) == ">") {
+                                continue; //we do not want to capture link refereces within a blockquote.
+                            }
+                            referenceLinks.push({ name: m[2], url: m[3] });
+                        }
+                        return text;
+                    }
+                },
+                {
+                    type: 'listener',
+                    listeners: {
+                        'images.after': function (event, text, options, globals) {
+                            return text.replace(/([\^|\<|\!]\s*)?((?:VIDEO|IMAGE|HELP|HINT|KNOWLEDGE|FILE|INSTRUCTIONS)\s*)?\[((?:[^\]])*)\]\s*\[([^\]]+)\]/ig, function (g1, g2, g3, g4, g5) {
+                                //g3 is the link modifier type
+                                //g4 is the link text
+                                //g5 is the reference name                               
+                                var url = null;                                
+                                for (var i = 0, numRefs = referenceLinks.length; i < numRefs; i++) {
+                                    if (referenceLinks[i].name == g5) {
+                                        url = referenceLinks[i].url;
+                                        break;
+                                    }
+                                }
+                                if (g2 == "!" && g3 == "INSTRUCTIONS") {
+                                    return url == null
+                                        ? "\n<div class='instructionsblock' data-name='" + g4 + "' ref='" + g5 + "'></div>"
+                                        : "\n<include data-name='" + g4 + "'src='" + url + "'></include>";
+                                }
+                                var html = "<a";
+                                if (g2 || g3) {
+                                    html += " class='";
+                                    if (g2) {
+                                        if (g2.indexOf("^") === 0) {
+                                            html += "dialogLink ";
+                                        } else if (g2.indexOf("<") === 0) {
+                                            html += "portalLink ";
+                                        }
+                                    }
+                                    if (g3) {
+                                        if (/video/i.test(g3)) {
+                                            html += "videoLink"
+                                        } else if (/image/i.test(g3)) {
+                                            html += "imageLink"
+                                        } else if (/help/i.test(g3)) {
+                                            html += "helpLink"
+                                        } else if (/hint/i.test(g3)) {
+                                            html += "hintLink"
+                                        } else if (/knowledge/i.test(g3)) {
+                                            html += "knowledgeLink"
+                                        } else if (/file/i.test(g3)) {
+                                            html += "fileLink"
+                                        }
+                                    }
+                                    html += "'";
+                                }
+                                if (url) {
+                                    html += " href='" + url + "'";
+                                } else {
+                                    html += " href='#' data-target='" + g5 + "'";
+                                }
+                                html += " target='_blank'>" + g4 + "</a>";
+                                return html;
+                            });
+                        }
+                    }
+                }
+            ];
+        });
+        
+        showdown.extension('tip', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.after': function (event, text, options, globals) {
+                        return text.replace(/\[((?:[^\]])*)\]\s*\(\s*"([^"]+)"\s*\)/g, "\n<a class='tipLink' target='_blank' href='#'>$1</a><span class='tipContent' style='display:none;'>$2</span>");
+                    }
+                }
+            }];
+        });
+
+        showdown.extension('pagebreak', function () {
+            return [{
+                type: 'lang',
+                filter: function (text, converter, options) {
+                    return text.replace(/^(\s{0,3})(= ?){3,}\s*$/gm, "\n<hr class='pagebreak'/>");
+                }
+            }];
+        });
+
+        showdown.extension('commandReferences', function () {
+            return [{
+                type: 'lang',
+                filter: function (text, converter, options) {
+                    return text
+                        .replace(/^\[([^\]]+)\]:\s*(?:^|\n)(```+|~~~+)([^\s`~]*)\n([\s\S]*?)\n\2/gm, "<div class='command' data-id='$1'><textarea>$4</textarea></div>") //for code blocks
+                        .replace(/^\[([^\]]+)\]:\s*`([^`]+)`/gm, "<div class='command' data-id='$1'><textarea>$2</textarea></div>"); //for inline code span
+                }
+            }];
+        });
+        showdown.extension('commandReferenceLinks', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'images.after': function (event, text, options, globals) {
+                        return text.replace(/\@\s*\[((?:[^\]])*)\]\s*\[([^\]]+)\](?:{([^}]+)})?/g, "\n<a class='commandLink' target='_blank' href='#' data-target='$2' data-options='$3'>$1</a>");
+                    }
+                }
+            }];
+        });
+        showdown.extension('inlineCommandLinks', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'blockQuotes.before': function (event, text, options, globals) {
+                        return text.replace(/\@\s*\[((?:[^\]])*)\]\s*\(`([^`]+)`\)(?:{([^}]+)})?/g, function (match, m1, m2, m3) {
+                            return "\n<a class='commandLink' target='_blank' href='#' data-options='" + m3 + "'>" + m1 + "</a><input type='hidden' class='command' value='" + encodeURIComponent(m2) + "' />";
+                        });
+                    }
+                }
+            }];
+        });
+
+        showdown.extension('containers', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'blockQuotes.before': function (event, text, options, globals) {
+                        return text.replace(/^:::(?:\s*)(\S*)(?:\s*)({.*})?[\n\r]([\s\S]*?)\n:::/gm, function (match, className, options, content) {
+                            return '\n<div class="' + className + '">\n' + content + '\n</div>\n';
+                        });
+                    }
+                }
+            }]
+        });
+
+        showdown.extension('activities', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'blockQuotes.before': function (event, text, options, globals) {
+                        return text.replace(/@lab\.Activity\((\d+)\)/g, '<div class="activity" data-id="$1"></div>');
+                    }
+                }
+            }]
+        });       
+
+        showdown.extension('variables', function () {
+            return [
+                {
+                    type: 'listener',
+                    listeners: {
+                        'autoLinks.after': function (event, text, options, globals) {
+                            var output = text.replace(/@lab\.TextBox\((")?([a-zA-Z0-9_-]+)\1\)/g, function (match, quotes, name) {
+                                var found = false;
+                                for (var i = 0; i < variableNames.length; i++) {
+                                    if (variableNames[i].name == name) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    variableNames.push({name:name});
+                                }
+                                return '<input type="text" class="variableTextBox" data-name="' + name + '" maxlength="500" />';
+                            });
+                            return output.replace(/@lab\.Variable\((")?([a-zA-Z0-9_-]+)\1\)/g, '<span class="variable" data-name="$2">&lt;$2&gt;</span>');
+                        }
+                    }
+                }
+            ]
+        });
+
+        showdown.extension('blockquoteModifiersBefore', function () {
+            return [{
+                type: 'listener',
+                listeners: {
+                    'blockQuotes.before': function (event, text, options, globals) {
+                        return text
+                            .replace(/^>\s*\[([^\]]+)\]:/igm, "<!--REFERENCECONTENT id=\"$1\"-->\n>")
+                            .replace(/^>\s*\[!ALERT\]/igm, "<!--ALERT-->\n>")
+                            .replace(/^>\s*\[!IMPORTANT\]/igm, "<!--ALERT-->\n>")
+                            .replace(/^>\s*\[!WARNING\]/igm, "<!--ALERT-->\n>")
+                            .replace(/^>\s*\[!KNOWLEDGE\]/igm, "<!--KNOWLEDGE-->\n>")
+                            .replace(/^>\s*\[!HELP\]/igm, "<!--HELP-->\n>")
+                            .replace(/^>\s*\[!HINT\]/igm, "<!--HINT-->\n>")
+                            .replace(/^>\s*\[!TIP\]/igm, "<!--HINT-->\n>")
+                            .replace(/^>\s*\[!NOTE\]/igm, "<!--NOTE-->\n>");
+                    }
+                }
+            }];
+        });
+
+        showdown.extension("blockquoteModifiersAfter", function () {
+            "use strict";
+            return [
+                {
+                    type: "output",
+                    filter: function (text, converter, options) {                        
+                        return text
+                            .replace(/<!--REFERENCECONTENT id="([^"]+)"-->\s*<blockquote>/gm, "<blockquote class='referenceContent' style='display:none;' data-id='$1'>")
+                            .replace(/<!--ALERT-->\s*<blockquote>/gm, "<blockquote class='alert'>")
+                            .replace(/<!--KNOWLEDGE-->\s*<blockquote>/gm, "<blockquote class='knowledge'>")                            
+                            .replace(/<!--HELP-->\s*<blockquote>/gm, "<blockquote class='help'>")
+                            .replace(/<!--HINT-->\s*<blockquote>/gm, "<blockquote class='hint'>")
+                            .replace(/<!--NOTE-->\s*<blockquote>/gm, "<blockquote class='note'>");
+                    }
+                }
+            ];
+        });
+       
+        converter = new showdown.Converter({
+            tables: true,
+            tasklists: true,
+            disableForced4SpacesIndentedSublists: true,
+            strikethrough: true,
+            literalMidWordUnderscores: true,
+            literalMidWordAsterisks: true,            
+            //simplifiedAutoLink: true,
+            //excludeTrailingPunctuationFromURLs: true,
+            customizedHeaderId: true,
+            //openLinksInNewWindow: true, 
+            ghCompatibleHeaderId:true,
+            emoji: true,
+            smoothLivePreview: true,
+            splitAdjacentBlockquotes:true,
+            extensions: [
+                "inlineCommandLinks"
+                ,"commandReferences"
+                , "commandReferenceLinks"
+                , "commandReferenceLinks"                
+                , "typeTextAndCopyable"
+                , "ms_include"
+                , "instructionsInclude"    
+                , "instructionsDialogLink"
+                , "pagebreak"
+                , "youtubevideo"
+                , "video"                
+                , "image"
+                , "link"
+                , "referenceLink"
+                , "tip"
+                , "blockquoteModifiersBefore"
+                , "blockquoteModifiersAfter"
+                , "containers"
+                , "activities"
+                , "variables"
+            ]
+        });
+        showDownInitialized = true;
+    }
+
+    function nthIndex(str, pat, n) {
+        var L = str.length, i = -1;
+        while (n-- && i++ < L) {
+            i = str.indexOf(pat, i);
+            if (i < 0) break;
+        }
+        return i;
+    }
+
+    function processPossibleYamlHeader(source) {
+        if (nthIndex(source, '---', 1) === 0) {
+            var yamlEndIndex = nthIndex(source, '---', 2);
+            if (yamlEndIndex > 0) {
+                var yamlString = source.substring(3, yamlEndIndex);
+                try {
+                    var yaml = YAML.parse(yamlString);
+                    return { yaml: yaml, document: source.substring(yamlEndIndex + 3) };
+                } catch (e) {
+                    //
+                }              
+            }
+        }
+        return null;
+    }
+
+    function processDocument(source, containerId) {
+        if (!showDownInitialized) {
+            initializeShowdown();
+        }
+        var yamlExtraction = processPossibleYamlHeader(source);
+        if (yamlExtraction != null) {
+            source = yamlExtraction.document;
+        }
+        contentRootPath = null;
+        var html = converter.makeHtml(source);
+        var wrappedHtml = "<div>" + html + "</div>";
+        var $html = $($.parseHTML(wrappedHtml)); //this strips script tags
+        $("#" + containerId).append($html);
+        doDomProcessing($html, "");
+    }
+
+    function processUrl(url, containerId) {
+        var $container = $("#" + containerId);
+        if (url && $container.length > 0) {
+            var url = getContentUrl(url, contentRootPath);
+            $.get(url, function (response) {
+                try {
+                    var content = response;
+                    var yamlExtraction = processPossibleYamlHeader(response);
+                    if (yamlExtraction != null) {
+                        //TODO:store the YAML for possible use elsewhere
+                        //var yaml = yamlExtraction.yaml;
+                        content = yamlExtraction.document;
+                    }
+                    contentRootPath = url.substr(0, url.lastIndexOf("/") + 1);
+                    var html = converter.makeHtml(content);
+                    
+                    $container.html(html);                    
+                    doDomProcessing($container, contentRootPath)
+                } catch (e) {
+                    $container.html("Unable to process content from " + url);
+                }
+            }).fail(function (response) {
+                $container.html("<div class='contentError'>Unable to retrieve content from " + url + "</div>");
+            });
+        }    
+    }
+
+    function escapeRegExp(str) {
+        return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+
+    function replaceAll(str, find, replace) {
+        if (replace == null) replace = "";
+        return str.replace(new RegExp(escapeRegExp(find), 'ig'), replace);
+    }
+
+    function process(source, containerId, enableCaching, documentRoot, replacementTokens, customDomProcessing, activities) {
+        if (!showDownInitialized) {
+            initializeShowdown();
+        }
+        variableNames = [];
+        var yamlExtraction = processPossibleYamlHeader(source);
+        if (yamlExtraction != null) {
+            //TODO:store the YAML for possible use elsewhere
+            //var yaml = yamlExtraction.yaml;
+            source = yamlExtraction.document;
+        }
+        contentRootPath = documentRoot;
+
+        if (insertPositionMarkers) {
+            var lineIndex = 0;
+            source = source.replace(/^\s*$[\n\r]{1,}/gm, function () {
+                var replacement = "<!--position " + lineIndex + "-->\n";
+                lineIndex++;
+                return replacement;
+            });
+        }
+                
+        if (replacementTokens && replacementTokens.length > 0) {
+            for (var z = 0, numTokens = replacementTokens.length; z < numTokens; z++) {
+                var token = replacementTokens[z];
+                source = replaceAll(source, token.Token, token.Replacement);
+            }
+        }
+
+        var html = converter.makeHtml(source);
+
+        if (insertPositionMarkers) {
+            html = html.replace(/^<!--position (\d+)-->/gm, "<div id='position$1' class='positionMarker'></div>")
+        }
+
+        var pages = html.split("<hr class='pagebreak'/>");
+        var numPages = pages.length;
+
+        for (var i = 0; i < numPages; i++) {
+            if (!$container || cachedContainerId !== containerId) {
+                $container = $("#" + containerId);
+                cachedContainerId = containerId;
+                if (!enableCaching) {
+                    $container.html("");
+                }
+            }
+            var pageHtml = pages[i];
+            var isNewPage = i >= cachedPages.length;
+            if (!enableCaching || isNewPage || (pageHtml !== cachedPages[i])) {
+                var $page;
+                if (isNewPage) {
+                    var wrappedHtml = "<div class='page' id='page" + i + "'>" + pageHtml + "</div>";
+                    $page = $($.parseHTML(wrappedHtml)); //this strips script tags
+                    $container.append($page);
+                } else {
+                    $page = $container.find("#page" + i);
+                    $page.html($.parseHTML(pageHtml));
+                }
+                if (enableCaching) {
+                    cachedPages[i] = pageHtml;
+                }
+                doDomProcessing($page, documentRoot, customDomProcessing, activities);
+            }
+        }
+
+        if (enableCaching) {
+            if (numPages < cachedPages.length) {
+                var numPagesToDelete = cachedPages.length - numPages;
+                var lastIndexToDelete = numPages + numPagesToDelete - 1;
+                for (var j = numPages; j <= lastIndexToDelete; j++) {
+                    $container.find("#page" + j).remove();
+                }
+                cachedPages.splice(numPages - 1, numPagesToDelete);
+            }
+        }
+    }
+
+    function doDomProcessing($element, contentRoot, customProcessing, activities) {  
+        $element.find(".task-list-item").each(function() {
+            var $li = $(this);
+            $li.removeAttr("style");
+            $li.closest("ol,ul").addClass("taskList");
+            //replace the default checkbox with our own wrapped one.
+            var $checkbox = $li.find('input[type="checkbox"]');
+            var checked = $checkbox.prop("checked");
+            $checkbox.before("<label class='checkbox'><input type='checkbox'" + (checked ? "checked='checked'" : "") + " /><span></span></label>");
+            $checkbox.remove();
+        });
+        $element.find(".copyable, code").attr("title", "Copy to clipboard");
+        $element.find(".typeText").attr("title", "Type Text");
+        $element.find(".knowledge").each(function() {
+            var $moreKnowledge = $("<div class='moreKnowledge'><a href='#' class='moreKnowledgeLink'>more...</a></div>");
+            $(this).after($moreKnowledge);
+        });
+        var $codeBlocks = $element.find("code");
+        if ($codeBlocks.length > 0) {
+            var $languageCodeBlocks = $codeBlocks.filter('[class*="language-"]');
+            $languageCodeBlocks.each(function() {
+                var $languageCodeBlock = $(this);
+                var classNames = $languageCodeBlock[0].className;
+                var indexOfLanguage = classNames.indexOf("language-");
+                if (indexOfLanguage > 0) {
+                    var language = classNames.substring(0, indexOfLanguage - 1);
+                    var nocode = language.indexOf("nocode") >= 0;
+                    var nocopy = language.indexOf("nocopy") >= 0;
+                    var nocolor = language.indexOf("nocolor") >= 0;
+                    var notab = language.indexOf("notab") >= 0;
+                    if (nocode || nocopy) {
+                        $languageCodeBlock.attr("title", "");
+                        $languageCodeBlock.addClass("nocopy");
+                    }
+                    if (nocode || nocolor) {
+                        $languageCodeBlock.addClass("nocode");
+                    }
+                    var langParts = language.split('-');
+                    var langNoModifiers = langParts[0];
+                    if (!notab && !nocode && langNoModifiers && langNoModifiers != "nocopy" && langNoModifiers != "nocolor") {
+                        var $codeLanguageTitle = ("<div class='codeTitle'>" + langNoModifiers + "</div>");
+                        $languageCodeBlock.before($codeLanguageTitle);
+                    }
+                }
+            });
+
+            if (insertPositionMarkers) {
+                for (var codeBlockIndex = 0, lastCodeBlockIndex = $codeBlocks.length; codeBlockIndex < lastCodeBlockIndex; codeBlockIndex++) {
+                    var $codeBlock = $codeBlocks.eq(codeBlockIndex);
+                    var codeBlockHtml = $codeBlock.html().replace(/&lt;!--position \d+--&gt;/g, "");
+                    $codeBlock.html(codeBlockHtml);
+                }
+            }
+
+            $codeBlocks.each(function () {
+                var html = $(this).html();                
+                html = html.replace(/@lab\.Variable\((")?([a-zA-Z0-9_-]+)\1\)/g, '<span class="nocode">&lt;$2&gt;</span>');
+                $(this).html(html);
+            });
+
+            $codeBlocks.addClass("prettyprint");
+
+            try {
+                PR.prettyPrint(); //TODO: target only the current page
+            } catch (e) {
+                //
+            }
+        }
+        
+        if (insertPositionMarkers) { //TODO: are there other hidden elements we need to account for?
+            $element.find("style").each(function () {
+                var $styleBlock = $(this);                
+                var styleBlockHtml = $styleBlock.html().replace(/<div id='position\d+' class='positionMarker'><\/div>/g, "");
+                $styleBlock.html(styleBlockHtml);
+            });
+        }
+
+        $element.find("include").each(function() {
+            var $include = $(this);
+            var $parent = $include.parent();
+            if ($parent.length > 0 && $parent.prop("tagName") == "P") {
+                $parent.before($include);
+                $parent.remove();
+            }
+            var src = $include.attr("src");
+            if (src) {
+                var url = getContentUrl(src, contentRoot);
+                $.get(url, function(response) {
+                    try {
+                        var content = response;
+                        var yamlExtraction = processPossibleYamlHeader(response);
+                        if (yamlExtraction != null) {
+                            //TODO:store the YAML for possible use elsewhere
+                            //var yaml = yamlExtraction.yaml;
+                            content = yamlExtraction.document;
+                        }
+                        contentRootPath = url.substr(0, url.lastIndexOf("/") + 1);
+                        var includeHtml = converter.makeHtml(content);
+                        $include.html(includeHtml);                        
+                        doDomProcessing($include, contentRootPath, customProcessing, activities);
+                    } catch (e) {
+                        $include.html("Unable to process content from " + src);
+                    }
+                }).fail(function(response) {
+                    $include.html("<div class='contentError'>Unable to retrieve content from " + src + "</div>");
+                });
+            }
+        });
+
+        $element.find("div.instructionsblock").each(function () {
+            var $insertpoint = $(this);
+            var referenceId = $insertpoint.attr("ref");
+            if (referenceId) {
+                var $reference = $("blockquote[data-id='" + referenceId + "']");                
+                if ($reference.length > 0) {
+                    $insertpoint.html($reference.html());
+                }
+            }
+        });
+
+        if (activities && activities.length > 0) {
+            var $activities = $element.find(".activity");
+            for (var i = 0, numActivities = $activities.length; i < numActivities; i++) {
+                var $activity = $activities.eq(i);
+                var id = parseInt($activity.attr("data-id"));                
+                var activity = getItemById(activities, id);
+                if (activity == null) {
+                    $activity.html("Activity " + id + " could not be found.").addClass("contentError");
+                } else {
+
+                    var $instances = $(".activity[data-id='" + id + "']");
+                    $instances.each(function (activityIndex) {
+                        $(this).attr('data-index', activityIndex);
+                    });
+                    var activityIndex = $activity.attr("data-index");
+
+                    var result = null;
+                    if (activity.Results != null && activity.Results.length > 0) {
+                        for (var m = 0, numResults = activity.Results.length; m < numResults; m++) {
+                            if (activity.Results[m].ActivityIndex == activityIndex) {
+                                //TODO:check that this was evaluated on demand vs. simply background recorded
+                                result = activity.Results[m];
+                                if (result.Evaluated) {
+                                    activity.AlreadyEvaluated = true;
+                                    $activity.attr("data-evaluated", "1");
+                                }                                
+                                break;
+                            }
+                        }
+                    }
+
+                    if (activity.Type == 0 || activity.Type == 10) {
+                        var answers = activity.Answers;
+                        var html = "<div class='questionText'>" + activity.Text + "</div><div class='answers'>";
+                        for (var j = 0, len = answers.length; j < len; j++) {
+                            var answer = answers[j];
+                            html += "<div class='answer' data-id='" + answer.Id + "'><label><input " +
+                                (activity.Type == 0 ? "type='radio' name='question" + activity.Id + "-" + activityIndex+ "'" : "type='checkbox'") +
+                                (activities.DisplayCorrectAnswers && answer.Correct ? " checked='checked'" : "") +
+                                " />" + answer.Text + "</label></div>";
+                        }
+                        html += "</div>";
+                        $activity.html(html);
+                        if (result) {
+                            for (var k = 0, numAnswerResults = result.AnswerResults.length; k < numAnswerResults; k++) {
+                                var answerResult = result.AnswerResults[k];
+                                $activity.find(".answer[data-id='" + answerResult + "'] input").prop("checked", true);
+                            }
+                        }
+                        if (activity.AlreadyEvaluated && !activity.AllowRetry) {
+                            $activity.find(".answer input").prop("disabled", true);
+                        }
+                    } else if (activity.Type == 20 || activity.Type == 30) {
+                        var answers = activity.Answers;
+                        var html = "<div class='questionText'>" + activity.Text + "</div><div class='answer'><input type='text' class='answerText' maxlength='200'/></div></div>";
+                        $activity.html(html);
+                        if (activities.DisplayCorrectAnswers && activity.TextAnswer) { //only used in editor
+                            $activity.find("input:text").attr("placeholder", activity.TextAnswer);
+                        }
+                        if (result && result.TextResult) {
+                            $activity.find("input:text").val(result.TextResult);
+                        }
+                        if (activity.AlreadyEvaluated && !activity.AllowRetry) {
+                            $activity.find(".answer input").prop("disabled", true);
+                        }
+                    } else if (activity.Type == 40) {
+                        if (activity.Text) {
+                            $activity.html("<div class='automatedActivityText'>" + activity.Text + "</div>");
+                        }
+                        if (activity.DisplayScriptsAsTaskList && activity.Scripts && activity.Scripts.length > 0) {
+                            var taskListHtml = "<div class='scriptTaskList'>";
+                            for (var m = 0, numScripts = activity.Scripts.length; m < numScripts; m++) {
+                                var script = activity.Scripts[m];
+                                taskListHtml += "<div class='scriptTask' data-id='" + script.Id + "'><div class='status'><span class='running loadingAnimation-medium'></span><span class='result'></span></div><div class='taskText'>" + script.Text + "</div><div class='response' style='display:none;'></div></div>";
+                            }
+                            taskListHtml += "</div>";
+                            $activity.append(taskListHtml);
+                        }
+                    }
+
+                    if (result != null && result.Evaluated) {
+                        if (activity.DisplayScriptsAsTaskList) {
+                            for (var n = 0, numScripts = result.ScriptResults.length; n < numScripts; n++) {
+                                var scriptResult = result.ScriptResults[n];
+                                var $scriptTask = $activity.find(".scriptTask[data-id='" + scriptResult.ScriptId + "']");
+                                if ($scriptTask.length > 0) {
+                                    if (scriptResult.Passed) {
+                                        $scriptTask.addClass("pass");
+                                    } else {
+                                        $scriptTask.addClass("fail");
+                                    }
+                                    if (scriptResult.Response || scriptResult.Text) {
+                                        var $response = $scriptTask.find(".response");
+                                        $response.show();
+                                        if (scriptResult.Response) {
+                                            $response.append($("<div class='textResponse'>" + scriptResult.Response + "</div>"));
+                                        }
+                                        if (scriptResult.Text) {
+                                            $response.append($("<div class='scriptResponse'>" + scriptResult.Text.replace("\n", "<br>") + "</div>"));
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            var $feedback = $("<div class='feedback'></div>");
+                            $activity.append($feedback);
+                            if (result.Passed) {
+                                $feedback.addClass("positive");
+                            } else {
+                                $feedback.addClass("negative");
+                            }
+                            var response = result.Response;
+                            if (!response && activity.Type < 40) {
+                                response = result.Passed ? "Correct" : "Incorrect";
+                            }
+                            if (response) {
+                                $feedback.html("<div class='textResponse'>" + response + "</div>");
+                            }
+                            for (var p = 0, numScripts = result.ScriptResults.length; p < numScripts; p++) {
+                                var scriptResult = result.ScriptResults[p];
+                                if (scriptResult.Text) {
+                                    $feedback.append($("<div class='scriptResponse'>" + scriptResult.Text + "</div>"));
+                                }
+                            }
+                        }
+                    }
+
+                    if (activity.OnDemandEvaluation) {
+                        $activity.append("<div><input type='button' class='evaluate'" + (!activity.AllowRetry && activity.AlreadyEvaluated ? " disabled='disabled'" : "") +  " value='" + (activity.Scored ? "Score" : "Check") + "' /><span class='loading loadingAnimation-medium' style='display:none;'></span></div>");
+                    }
+                }
+            }
+        }
+
+        if (customProcessing) {
+            customProcessing($element);
+        }
+    }
+
+    function getItemById(items, id) {
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].Id == id) {
+                return items[i];
+            }
+        }
+        return null;
+    }
+
+    function getContentUrl(url, contentRoot) {
+        if (!contentRoot) return url;
+        if (url.indexOf("/") === 0 || url.indexOf(":") >= 0 || url.indexOf("#") === 0) return url;
+        return contentRoot + url;
+    }
+        
+    return {
+        process: process,
+        processDocument: processDocument,
+        processUrl: processUrl,
+        insertPositionMarkers: function (v) { insertPositionMarkers = v; },
+        getVariableNames: function () { return variableNames; }
+    };
+}();

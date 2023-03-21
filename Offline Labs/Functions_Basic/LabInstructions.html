@@ -1,0 +1,1028 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0047)https://labondemand.com/LabProfile/Manual/LABID -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Local Lab Instructions</title>
+
+
+    <script src="./Content/jquery-2.1.4.min.js.download" type="text/javascript"></script>
+    <script src="./Content/showdown.min.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Content/prettify.css">
+    <script src="./Content/yaml.min.js.download"></script>
+    <script src="./Content/LocalizeTo" type="text/javascript"></script>
+    <link href="./Content/CloudClient.css" rel="stylesheet" type="text/css">
+  
+    <style type="text/css">
+        body, html {
+            font-family: Segoe UI,Tahoma,Verdana,Arial,sans-serif;
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            background-color: #efefef;
+            color: #000;
+            height: 100%;
+        }
+
+        body {
+            overflow:auto;
+        }
+
+        #outputWrapper {
+            background-color: #efefef;
+            min-height:100%;
+        }
+
+        .instructionsPreview {
+            padding: 20px;
+            height: 100%;
+        }
+
+        .instructionsPreview .page {
+            position:relative;
+            display: block !important;
+            padding: 15px 20px;
+            background-color:#fff;
+            page-break-after: always;
+            min-height:40px;
+        }
+
+        .instructionsPreview .page:not(:first-child) {
+            margin-top:20px;
+        }
+
+        @media print {
+            body, html{
+                height:auto;
+            }
+            
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            div {
+                page-break-inside: avoid;
+            }
+
+            #outputWrapper {
+                background-color: transparent;
+            }
+
+            .instructionsPreview {
+                padding: 0;
+            }
+
+            .instructionsPreview .page:not(:first-child) {
+                margin-top: 0px;
+            }
+
+        }
+
+        @page {
+            margin-left: 1.5cm;
+            margin-right: 1.5cm;
+            margin-top: 1.5cm;
+            margin-bottom: 1.5cm;
+        }
+    </style>
+    <link id="themeStylesheet" href="./Content/Blue.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="outputWrapper">
+                <div id="instructions" class="instructionsPreview">
+    </div>
+    <input type="hidden" id="rawContent" value="[TemplateVersion]:
+&#39;1.1&#39;
+
+[LODLabID]:
+&#39;40022&#39;
+
+[LODLabNumber]:
+&#39;04 FS.Functions&#39;
+
+[AdminPowerShell]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell -Verb RunAs&quot;
+exit
+```
+
+[AdminPowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise -Verb RunAs&quot;
+exit
+```
+
+[PowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise&quot;
+exit
+```
+
+# Welcome student to the module: Functions
+
+A **function** is a reusable block of PowerShell code that is called via the defined name. This allows for code to be reused more efficiently, either interactively or within a script.
+
+**Parameters** can be added to functions to allow passing input into the script block for more dynamic usage.
+
+**Script blocks** are objects that contain code to be used by *certain* cmdlets. This can be useful in a variety of situations which will be explored throughout the workshop.
+
+PowerShell supports **scoping** to create a logical border between processes. Using scopes properly will prevent naming collisions, or using the same variable multiple times for separate purposes.
+
+Estimated time to complete this lab: **45 minutes**
+
+## Module Objectives
+
+After completing this lab, you will be able to:
+
+-   Create a function
+-   Add parameters to functions
+-   Use script blocks with various cmdlets
+-   Understand how scopes work
+
+===
+
+# Login to Windows 10 and Start the Lab
+
+Login to **win10(wdt** machine with the given credentials. You can find them on the **Resources** pane.
+
+Please login with Username: **+++Power+++** and Password: **+++Pa$$w0rd+++**
+
+After logging in wait until you see the &quot;Lab preparation has been completed&quot; in the action center (This can take up to 2 minutes). If this does not popup you can click in the bottom right of the Vm to open the action center. Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+> [!TIP] **Notes about using the lab**
+> - It might take a moment to start ISE if you click the above link
+> - You can click the **+++Type Text+++** icon to enter the highlighted text at the position of the cursor in the virtual machine. You can also click on the **++Copyto Clipboard++** icon and then paste in at the desired destination.
+> - Entering your code in the script pane of the ISE will allow for better troubleshooting if you find errors
+> - Remember that the PowerShell ISE will allow you to highlight multiple lines of PowerShell code and run them together by pressing **F8**
+
+===
+
+# Exercise 1: Creating Functions
+A **function** is a reusable block of PowerShell code that is called via the defined name. This allows for code to be reused more efficiently, either interactively or within a script. **Parameters** can be added to functions to allow passing input into the script block for more dynamic usage.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+-   Create a basic function
+-   Add parameters to a function
+
+>[!alert] The function you create in this exercise will continue to be used later in this lab.
+
+===
+
+# Task 1.1: Create a function
+
+A **function** is **defined** by using the function keyword and a unique function name followed by a pair of curly braces containing the statements to be run.
+
+```PowerShell-notab-nocopy
+Function <FunctionName> {
+    <Statement1>
+    <Statement2>
+    <Statement3>
+}
+```
+
+1. [] Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting &quot;Windows PowerShell ISE&quot;, or by clicking @[Windows PowerShell ISE][PowerShellISE]{shell visible}.
+
+1. [] Using the above as a template, define a new function called **Write-LogEntry**
+
+    <details>
+    <summary>Example Function</summary>
+
+    ```PowerShell-notab
+    Function Write-LogEntry {
+
+    }
+    ```
+    </details>
+
+1. [] Add some commands to the statement list to execute when the function is called.
+    - [] Write today&#39;s date to a new text file in the C:\PShell\ directory
+    - [] Write the current user&#39;s home directory to the text file
+    - [] Add a sample log entry to the text file
+    - [] Open the text file in Notepad
+
+    >[!Hint] PowerShell stores the current user&#39;s home directory in the built-in variable **$HOME**.
+
+    <details>
+    <summary>Example Function</summary>
+
+    ```PowerShell-notab
+    Function Write-LogEntry {
+        Get-Date | Set-Content C:\PShell\MyLog.txt
+        $HOME | Add-Content C:\PShell\MyLog.txt
+        &quot;New log entry&quot; | Add-Content C:\PShell\MyLog.txt
+        Notepad C:\PShell\MyLog.txt
+    }
+    ```
+    </details>
+
+1. [] Highlight the function and press **F8** to run the code and define the function. Notice no output occurs when running this code.
+
+    >[!KNOWLEDGE] A function must be defined before it can be executed, usually referred to as **calling** a function. To call a function, simply type the function name like you would a cmdlet.
+
+1. [] Call the function and observe that each of the commands execute to create a new text file, adds content, and displays the contents of the file.
+
+    <details>
+    <summary>How to call the Function</summary>
+
+    ```PowerShell-notab
+    Write-LogEntry
+    ```
+    </details>
+===
+
+# Task 1.2: Add parameters to a function
+
+Functions can use **Parameters** just like cmdlets do. To add parameters to a function, **Param ()** must be added to the beginning of the function with a defined list of parameters inside of the parenthesis. Parameters can be listed on the same line or on multiple lines. They can also be defined with default values, in the event that the parameter is not used when calling the function.
+
+```PowerShell-notab-nocopy
+Function <Name>
+{
+    Param (
+        $Param1,
+        $Param2
+        )
+    <Statement1 $Param1>
+    <Statement2>
+    <Statement3 $Param2>
+}
+```
+
+1. [] Using the function created in the previous task, add new parameters for the **file name** and **log entry text**.
+
+1. [] Defining parameters in the **Param ()** block only allows you to use the parameters in the script block, they are not yet being passed to the code in the script block. Replace some of the static code with your new parameters.
+
+    <details>
+    <summary>Example Function</summary>
+
+    ```PowerShell-notab
+    Function Write-LogEntry {
+        param (
+            $FileName,
+            $LogEntry
+            )
+        Get-Date | Set-Content $FileName
+        $HOME | Add-Content $FileName
+        $LogEntry | Add-Content $FileName
+        Notepad $FileName
+    }
+    ```
+    </details>
+
+1. [] By default, parameters are empty variables waiting for a value. You can define a default value to your parameters using the same syntax as defining a variable. Add a default value to one or more of your new parameters.
+
+    <details>
+    <summary>Example Parameters</summary>
+
+    ```PowerShell-notab
+    Function Write-LogEntry {
+        param (
+            $FileName = &quot;C:\PShell\MyLog.txt&quot;,
+            $LogEntry = &quot;Default Log Entry&quot;
+            )
+        Get-Date | Set-Content $FileName
+        $HOME | Add-Content $FileName
+        $LogEntry | Add-Content $FileName
+        Notepad $FileName
+    }
+    ```
+    </details>
+
+1. [] Now you have a function that creates a new file based on dynamic input from parameters. Call your function in a variety of methods.
+    - [] Call the function with no parameters
+    - [] Call the function using named parameters
+    - [] Call the function using positional parameters
+
+    <details>
+    <summary>How to call the function</summary>
+
+    ```PowerShell-notab
+    Write-LogEntry
+    ```
+
+    ```PowerShell-notab
+    Write-LogEntry -FileName MyLog.txt -LogEntry &quot;Errors found!&quot;
+    ```
+
+    ```PowerShell-notab
+    Write-LogEntry MyLog.txt &quot;Errors found!&quot;
+    ```
+    </details>
+
+1. [] You can use **Get-Command** to find your function just like a cmdlet. For example, you can run +++Get-Command -Name Write-LogEntry -Syntax+++ or +++Get-Command -Noun LogEntry+++.
+
+    >[!Note] Parameters have a default set of attributes that can be modified by using advanced techniques, such as making parameters mandatory or defining their positional order. These techniques are covered in other workshops.
+
+===
+# Exercise 2: Script Blocks
+
+**Script blocks** are objects that contain multiple lines of code to be used with *certain* cmdlets. In this exercise you will explore scenerios that use script blocks.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+-   Invoke a scipt block
+-   Identify cmdlets with parameters that use script blocks
+-   Use script blocks in common cmdlets
+
+===
+
+# Task 2.1: Invoking a script block
+
+You can create a basic **script block** by placing PowerShell statements inside of curly braces **{ }**. Functions assign a name to a script block for an easy way to call, or invoke, the statements, however, script blocks can also be called using the **.Invoke()** method.
+
+```PowerShell-notab-nocopy
+{
+    <Statement1>
+    <Statement2>
+}
+```
+
+1. [] Using the above template, create a new script block. Some ideas for cmdlets to use could include:
+    - Write some text to the host
+    - Get the current date
+    - Get a specific service
+
+    <details>
+    <summary>Example Script Block</summary>
+
+    ```PowerShell-notab
+    {
+        Write-Host &quot;This is inside a script block&quot;
+        Get-Date
+        Get-Service -Name WinRM
+    }
+    ```
+    </details>
+
+1. [] Hightlight the script block and press **F8** to run it. Notice that the code listed inside of the script block is displayed in the output pane but does not run and return results.
+
+1. [] In order for PowerShell to execute the script block you need to **invoke** it. One way to invoke a script block is to use the **invoke method**. After the closing curly brace, add **.Invoke()**, then run the script block and invoke method. The statements inside of the script block will execute and return results.
+
+1. [] Running a script block in the above manner is not very useful since it can&#39;t be reused easily. One method to reuse a script block is to save it in a variable and invoke the variable. Create a new variable **$SB** and save your script block into it.
+
+    >[!Note] The invoke method should not be included when saving to a variable.
+
+    <details>
+    <summary>Example Variable Script Block</summary>
+
+    ```PowerShell-notab
+    $SB = {
+            Write-Host &quot;This is inside a script block&quot;
+            Get-Date
+            Get-Service -Name WinRM
+        }
+    ```
+    </details>
+
+1. [] When a script block is saved to a variable it will behave the same as a script block not saved to a variable, calling the variable will only return the statements in the script block. Call the variable without and with the **.Invoke()** method to see the difference.
+
+===
+
+# Task 2.2: Using script blocks with other cmdlets
+
+Several PowerShell cmdlets accept script blocks as input. Not all of these cmdlets use the same parameter names to accept script blocks. You can use the **Get-Command** cmdlet to identify what cmdlets have parameters that accept script blocks.
+
+1. [] Run **Get-Command** and specify a **-ParameterType** of **scriptblock** to identify what cmdlets accept script blocks. How many cmdlets use script blocks?
+
+    <details>
+    <summary>Answer</summary>
+    The number could vary depending on your environment. In the lab you should see around 13.
+    </details>
+
+1. [] **Measure-Command** is a common cmdlet measuring how long it takes for a script block to run. Before using the Measure-Command cmdlet, use Get-Command to view the syntax for the cmdlet.
+
+1. [] Measure-Command uses a parameter called **expression** to define the script block to evaluate. Use the Measure-Command cmdlet to identify how long it takes to run the **Get-Service** cmdlet.
+
+    <details>
+    <summary>Measure-Command Example</summary>
+
+    ```PowerShell-notab
+    Measure-Command -Expression {Get-Service}
+    ```
+    </details>
+
+1. [] The output of **Measure-command** displays the time it took to *execute* the code in the script block, but does not return the output from the code that was run. Run Measure-Command with other script blocks to identify how long each of them take to run.
+
+    - [] Get-Alias
+    - [] Write-LogEntry - *The same function from the previous exercise*
+    - [] Multiple cmdlets in a single script block, such as: Get-Service, Get-Process, Get-ChildItem
+
+    <details>
+    <summary>Write-LogEntry</summary>
+
+    ```PowerShell-notab
+    Function Write-LogEntry {
+        param (
+            $FileName = &quot;MyLogFile.txt&quot;,
+            $LogEntry = &quot;Default Log Entry&quot;
+            )
+        Get-Date | Set-Content $FileName
+        $HOME | Add-Content $FileName
+        $LogEntry | Add-Content $FileName
+        Notepad $FileName
+    }
+    ```
+    </details>
+
+    <details>
+    <summary>Measure-Command Examples</summary>
+
+    ```PowerShell-notab
+    Measure-Command -Expression {Get-Alias}
+    ```
+
+    ```PowerShell-notab
+    Measure-Command -Expression {Write-LogEntry}
+    ```
+
+    ```PowerShell-notab
+    Measure-Command -Expression {Get-Service
+                                    Get-Process
+                                    Get-ChildItem}
+    ```
+    </details>
+
+1. [] Another common cmdlet that accepts script blocks is **Invoke-Command**. Use Get-Command to view the syntax for Invoke-Command. There are many parameter sets available for this command, for this step you should look at the top parameter set.
+
+    <details>
+    <summary>Invoke-Command Syntax</summary>
+
+    ```nocopy
+    Invoke-Command [-ScriptBlock] <scriptblock> [-NoNewScope] [-InputObject <psobject>] [-ArgumentList <Object[]>] [<CommonParameters>]
+    ```
+    </details>
+
+1. [] Invoke-Command uses the **-ScriptBlock** parameter to run the defined script block, similar to the Invoke() method. Use the Invoke-Command to run several script blocks.
+
+    - [] Get-Alias
+    - [] Write-LogEntry - *The same function from the previous exercise*
+    - [] $SB - *The same variable from the previous task*
+    - [] Multiple cmdlets in a single script block
+
+    <details>
+    <summary>$SB Script Block</summary>
+
+    ```PowerShell-notab
+    $SB = {
+            Write-Host &quot;This is inside a script block&quot;
+            Get-Date
+            Get-Service -Name WinRM
+        }
+    ```
+    </details>
+
+    <details>
+    <summary>Invoke-Command Examples</summary>
+
+    ```PowerShell-notab
+    Invoke-Command -ScriptBlock {Get-Alias}
+    ```
+
+    ```PowerShell-notab
+    Invoke-Command -ScriptBlock {Write-LogEntry}
+    ```
+
+    ```PowerShell-notab
+    Invoke-Command -ScriptBlock $SB
+    ```
+
+    ```PowerShell-notab
+    Invoke-Command -ScriptBlock {Get-Service
+                                    Get-Alias
+                                    Write-LogEntry}
+    ```
+    </details>
+
+>[!Knowledge] When a variable that contains a script block is used with Invoke-Command you do not need to use the .Invoke() method, since the command will invoke it instead. You also do not need to use curly braces around the variable, as those are already included in the saved script block.
+
+===
+
+# Exercise 3: Working with scopes in PowerShell
+
+PowerShell supports **scopes** to create a logical borders to prevent naming collisions. These scopes protect access to variables and more by limiting where they can be accessed. This means that a variable created in one function is unavailable to a second function, unless specifically allowed.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+-   Understand default scope behavior in PowerShell
+-   Use dot sourcing to modify scope behavior
+
+===
+
+## Task 3.1: View the function scope
+
+**Scopes** are defined by logical borders and can be observed by creating separate functions and passing variables between them. You will create two functions that use the same variables to see this in action.
+
+1. [] In PowerShell ISE, create a new variable **$GlobalVariable** and assign it a value of **&quot;Outside&quot;**. This variable will exist in the global scope which is a parent to the function scope we will create next.
+
+1. [] Create a new function called **Test-Scope1**. Adding the following code to the function will allow you to explore scopes using this function.
+
+    1. [] Write the value of **$GlobalVariable** to the host. This will display the value passed from the parent scope (*Global*) to the child scope (*Test-Scope1*).
+
+    1. [] Assign **$GlobalVariable** to a new value of **&quot;Inside Test-Scope1&quot;**. This will assign a new value to the variable inside the Test-Scope1 scope.
+
+    1. [] Write the new value of the **$GlobalVariable** to the host, this will contain the new value that was just set.
+
+    1. [] Create a new variable called **$Scope1** with a value of **&quot;Inside Test-Scope1&quot;**. This variable will only exist inside of the Test-Scope1 scope.
+
+    1. [] Write the value of **$Scope1** to the host.
+
+    <details>
+    <summary>Test-Scope1</summary>
+
+    ```PowerShell-notab
+    $GlobalVariable = &quot;Outside&quot;
+
+    function Test-Scope1 {
+        Write-Host &quot;GlobalVariable is: $GlobalVariable&quot;
+        $GlobalVariable = &quot;Inside Test-Scope1&quot;
+        Write-Host &quot;The new value of GlobalVariable is: $GlobalVariable&quot;
+        $Scope1 = &quot;Inside Test-Scope1&quot;
+        Write-Host &quot;Scope1 is: $Scope1&quot;
+    }
+    ```
+    </details>
+
+1. [] Highlight **$GlobalVariable** and the newly created function and press **F8** to run it. Now when you call the Test-Scope1 function you should see the following.
+    - The value of $GlobalVariable passed from the parent scope to the child scope
+    - The value of $GlobalVariable being set to a new value and displayed
+    - A new variable inside of the Test-Scope1 scope being define and displayed
+
+1. [] What do you expect the values of **$GlobalVariable** and **$Scope1** to return? Inside the console pane type each variable to return the actual value.
+
+    <details>
+    <summary>Answer</summary>
+
+    **$GlobalVariable** will return the value of &quot;Outside&quot; since the child scope does not affect the parent scope. The child scope receives a copy of the value which only exists in the function.
+
+    **$Scope1** does not exist outside of the scope created for the function.
+    </details>
+
+1. [] Create a second function, **Test-Scope2**, with the following code:
+
+    1. [] Write the value of $GlobalVariable to the host.
+
+    1. [] Set the value of $GlobalVariable to &quot;Inside Test-Scope2&quot;.
+
+    1. [] Write the new value of $GlobalVariable to the host
+
+    1. [] Write the value of $Scope1 to the host.
+
+    <details>
+    <summary>Test-Scope2</summary>
+
+    ```PowerShell-notab
+    function Test-Scope2{
+        Write-Host &quot;GlobalVariable is: $GlobalVariable&quot;
+        $GlobalVariable = &quot;Inside Test-Scope2&quot;
+        Write-Host &quot;The new value of GlobalVariable is: $GlobalVariable&quot;
+        Write-Host &quot;Scope1 is: $Scope1&quot;
+    }
+    ```
+    </details>
+
+1. [] Highlight **Test-Scope2** and press **F8** to define it. Call the new function and observe the new results.
+    - $GlobalVariable displays the original value of &quot;Outside&quot; and not the new value defined in Test-Scope1
+    - $GlobalVariable is assigned a new value, within this functions scope that does not affect the other scopes
+    - The variable $Scope1 that was defined in Test-Scope1 does not exist for Test-Scope2
+
+1. [] Call the values of **$GlobalVariable** and **$Scope1** to verify the current values.
+
+    <details>
+    <summary>Answer</summary>
+
+    **$GlobalVariable** will return the value of &quot;Outside&quot; because Test-Scope2 is run in a separate scope and it does not see the value assigned in Test-Scope1.
+
+    **$Scope1** does not exist outside of the scope created for the function.
+    </details>
+
+>[!Note]  Keep Test-Scope1 and Test-Scope2 in the ISE for the next task.
+
+===
+## Task 3.2: Use dot sourcing
+
+In the previous task, you created two separate functions and observed how scopes prevent variables from being reassigned from another scope. Variables can be passed from parent to child but not from child to parent. In this task you will run your functions without creating a child scope.
+
+1. [] Call Test-Scope1 and observe the previous results of scopes preventing variables from being overwritten with new values.
+
+1. [] **Dot sourcing** a function will not create the new child scope and will run it within the current scope. Run the same function with a **.** before it to run it in the global scope: `. Test-Scope1`
+
+
+1. [] What do you expect the values of **$GlobalVariable** and **$Scope1** to return this time? Inside the console pane, type each variable to return the actual value.
+
+    <details>
+    <summary>Answer</summary>
+
+    Because dot sourcing did not create a child scope, **$GlobalVariable** returns the new value that was assigned in Test-Scope1.
+
+    **$Scope1** was not created in a child scope and now exists in the global scope.
+    </details>
+
+1. [] Without the new child scope, both variables are now available in the global scope with the new values. Run Test-Scope2 and note the output of the function now.
+
+1. [] Now dot source Test-Scope2, and observe the new changes. What do you expect the values of **$GlobalVariable** and **$Scope1** to return this time? Inside the console pane, type each variable to return the actual value.
+
+    <details>
+    <summary>Answer</summary>
+
+    Because dot sourcing did not create a child scope, **$GlobalVariable** returns the new value that was assigned in Test-Scope2.
+
+    **$Scope1** still exists in the global scope.
+    </details>
+
+===
+
+# End of lab
+
+## Functions Lab Summary
+
+You have successfully completed this module.
+
+Throughout this module, you have:
+-   Created a simple function
+-   Added parameters to your function
+-   Learned how to use script blocks in cmdlets
+-   Created variables within different scopes
+
+Click on **Next** to continue to the (optional) self test.
+
+===
+
+# Self test (Optional part of the course)
+
+## Self test information
+
+The following self test is a optional part of this course and can be used to evaluate if your knowledge of the subject matter is sufficient. You can use this self test to re-evaluate your knowledge after taking the course or test your knowledge before you take / retake the course.
+
+The self test consists of 10 questions/exercises. For best results, it is recommended to complete this self test without referring back to the previous materials or other resources.
+
+##  Self test duration
+
+Although the self test is not timed this test should be completed in approximately 15 minutes.
+
+To start the self test continue to the next page
+
+===
+
+## Self test
+
+1. <Removed>
+___
+2. <Removed>
+___
+3. <Removed>
+___
+4. <Removed>
+___
+5. <Removed>
+___
+6. <Removed>
+___
+7. <Removed>
+___
+8. <Removed>
+___
+9. <Removed>
+___
+10. @lab.Activity(Question10)">
+    <input type="hidden" id="activities" value="[]">
+    <input type="hidden" id="replacementTokens" value="[{&quot;Token&quot;:&quot;@lab.LabProfile.Id&quot;,&quot;Replacement&quot;:&quot;38671&quot;},{&quot;Token&quot;:&quot;@lab.CtrlAltDelete&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;ctrlAltDeleteLink&#39;&gt;Ctrl+Alt+Delete&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;63124&#39;&gt;WIN10&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54597&#39;&gt;MS&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54598&#39;&gt;DC&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Username&quot;,&quot;Replacement&quot;:&quot;Administrator&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.OpticalMedia(5638).LoadLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;loadMediaLink opticalMedia&#39; data-data=&#39;5638&#39;&gt;Introduction to Commands - 0050&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.Id&quot;,&quot;Replacement&quot;:&quot;[ID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.GlobalId&quot;,&quot;Replacement&quot;:&quot;[lodID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.StartDate&quot;,&quot;Replacement&quot;:&quot;20190108&quot;},{&quot;Token&quot;:&quot;@lab.User.Id&quot;,&quot;Replacement&quot;:&quot;[USERID]&quot;},{&quot;Token&quot;:&quot;@lab.User.FirstName&quot;,&quot;Replacement&quot;:&quot;[FIRSTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.LastName&quot;,&quot;Replacement&quot;:&quot;[LASTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.Email&quot;,&quot;Replacement&quot;:&quot;[EMAIL]&quot;},{&quot;Token&quot;:&quot;@lab.User.ExternalId&quot;,&quot;Replacement&quot;:&quot;[EXTERNALID]&quot;},{&quot;Token&quot;:&quot;@lab.Tag&quot;,&quot;Replacement&quot;:&quot;[TAG]&quot;}]">
+
+    <textarea id="copyInput" value="" style="position: absolute; left:-10000px; top:-10000px; "></textarea>
+
+    <script type="text/javascript"> 
+    
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        var childWindows = [];
+
+        function showClickFeedbackMessage(text, x, y, duration) {
+            var $message = $("<div class='clickFeedbackMessage noselect'>" + text + "</div>");
+            $message.appendTo($("body")).hide();
+            $message.css({ left: x, top: y });
+            $message.fadeIn("fast");
+            window.setTimeout(function () {
+                $message.fadeOut("fast", function () { $message.remove(); });
+            }, duration);
+        }
+
+        function copyableClicked(element) {
+            //only copy if we are clicking, not if we have used the mouse to select the text manually.
+            var selectedText;
+            if (window.getSelection) {
+                selectedText = window.getSelection().toString();
+            } else if (document.selection && document.selection.type !== "Control") {
+                selectedText = document.selection.createRange().text;
+            }
+            if (selectedText) { return };
+
+            var $element = $(element);
+            var text = $element.text();
+            $("#copyInput").val(text).select();
+            var offset = $element.offset();
+            var x = offset.left;
+            var y = offset.top - 40;
+            try {
+                var successful = document.execCommand("copy");
+                if (successful) {
+                    showClickFeedbackMessage("Copied to clipboard", x, y, 2000);
+                } else {
+                    showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                }
+            } catch (err) {
+                showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                console.log("Unable to copy. " + err);
+            }
+        }
+
+        function setupKnowledgeExpanders() {
+            $(".knowledge").each(function () {
+                var knowledge = this;
+                var $knowledge = $(this);
+                var $moreKnowledge = $knowledge.next();
+                if ($moreKnowledge.is(".moreKnowledge")) {
+                    var maxHeight = 100;
+                    var leeway = 100;
+                    var diff = knowledge.scrollHeight - maxHeight;
+                    if (diff < leeway) {
+                        $knowledge.removeClass("collapsed");
+                        $moreKnowledge.find("a").hide();
+                    } else {
+                        //this is tall content, let's show the 'more' link
+                        $moreKnowledge.find("a").show();
+                        $knowledge.addClass("collapsed");
+                    }
+                }
+            });
+        }
+
+        var variables = {};
+
+        function processVariables() {
+            $("span.variable").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.html(variables[name]);
+                } else {
+                    $this.text("<" + name + ">");
+                }
+            });
+            $("input.variableTextBox").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.val(variables[name]);
+                } else {
+                    $this.val("");
+                }
+            });
+            $("code").each(function () {
+                var originalHtml = this.originalHtml ? this.originalHtml : this.innerHTML;
+                var newHtml = originalHtml;
+                for (var name in variables) {
+                    var val = variables[name];
+                    var regex = new RegExp('<span class="nocode">&lt;' + name + '&gt;</span>', 'g');
+                    newHtml = newHtml.replace(regex, val);
+                }
+                if (originalHtml != newHtml || originalHtml != this.innerHTML) {
+                    this.originalHtml = originalHtml;
+                    this.innerHTML = newHtml;
+                }
+            });
+        }
+        
+        window.onload = function () {
+
+            var rawContent = document.getElementById("rawContent").value;
+            var contentRoot = "./Content/"
+            var activitiesString = document.getElementById("activities").value;
+            var activities = (activitiesString == null || activitiesString.length == 0) ? [] : JSON.parse(activitiesString);
+            var replacementTokensString = document.getElementById("replacementTokens").value;
+            var replacementTokens = (replacementTokensString == null || replacementTokensString.length == 0) ? [] : JSON.parse(replacementTokensString);
+            instructionsProcessor.process(rawContent, "instructions", false, contentRoot, replacementTokens,
+                function ($page) {
+                    setupKnowledgeExpanders();
+                },
+                activities
+            );
+            $(".page").each(function () {
+                var $page = $(this);
+                if ($page.find("iframe.externalManual").length > 0) {
+                    $page.css("padding", 0);
+                }
+            });
+
+            $("body").on("click", ".moreKnowledgeLink", function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var $knowledge = $link.parent().prev();
+                if ($knowledge.hasClass("expanded")) {
+                    $knowledge.removeClass("expanded");
+                    $link.text("more...");
+                } else {
+                    $knowledge.addClass("expanded");
+                    $link.text("...less");
+                }
+            }).on("click", ".copyable, code:not(.nocopy)", function (e) {
+                copyableClicked(this);
+            }).on("click", ".dialogLink", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var $dialogLink = $(this);
+                var title = $dialogLink.attr("title");
+                var target = $dialogLink.attr("data-target");
+                if (target) {
+                    var $hiddenDialog = $("blockquote.referenceContent[data-id='" + target + "']");
+                    if ($hiddenDialog.length === 0) {
+                        alert('CONTENT ERROR: Unable to find a reference content "' + target + '"');
+                    } else {
+                        showDialog({title:title, content: $hiddenDialog.html() });
+                    }
+                }
+                else {
+                    showDialog({title:title, url: $dialogLink.attr("href"), isInstructions: $dialogLink.hasClass("instructions") });
+                }
+            }).on("click", ".videoLink, video", function (e) {
+                e.preventDefault();
+                var videoUrl = $(this).hasClass("videoLink") ? this.href : this.src;
+                var url = "./Content/" + videoUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var videoWindow = window.open(url, "videoWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(videoWindow);
+                try {
+                    videoWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".imageLink, img", function (e) {
+                var $this = $(this);
+                if ($this.parent().is("a")) return;
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var imgUrl = $this.hasClass("imageLink") ? this.href : this.src;
+                var url = "./Content/" + imgUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var imageWindow = window.open(url, "imageWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(imageWindow);
+                try {
+                    imageWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".tipLink", function (e) {
+                e.preventDefault();
+                var $tiplink = $(this);
+                var $hiddenTip = $tiplink.next();
+                var offset = $(this).offset();
+                var x = offset.left;
+                var y = offset.top + 25;
+                showClickFeedbackMessage($hiddenTip.html().replaceAll('<code title="Copy to clipboard" class="prettyprint">','<code title="Copy to clipboard" style="background-color:#8888;" class="prettyprint">').replaceAll("class",'style="background-color:#8888;" class'), x, y, 5000);
+            }).on("change", ".variableTextBox", function () {
+                var $textBox = $(this);
+                var name = $textBox.attr("data-name");
+                var val = $textBox.val();
+                if (val == null || val.length == 0) {
+                    if (name in variables) {
+                        delete variables[name];
+                    }
+                } else {
+                    variables[name] = val;
+                }
+                processVariables();
+            });;
+
+            $(window).resize(function () {
+                setupKnowledgeExpanders();
+            }).unload(function () {
+                closeAllChildWindows();
+            });
+
+            function closeAllChildWindows() {
+                for (var i = 0; i < childWindows.length; i++) {
+                    try {
+                        childWindows[i].close();
+                    } catch (e) {
+                    }
+                }
+                childWindows = [];
+            }
+
+            function showDialog(options) {
+                if (!options) return;
+                var $dialog = $("#modalDialog");
+                var isUpdatedContent = false;
+                if ($dialog.length > 0) {
+                    $dialog.find(".dialogContent").html("");
+                    $dialog.find(".dialogButtons").html("");
+                    isUpdatedContent = true;
+                } else {
+                    var $dialog = $('<div id="modalDialog" class="dialog"><div class="dialogMask"></div><div class="dialogBox"><div class="dialogCloseButton"></div><div class="dialogTitle"></div><div class="dialogContent"></div><div class="dialogButtons"></div></div></div>');
+                }
+                var $dialogBox = $dialog.find(".dialogBox");
+                var close = function () {
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", 0).animate({ marginTop: -h - offset.top }, 300);
+                    $dialog.delay(200).fadeOut("fast", function () { $dialog.remove(); });
+                }
+                $dialog.find(".dialogCloseButton").click(close);
+
+                if (options.title) {
+                    $dialog.find(".dialogTitle").html(options.title).show();
+                } else {
+                    $dialog.find(".dialogTitle").hide();
+                    $dialog.addClass("noTitle");
+                }
+                if (options.content) {
+                    $dialog.find(".dialogContent").removeClass("noScroll").append(options.content);
+                } else if (options.url) {
+                    var urlLower = options.url.toLowerCase();
+                    if (urlLower.indexOf(".mp4") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<video src="' + options.url + '" controls autoplay></video>');
+                        var $video = $("#contentDialogVideo");
+                        try {
+                            $video[0].play();
+                        } catch (e) {
+                            //
+                        }
+                    } else if (urlLower.indexOf(".png") !== -1 || urlLower.indexOf(".jpg") !== -1 || urlLower.indexOf(".jpeg") !== -1 || urlLower.indexOf(".gif") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<img src="' + options.url + '" controls></iframe>');
+                    } else if (options.isInstructions || urlLower.indexOf(".md") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<div id="instructionsDialog"></div>');
+                        window.setTimeout(function () {
+                            instructionsProcessor.processUrl(options.url, "instructionsDialog");
+                            if (options.url.indexOf("#") >= 0) {
+                                window.setTimeout(function () {
+                                    var hash = options.url.substr(options.url.indexOf("#"));
+                                    var $element = $("#instructionsDialog " + hash);
+                                    if ($element.length > 0) {
+                                        $dialog.find(".dialogContent").scrollTop($element.position().top);
+                                    }
+                                }, 400); //leave time for the content to layout... the dialog takes 400ms to animate anyway, which should be sufficient.
+                            }
+                        }, 1);
+                    } else {
+                        $dialog.find(".dialogContent").addClass("noScroll").append('<iframe id="contentDialogIFrame" src="' + options.url + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>');
+                    }
+                } else {
+                    $dialog.find(".dialogContent").hide();
+                }
+                if (options.buttons && options.buttons.length > 0) {
+                    $dialog.addClass("hasButtons");
+                    var $dialogButtons = $dialog.find(".dialogButtons");
+                    var numButtons = options.buttons.length;
+                    for (var i = 0; i < numButtons; i++) {
+                        var button = options.buttons[i];
+                        var $button = $("<input type='button' value='" + button.text + "' />");
+                        if (button.click) {
+                            $button.click(button.click);
+                        }
+                        if (button.primary) {
+                            $button.addClass("primary");
+                        }
+                        if (button.closeDialog) {
+                            $button.click(close);
+                        }
+                        $dialogButtons.append($button);
+                    }
+                }
+                if (!isUpdatedContent) {
+                    $("body").append($dialog);
+                    $dialog.hide().fadeIn("fast", function () {
+                        if (options.open) {
+                            options.open();
+                        }
+                    });
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", -h - offset.top).animate({ marginTop: 0 }, 400);
+                }
+                return {
+                    close: close
+                };
+            }
+
+        }
+
+        function getScrollTop() {
+            return document.body.scrollTop;
+        }
+
+    </script>
+
+
+</body>
+</html>

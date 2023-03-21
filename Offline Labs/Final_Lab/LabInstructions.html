@@ -1,0 +1,1025 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0047)https://labondemand.com/LabProfile/Manual/LABID -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Local Lab Instructions</title>
+
+
+    <script src="./Content/jquery-2.1.4.min.js.download" type="text/javascript"></script>
+    <script src="./Content/showdown.min.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Content/prettify.css">
+    <script src="./Content/yaml.min.js.download"></script>
+    <script src="./Content/LocalizeTo" type="text/javascript"></script>
+    <link href="./Content/CloudClient.css" rel="stylesheet" type="text/css">
+  
+    <style type="text/css">
+        body, html {
+            font-family: Segoe UI,Tahoma,Verdana,Arial,sans-serif;
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            background-color: #efefef;
+            color: #000;
+            height: 100%;
+        }
+
+        body {
+            overflow:auto;
+        }
+
+        #outputWrapper {
+            background-color: #efefef;
+            min-height:100%;
+        }
+
+        .instructionsPreview {
+            padding: 20px;
+            height: 100%;
+        }
+
+        .instructionsPreview .page {
+            position:relative;
+            display: block !important;
+            padding: 15px 20px;
+            background-color:#fff;
+            page-break-after: always;
+            min-height:40px;
+        }
+
+        .instructionsPreview .page:not(:first-child) {
+            margin-top:20px;
+        }
+
+        @media print {
+            body, html{
+                height:auto;
+            }
+            
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            div {
+                page-break-inside: avoid;
+            }
+
+            #outputWrapper {
+                background-color: transparent;
+            }
+
+            .instructionsPreview {
+                padding: 0;
+            }
+
+            .instructionsPreview .page:not(:first-child) {
+                margin-top: 0px;
+            }
+
+        }
+
+        @page {
+            margin-left: 1.5cm;
+            margin-right: 1.5cm;
+            margin-top: 1.5cm;
+            margin-bottom: 1.5cm;
+        }
+    </style>
+    <link id="themeStylesheet" href="./Content/Blue.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="outputWrapper">
+                <div id="instructions" class="instructionsPreview">
+    </div>
+    <input type="hidden" id="rawContent" value="[TemplateVersion]:
+&#39;1.1&#39;
+
+[LODLabID]:
+&#39;70576&#39;
+
+[LODLabNumber]:
+&#39;13 FS.Final_Lab&#39;
+
+[AdminPowerShell]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell -Verb RunAs&quot;
+exit
+```
+
+[AdminPowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise -Verb RunAs&quot;
+exit
+```
+
+# Welcome student to the module: Final Lab
+
+The final lab is a case scenario that takes you through a real life case that mimics daily operational activities using PowerShell. Although the steps in this lab have hints and answers, try to complete as much of it without using them. Practice the skills you have learned throughout the workshop to find the solutions.
+
+Estimated time to complete this lab: **60 minutes**
+
+## Module Objective
+After completing this lab you will be able to:
+- Use all materials from the workshop in real life environments
+
+===
+
+# Login to Windows 10 and Start the Lab
+
+Login to **win10(wdt** machine with the given credentials. You can find them on the **Resources** pane.
+
+Please login with Username: **+++Power+++** and Password: **+++Pa$$w0rd+++**
+
+After logging in wait until you see the &quot;Lab preparation has been completed&quot; in the action center (This can take up to 2 minutes). If this does not popup you can click in the bottom right of the VM to open the action center. Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+> [!TIP] **Notes about using the lab**
+> - It might take a moment to start ISE if you click the above link
+> - You can click the **+++Type Text+++** icon to enter the highlighted text at the position of the cursor in the virtual machine. You can also click on the **++Copy to Clipboard++** icon and then paste in at the desired destination.
+> - Entering your code in the script pane of the ISE will allow for better troubleshooting if you find errors
+> - Remember that the PowerShell ISE will allow you to highlight multiple lines of PowerShell code and run them together by pressing **F8**
+
+===
+
+# Exercise 1: Monday morning at Contoso
+
+You are a server administrator working at Contoso maintaining the servers in the data center. It is a beautiful Monday morning and the sun is shining through the windows providing a pleasant 21 degrees  celsius temperature. The work queue is low and only 1 ticket is open. As you are opening the ticket you see it&#39;s about an issue for one of the servers. The Functional manager complains the server is not being patched correctly. When firing up the monitoring tool, you don&#39;t seem to find any issues with that server. You need to investigate the logs and provide proof that the server is patched correctly. This should be an easy start to the day, get the logs, show there is no problem, and continue with your coffee.
+
+Security restrictions for Contoso:
+- You are not allowed to login to servers or domain controllers using RDP (Remote Desktop Protocol)
+
+Logging requirements for Contoso:
+- Strange behavior needs to be reported to the Security department
+
+Information about the server in error from the ticket:
+
+ - Information: **A Windows 10 machine being used as a Windows server to run testing software and tools**
+ - Machine name:  **Win10**
+ - Machine Netbios Name: **Win10**
+ - Operating System: **Windows 10**
+
+Work through the steps and think about the information of the past few days of how to use PowerShell. Several **hints** are provided if you need some guided assistance. Try and work through the problem before using the **answers**, but always remember, the answers can be used to provide assistance to solve the current tasks. (Just like searching the internet, several hints and answers are provided for you to successful complete the tasks.)
+
+===
+
+# Task 1.1: All is well investigate the event logs
+
+1. [ ] Log in to the machine that is being used as a server. win10(wdt (This is the default machine you login to.)
+
+1. [ ] Open **Windows PowerShell** or **PowerShell ISE** by **right clicking** on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+1. [ ] Find a command that you can use to get event logs of a computer. Use what you learned during the first 5 core modules of this course.
+
+    <details>
+    <summary>Hint for commands</summary>
+
+    You can use **Get-Command** to find commands to use. You can use the parameters **-Noun** or **-Verb**, or use the wildcard character **\*** to narrow your search.
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    The **Get-EventLog** command can be used to view a computers&#39; event logs.
+    </details>
+
+1. [ ] Collect the event logs for the **application** log from the machine and store them into a variable called **$eventlogs**. This is the machine you are currently logged in to.
+
+
+    <details>
+    <summary>Hint for variables</summary>
+
+    To store data into a variable assign a value on the right hand of the assignment operator **=** into the variable name on the left hand of the **=**
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    $eventlogs = Get-EventLog -LogName Application
+    ```
+    </details>
+
+1. [ ] Find a way to look up what object type **$eventlogs** is. (Example it could be a [String] or [Int])
+
+    <details>
+    <summary>Hint for commands</summary>
+
+    There are multiple options available to look at an object type.
+
+    You could use a method from the variable or you could look at the object with Get-Member.
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    The **$eventlogs** variable type is a **System.Object** with base type of **System.Array**. 
+
+    ```PowerShell-notab
+    $eventlogs | Get-Member
+    ```
+    </details>
+
+1. [ ] Use what you have learned about arrays to inspect the log entries in the **$eventlogs** variable. Can you find something suspicious in the logs that might indicate something is wrong during patching?
+
+    <details>
+    <summary>Things you can use to look at the table</summary>
+
+    The following are all options you could use:
+
+    Basic:
+    - Indexing in a table can be done using the range operator &quot;**..**&quot;. Example **$eventlogs[0..5]**
+    - You could also use the **pipeline** and use the **Select-Object** command with parameters like **-First**, **-Last**, **-skip** etc.
+    - You could also use the **pipeline** and use the **Group-Object** command to group based on columns
+    - You can store the results in a new variable to keep it simple and easy to work with the results
+    - You can use **Format-Table** or **Format-List** to zoom into pieces of data
+
+    Advanced:
+    - Create a **for** loop and test for values in a column and store matches into a new variable
+
+    Best practice is to keep assigning your results to a new variable every time eliminating data that you don&#39;t need until you only have relevant data left.
+
+    Example:
+    When you looked at the **$eventlogs** variable you can see that events after the first 536 are from before the ticket date. You can eliminate those from your data set
+
+    +++\$Eventlogs2 = $eventlogs[0..536]+++
+
+    </details>
+
+    <details>
+    <summary>Hint if you still can&#39;t find the logs in question</summary>
+
+
+    You can still try again and search for KBs installed by &quot;WindowsUpdateAgent&quot;
+
+    One of the patches installed by **WindowsUpdateAgent** mentioned the patch **KB1337-Godmode**. This is **not** a Microsoft name convention, hence not a MS patch. Keep track of the name of the patch.
+
+
+    </details>
+
+1. [ ] As you need to report later to security, you will need to keep the important logs stored into a new variable.
+
+    1. [ ] Enter the name of the variable you used to store the logs in this process: proof1
+
+
+
+===
+# Exercise 2: Monday Morning Gone Wrong
+
+During the investigation of the logs you found that one of the patches does not seem to be what it should be. What is this strange patch? Put on your investigator hat as this needs some more digging around.
+
+If you did not find the event log with the suspicious action go back to the previous exercise and inspect the data.
+
+As a employee of Contoso you have to adhere to the Security restrictions:
+- You are not allowed to login to servers or domain controllers using RDP
+
+Logging requirements for Contoso:
+- Strange behavior needs to be reported to the Security department
+
+Information about the server in error:
+
+ - Information: **A Windows 10 machine being used as a Windows server to run testing software and tools**
+ - Machine name:  **Win10**
+ - Machine Netbios Name: **Win10**
+ - Operating System: **Windows 10**
+
+===
+
+# Task 2.1: Coffee has to wait...
+
+By now it is clear to you that this is not just a regular Microsoft patch. What is the application owner trying to do? Well they are messing with the wrong Sys admin. Continue your investigation into the patch and try to find out what this patch did.
+
+1. [ ] The next place to investigate would be the **System** logs to see if the patch installed successfully.
+
+1. [ ] Find a way to filter the system log and figure out what the patch has changed on the **local** system.
+
+    If you need help you can use the below guides:
+
+    <details>
+    <summary>Approach options</summary>
+
+    <details>
+    <summary>Option 1 - Get all data and filter on the local machine using PowerShell </summary>
+
+    Advantage:
+    - Data only needs to be collected once and can be stored, changed, and reused multiple times using variables
+
+    Disadvantage:
+    - Depending on data, the content can be a large data set using a lot of system resources on local or remote computers
+    - Slower data return
+
+    Technique:
+    ```
+    $logs = Get-EventLog -LogName system
+    $logs1337 = $logs | Where-Object -FilterScript {$_.Source -like &quot;*1337*&quot;}
+    ```
+
+    Use the same technique to narrow down the results to interesting data only
+
+    </details>
+
+    <details>
+    <summary>Option 2 - Only get needed data and filter on server side</summary>
+
+    Advantage:
+    - Smaller set of data to start with using less resources
+    - Faster response / data return
+
+    Disadvantage:
+    - Chance of missing objects due to smaller start set
+    - Multiple queries needed / repeating when more data is needed from source
+    - Need to know what your searching for
+
+    Technique: (Sample - use your own filtering replacing the ???)
+    ```
+    $logs = Get-EventLog -LogName system -InstanceId 1337
+    $logsinterested = $logs | Where-Object -FilterScript {$_.??? -like &quot;???&quot;}
+    ```
+
+    Use the same technique to narrow down the results to interesting data only
+
+    </details>
+
+    </details>
+
+1. [ ] Now that you know what the patch has changed on the **local** system, you can mitigate the attack.
+
+    1. [ ] Find a cmdlet that can be used to list all the rules of the changed component.
+
+        >[!note] Cmdlets are grouped in modules so the same module might have more commands that are needed later.
+
+        <details>
+        <summary>Hint</summary>
+
+        By using +++get-command+++, you can filter and find a command that might make sense. In this case study, you need the firewall commands so anything hitting a wildcard search for fire should work
+
+        ```
+        Get-command *fire*
+
+        ```
+
+        Look at the modules listed and use that module to find all firewall related commands
+
+        ```
+        Get-command -Module netsecurity
+
+        ```
+        </details>
+
+    1. [ ] Revert the change done by the patch by removing the firewall rule.
+
+        <details>
+        <summary>Hint</summary>
+
+        Look at the modules listed and use that module to find all firewall related commands
+
+        ```
+        Get-command -Module netsecurity
+
+        ```
+        </details>
+
+        <details>
+        <summary>Answer Options</summary>
+
+        As always, there are a lot of ways to accomplish your goals, below are multiple possibilities:
+
+        <details>
+        <summary>Possibility 1</summary>
+
+        Advantage:
+        - Data only needs to be harvested once and can be stored, changed, and reused multiple times using variables
+        - Easier to inspect all rules
+
+        Disadvantage:
+        - More code needed
+        - More parsing and sorting of rules and variables
+
+        Technique:
+        ```
+        $rules = Get-netfirewallrule
+        $rules
+        # Manually look at the rules / parse them / narrow them down using the previous techniques.
+        $badrules = $rules | Where-Object -FilterScript {$_.name -like &quot;*1337*&quot;}
+        # Use the rule stored in the variable to remove it
+        $badrules | remove-netfirewallrule
+        ```
+        </details>
+
+        <details>
+        <summary>Possibility 2</summary>
+
+        Advantage:
+        - Shorter more direct code
+
+        Disadvantage:
+        - Cmd must support wild cards
+        - You must know a property you are searching for
+        - You might miss data if you don&#39;t inspect the  rest of the rules
+
+        Technique: (Sample - use your own filtering replacing the ???)
+        ```
+        Get-NetFirewallRule -Name *1337*
+        #remember the logging requirement so store results in temporary variable
+        $firewallrules = Get-NetFirewallRule -Name *1337*
+        # Validate its the right one and use Pipeline
+        Get-NetFirewallRule -Name *1337* | remove-netfirewallrule
+        ```
+        </details>
+
+        </details>
+
+1. [ ] As you will need to report this incident to security later, you will need to save the important logs into a variable.
+
+    1. [ ] What is the name of the variable you used to store the firewall rule? proof2
+
+===
+# Exercise 3: Chasing the white rabbit down the hole
+
+Right now you realize this is not just a piece of user software, but your systems are under attack from a hacker and they managed to spread beyond the first server gaining a foothold in the environment. It is time to step up your game and kick this person out of the environment before they do some real damage. The team meeting at 10:00am will need to wait, as you have more pressing matters at hand.
+
+As an employee of Contoso you have to adhere to the Security restrictions:
+- You are not allowed to login to servers or domain controllers using RDP
+
+Logging requirements for Contoso:
+- Strange behavior needs to be reported to Security department
+
+===
+
+# Task 3.1: It’s no use going back to yesterday, it was a different system then
+
+1. [ ] You need to inspect the firewall log to find out where the software moved next. The firewall log is located at +++C:\Windows\System32\LogFiles\Pfirewall.log++
+
+1. [ ] Find a PowerShell command to read the log file.
+
+    <details>
+    <summary>Answer</summary>
+
+    You can use either **Get-Content** or **Import-Csv**
+
+    </details>
+
+1. [ ] Both commands used above are not ideal to read a **.txt** log file with multiple headers. Find a way using PowerShell to remove the lines marked with the **#** character in the log file.
+
+    <details>
+    <summary>Hint</summary>
+
+    Look at the **parameters** of the command  **Select-Object** and save the output to a new temporary file.
+
+    </details>
+
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    get-content -path C:\Windows\System32\LogFiles\Pfirewall.log | select-object -Skip 4 | Set-Content -path C:\Windows\System32\LogFiles\Pfirewall_temp.log
+    ```
+
+    </details>
+
+
+1. [ ] Now that you have a log that we can read as a table load the file in a variable (remember this is not only a logging requirement, but also a good practice to reuse the data) as a table so you can inspect the individual lines.
+
+    <details>
+    <summary>Hint</summary>
+
+    You can use the **Import-Csv** command now as the file has a proper format. Look at the parameters to solve the format issue so it recognizes the correct columns.
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+    ```
+    $fwlogfiles = Import-Csv C:\Windows\System32\LogFiles\Pfirewall_temp.log -Delimiter &quot; &quot;
+    ```
+    </details>
+
+1. [ ] To be able to report the evidence later to security, what is the name of the variable you used to store the log file in:
+proof3
+
+
+1. [ ] Use one of the loops from the **flow control** section to create a loop with the following requirements:
+
+    - Use a Loop to process all items in the firewall log
+    - Copy the files from the remote system to C:\Temp on your local system
+    - Remove the files from the remote system
+
+    <details>
+    <summary>Hint on approach</summary>
+
+    You stored all needed data into a variable called proof3. Use this variable to iterate through with a loop that can read the array content.
+
+    </details>
+
+    <details>
+    <summary>Hint on copy</summary>
+
+    There are multiple options again to reach your goal:
+
+    <details>
+    <summary>PowerShell Remoting</summary>
+
+    As you have the path and the hostname in the variable, you could use a **pssession** to copy the file from the remote machine.
+    
+    ```
+    New-item -type directory -path C:\Temp
+    foreach ($file in proof3)
+    {
+        $session = $null
+        $session = new-pssession -computer $file.&quot;dst-host&quot;
+        copy-item -fromsession $session -path $file.&quot;dst-path&quot; -destination C:\Temp
+    }
+    ```
+    </details>
+
+    <details>
+    <summary>Network Remoting</summary>
+
+    As you have the path and the hostname in the variable, you could just use that and replace the values in the UNC path directly using sub-expression and replace:
+    
+    ```
+    New-item -type directory -path C:\Temp
+    foreach ($file in proof3)
+    {
+        $UNCpath = $null
+        $UNCpath = &quot;\\$($file.&quot;dst-host&quot;)\$($file.&quot;dst-path&quot;)&quot; -replace &quot;:&quot;,&quot;$&quot;
+        copy-item -path $UNCpath -destination C:\Temp
+    }
+    ```
+    </details>
+
+    </details>
+
+    <details>
+    <summary>Hint on Removing the files</summary>
+
+    There are multiple options again to reach your goal, while using the code sample from above, you can simply invoke the remove
+
+    </details>
+
+    <details>
+    <summary>Solution</summary>
+
+    ```
+    New-item -type directory -path C:\Temp
+    foreach ($file in proof3)
+    {
+        $session = $null
+        $session = new-pssession -computer $file.&quot;dst-host&quot;
+        copy-item -fromsession $session -path $file.&quot;dst-path&quot; -destination C:\Temp
+        Invoke-Command -session $session -scriptblock {Remove-item -path $args[0]} -argumentlist ($file.&quot;dst-path&quot;)
+    }
+    ```
+    </details>
+
+===
+# Exercise 4: Explaining the unexplained
+
+As you complete your investigation and collected all proof of what happened, you will need to report this to the Master Chief. Lets hope he has time in between his rounds of Halo.
+
+As a employee of Contoso you have to adhere to the Security restrictions:
+- You are not allowed to login to servers or domain controllers using RDP
+
+Logging requirements for Contoso:
+- Strange behavior needs to be reported to Security department
+
+===
+
+# Task 4.1: &quot;Report it&quot;
+
+1. [ ] During the investigation, you stored all pieces of proof inside your PS session. You collected the following:
+
+    |Proof|stored in variable|
+    |:--:|:--:|
+    |Proof 1|proof1
+    |Proof 2|proof2
+    |Proof 3|proof3|
+    |Proof 4|Located in C:\Temp|
+
+
+1. [ ] Find a cmdlet that can be used to convert the information to HTML format.
+
+    <details>
+    <summary>Answer</summary>
+
+    ConvertTo-Html
+
+    </details>
+
+1. [ ] Convert the first pieces of proof to HTML for reporting to the security department and store this is the variable +++$fullreport+++
+
+    <details>
+    <summary>Answer</summary>
+    ```
+    $fullreport = proof1 | ConvertTo-Html
+    ```
+    </details>
+
+1. [ ] Add the second piece of proof to the HTML report. Use the **fragment** parameter to only generate the table instead of a full page.
+
+
+    <details>
+    <summary>Answer</summary>
+    ```
+    $fullreport += proof2 | ConvertTo-Html -fragment
+    ```
+    </details>
+
+1. [ ] Add the third piece of proof to the HTML report. Use the **fragment** parameter to only generate the table instead of a full page.
+
+
+    <details>
+    <summary>Answer</summary>
+    ```
+    $fullreport += proof3 | ConvertTo-Html -fragment
+    ```
+    </details>
+
+1. [ ] For the final piece, you need to present the content of the files that you stored in the **C:\Temp** folder. Get the content and concatenate them in alphabetical order.
+
+    1. [ ] Grab the content from the text files and use a typecast to direct form a single text line from them.
+
+    <details>
+    <summary>Hint 1</summary>
+
+    You should first use a command to list the content of the folder. You can then use a loop or pipeline to grab the content
+
+    </details>
+
+    <details>
+
+    <summary>Hint 2</summary>
+
+    A type cast is done using the [] in front of the result of an object. In this, case you need a text line that is a **String** class
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    [string](Get-ChildItem -Path C:\Temp -Name &#39;*.txt&#39; | Get-Content)
+
+    </details>
+
+    1. [ ] Convert the string to HTML and add this to the report.  ConvertTo-HTML enumerates properties of input objects. String types only contain the Length property, therefore you will need to add a calculated property to hold the content of the string.
+
+    <details>
+    <summary>Answer</summary>
+    ```
+    $fullreport += [string](Get-ChildItem -Path C:\Temp -Name &#39;*.txt&#39; | Get-content) | ConvertTo-Html -Fragment -Property @{Label=&#39;Title&#39;;Expression= {$_}}
+    ```
+    </details>
+
+1. [ ] Save the report to a file so it can be submitted to the security officer.
+
+    <details>
+    <summary>Answer</summary>
+    ```
+    $fullreport | out-file C:\Temp\securityreport.html
+    ```
+    </details>
+
+1. [ ] Open the report with **Microsoft Edge** and read the last line of the report. 
+
+## Congratulations student, you have successfully completed this course.
+
+Click **End** to **End my lab and mark it as complete** or **Cancel my lab** from the upper right hand corner of the lab browser.
+
+You can also **save** the lab for use over the next few days. While you have access to the VM&#39;s for 6 months, if you don&#39;t log into them every few days, they will reset and you&#39;ll lose any code you have saved within the environment.
+
+">
+    <input type="hidden" id="activities" value="[]">
+    <input type="hidden" id="replacementTokens" value="[{&quot;Token&quot;:&quot;@lab.LabProfile.Id&quot;,&quot;Replacement&quot;:&quot;38671&quot;},{&quot;Token&quot;:&quot;@lab.CtrlAltDelete&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;ctrlAltDeleteLink&#39;&gt;Ctrl+Alt+Delete&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;63124&#39;&gt;WIN10&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54597&#39;&gt;MS&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54598&#39;&gt;DC&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Username&quot;,&quot;Replacement&quot;:&quot;Administrator&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.OpticalMedia(5638).LoadLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;loadMediaLink opticalMedia&#39; data-data=&#39;5638&#39;&gt;Introduction to Commands - 0050&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.Id&quot;,&quot;Replacement&quot;:&quot;[ID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.GlobalId&quot;,&quot;Replacement&quot;:&quot;[lodID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.StartDate&quot;,&quot;Replacement&quot;:&quot;20190108&quot;},{&quot;Token&quot;:&quot;@lab.User.Id&quot;,&quot;Replacement&quot;:&quot;[USERID]&quot;},{&quot;Token&quot;:&quot;@lab.User.FirstName&quot;,&quot;Replacement&quot;:&quot;[FIRSTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.LastName&quot;,&quot;Replacement&quot;:&quot;[LASTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.Email&quot;,&quot;Replacement&quot;:&quot;[EMAIL]&quot;},{&quot;Token&quot;:&quot;@lab.User.ExternalId&quot;,&quot;Replacement&quot;:&quot;[EXTERNALID]&quot;},{&quot;Token&quot;:&quot;@lab.Tag&quot;,&quot;Replacement&quot;:&quot;[TAG]&quot;}]">
+
+    <textarea id="copyInput" value="" style="position: absolute; left:-10000px; top:-10000px; "></textarea>
+
+    <script type="text/javascript"> 
+    
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        var childWindows = [];
+
+        function showClickFeedbackMessage(text, x, y, duration) {
+            var $message = $("<div class='clickFeedbackMessage noselect'>" + text + "</div>");
+            $message.appendTo($("body")).hide();
+            $message.css({ left: x, top: y });
+            $message.fadeIn("fast");
+            window.setTimeout(function () {
+                $message.fadeOut("fast", function () { $message.remove(); });
+            }, duration);
+        }
+
+        function copyableClicked(element) {
+            //only copy if we are clicking, not if we have used the mouse to select the text manually.
+            var selectedText;
+            if (window.getSelection) {
+                selectedText = window.getSelection().toString();
+            } else if (document.selection && document.selection.type !== "Control") {
+                selectedText = document.selection.createRange().text;
+            }
+            if (selectedText) { return };
+
+            var $element = $(element);
+            var text = $element.text();
+            $("#copyInput").val(text).select();
+            var offset = $element.offset();
+            var x = offset.left;
+            var y = offset.top - 40;
+            try {
+                var successful = document.execCommand("copy");
+                if (successful) {
+                    showClickFeedbackMessage("Copied to clipboard", x, y, 2000);
+                } else {
+                    showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                }
+            } catch (err) {
+                showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                console.log("Unable to copy. " + err);
+            }
+        }
+
+        function setupKnowledgeExpanders() {
+            $(".knowledge").each(function () {
+                var knowledge = this;
+                var $knowledge = $(this);
+                var $moreKnowledge = $knowledge.next();
+                if ($moreKnowledge.is(".moreKnowledge")) {
+                    var maxHeight = 100;
+                    var leeway = 100;
+                    var diff = knowledge.scrollHeight - maxHeight;
+                    if (diff < leeway) {
+                        $knowledge.removeClass("collapsed");
+                        $moreKnowledge.find("a").hide();
+                    } else {
+                        //this is tall content, let's show the 'more' link
+                        $moreKnowledge.find("a").show();
+                        $knowledge.addClass("collapsed");
+                    }
+                }
+            });
+        }
+
+        var variables = {};
+
+        function processVariables() {
+            $("span.variable").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.html(variables[name]);
+                } else {
+                    $this.text("<" + name + ">");
+                }
+            });
+            $("input.variableTextBox").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.val(variables[name]);
+                } else {
+                    $this.val("");
+                }
+            });
+            $("code").each(function () {
+                var originalHtml = this.originalHtml ? this.originalHtml : this.innerHTML;
+                var newHtml = originalHtml;
+                for (var name in variables) {
+                    var val = variables[name];
+                    var regex = new RegExp('<span class="nocode">&lt;' + name + '&gt;</span>', 'g');
+                    newHtml = newHtml.replace(regex, val);
+                }
+                if (originalHtml != newHtml || originalHtml != this.innerHTML) {
+                    this.originalHtml = originalHtml;
+                    this.innerHTML = newHtml;
+                }
+            });
+        }
+        
+        window.onload = function () {
+
+            var rawContent = document.getElementById("rawContent").value;
+            var contentRoot = "./Content/"
+            var activitiesString = document.getElementById("activities").value;
+            var activities = (activitiesString == null || activitiesString.length == 0) ? [] : JSON.parse(activitiesString);
+            var replacementTokensString = document.getElementById("replacementTokens").value;
+            var replacementTokens = (replacementTokensString == null || replacementTokensString.length == 0) ? [] : JSON.parse(replacementTokensString);
+            instructionsProcessor.process(rawContent, "instructions", false, contentRoot, replacementTokens,
+                function ($page) {
+                    setupKnowledgeExpanders();
+                },
+                activities
+            );
+            $(".page").each(function () {
+                var $page = $(this);
+                if ($page.find("iframe.externalManual").length > 0) {
+                    $page.css("padding", 0);
+                }
+            });
+
+            $("body").on("click", ".moreKnowledgeLink", function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var $knowledge = $link.parent().prev();
+                if ($knowledge.hasClass("expanded")) {
+                    $knowledge.removeClass("expanded");
+                    $link.text("more...");
+                } else {
+                    $knowledge.addClass("expanded");
+                    $link.text("...less");
+                }
+            }).on("click", ".copyable, code:not(.nocopy)", function (e) {
+                copyableClicked(this);
+            }).on("click", ".dialogLink", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var $dialogLink = $(this);
+                var title = $dialogLink.attr("title");
+                var target = $dialogLink.attr("data-target");
+                if (target) {
+                    var $hiddenDialog = $("blockquote.referenceContent[data-id='" + target + "']");
+                    if ($hiddenDialog.length === 0) {
+                        alert('CONTENT ERROR: Unable to find a reference content "' + target + '"');
+                    } else {
+                        showDialog({title:title, content: $hiddenDialog.html() });
+                    }
+                }
+                else {
+                    showDialog({title:title, url: $dialogLink.attr("href"), isInstructions: $dialogLink.hasClass("instructions") });
+                }
+            }).on("click", ".videoLink, video", function (e) {
+                e.preventDefault();
+                var videoUrl = $(this).hasClass("videoLink") ? this.href : this.src;
+                var url = "./Content/" + videoUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var videoWindow = window.open(url, "videoWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(videoWindow);
+                try {
+                    videoWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".imageLink, img", function (e) {
+                var $this = $(this);
+                if ($this.parent().is("a")) return;
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var imgUrl = $this.hasClass("imageLink") ? this.href : this.src;
+                var url = "./Content/" + imgUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var imageWindow = window.open(url, "imageWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(imageWindow);
+                try {
+                    imageWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".tipLink", function (e) {
+                e.preventDefault();
+                var $tiplink = $(this);
+                var $hiddenTip = $tiplink.next();
+                var offset = $(this).offset();
+                var x = offset.left;
+                var y = offset.top + 25;
+                showClickFeedbackMessage($hiddenTip.html().replaceAll('<code title="Copy to clipboard" class="prettyprint">','<code title="Copy to clipboard" style="background-color:#8888;" class="prettyprint">').replaceAll("class",'style="background-color:#8888;" class'), x, y, 5000);
+            }).on("change", ".variableTextBox", function () {
+                var $textBox = $(this);
+                var name = $textBox.attr("data-name");
+                var val = $textBox.val();
+                if (val == null || val.length == 0) {
+                    if (name in variables) {
+                        delete variables[name];
+                    }
+                } else {
+                    variables[name] = val;
+                }
+                processVariables();
+            });;
+
+            $(window).resize(function () {
+                setupKnowledgeExpanders();
+            }).unload(function () {
+                closeAllChildWindows();
+            });
+
+            function closeAllChildWindows() {
+                for (var i = 0; i < childWindows.length; i++) {
+                    try {
+                        childWindows[i].close();
+                    } catch (e) {
+                    }
+                }
+                childWindows = [];
+            }
+
+            function showDialog(options) {
+                if (!options) return;
+                var $dialog = $("#modalDialog");
+                var isUpdatedContent = false;
+                if ($dialog.length > 0) {
+                    $dialog.find(".dialogContent").html("");
+                    $dialog.find(".dialogButtons").html("");
+                    isUpdatedContent = true;
+                } else {
+                    var $dialog = $('<div id="modalDialog" class="dialog"><div class="dialogMask"></div><div class="dialogBox"><div class="dialogCloseButton"></div><div class="dialogTitle"></div><div class="dialogContent"></div><div class="dialogButtons"></div></div></div>');
+                }
+                var $dialogBox = $dialog.find(".dialogBox");
+                var close = function () {
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", 0).animate({ marginTop: -h - offset.top }, 300);
+                    $dialog.delay(200).fadeOut("fast", function () { $dialog.remove(); });
+                }
+                $dialog.find(".dialogCloseButton").click(close);
+
+                if (options.title) {
+                    $dialog.find(".dialogTitle").html(options.title).show();
+                } else {
+                    $dialog.find(".dialogTitle").hide();
+                    $dialog.addClass("noTitle");
+                }
+                if (options.content) {
+                    $dialog.find(".dialogContent").removeClass("noScroll").append(options.content);
+                } else if (options.url) {
+                    var urlLower = options.url.toLowerCase();
+                    if (urlLower.indexOf(".mp4") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<video src="' + options.url + '" controls autoplay></video>');
+                        var $video = $("#contentDialogVideo");
+                        try {
+                            $video[0].play();
+                        } catch (e) {
+                            //
+                        }
+                    } else if (urlLower.indexOf(".png") !== -1 || urlLower.indexOf(".jpg") !== -1 || urlLower.indexOf(".jpeg") !== -1 || urlLower.indexOf(".gif") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<img src="' + options.url + '" controls></iframe>');
+                    } else if (options.isInstructions || urlLower.indexOf(".md") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<div id="instructionsDialog"></div>');
+                        window.setTimeout(function () {
+                            instructionsProcessor.processUrl(options.url, "instructionsDialog");
+                            if (options.url.indexOf("#") >= 0) {
+                                window.setTimeout(function () {
+                                    var hash = options.url.substr(options.url.indexOf("#"));
+                                    var $element = $("#instructionsDialog " + hash);
+                                    if ($element.length > 0) {
+                                        $dialog.find(".dialogContent").scrollTop($element.position().top);
+                                    }
+                                }, 400); //leave time for the content to layout... the dialog takes 400ms to animate anyway, which should be sufficient.
+                            }
+                        }, 1);
+                    } else {
+                        $dialog.find(".dialogContent").addClass("noScroll").append('<iframe id="contentDialogIFrame" src="' + options.url + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>');
+                    }
+                } else {
+                    $dialog.find(".dialogContent").hide();
+                }
+                if (options.buttons && options.buttons.length > 0) {
+                    $dialog.addClass("hasButtons");
+                    var $dialogButtons = $dialog.find(".dialogButtons");
+                    var numButtons = options.buttons.length;
+                    for (var i = 0; i < numButtons; i++) {
+                        var button = options.buttons[i];
+                        var $button = $("<input type='button' value='" + button.text + "' />");
+                        if (button.click) {
+                            $button.click(button.click);
+                        }
+                        if (button.primary) {
+                            $button.addClass("primary");
+                        }
+                        if (button.closeDialog) {
+                            $button.click(close);
+                        }
+                        $dialogButtons.append($button);
+                    }
+                }
+                if (!isUpdatedContent) {
+                    $("body").append($dialog);
+                    $dialog.hide().fadeIn("fast", function () {
+                        if (options.open) {
+                            options.open();
+                        }
+                    });
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", -h - offset.top).animate({ marginTop: 0 }, 400);
+                }
+                return {
+                    close: close
+                };
+            }
+
+        }
+
+        function getScrollTop() {
+            return document.body.scrollTop;
+        }
+
+    </script>
+
+
+</body>
+</html>

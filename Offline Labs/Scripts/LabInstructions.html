@@ -1,0 +1,1025 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0047)https://labondemand.com/LabProfile/Manual/LABID -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Local Lab Instructions</title>
+
+
+    <script src="./Content/jquery-2.1.4.min.js.download" type="text/javascript"></script>
+    <script src="./Content/showdown.min.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Content/prettify.css">
+    <script src="./Content/yaml.min.js.download"></script>
+    <script src="./Content/LocalizeTo" type="text/javascript"></script>
+    <link href="./Content/CloudClient.css" rel="stylesheet" type="text/css">
+  
+    <style type="text/css">
+        body, html {
+            font-family: Segoe UI,Tahoma,Verdana,Arial,sans-serif;
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            background-color: #efefef;
+            color: #000;
+            height: 100%;
+        }
+
+        body {
+            overflow:auto;
+        }
+
+        #outputWrapper {
+            background-color: #efefef;
+            min-height:100%;
+        }
+
+        .instructionsPreview {
+            padding: 20px;
+            height: 100%;
+        }
+
+        .instructionsPreview .page {
+            position:relative;
+            display: block !important;
+            padding: 15px 20px;
+            background-color:#fff;
+            page-break-after: always;
+            min-height:40px;
+        }
+
+        .instructionsPreview .page:not(:first-child) {
+            margin-top:20px;
+        }
+
+        @media print {
+            body, html{
+                height:auto;
+            }
+            
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            div {
+                page-break-inside: avoid;
+            }
+
+            #outputWrapper {
+                background-color: transparent;
+            }
+
+            .instructionsPreview {
+                padding: 0;
+            }
+
+            .instructionsPreview .page:not(:first-child) {
+                margin-top: 0px;
+            }
+
+        }
+
+        @page {
+            margin-left: 1.5cm;
+            margin-right: 1.5cm;
+            margin-top: 1.5cm;
+            margin-bottom: 1.5cm;
+        }
+    </style>
+    <link id="themeStylesheet" href="./Content/Blue.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="outputWrapper">
+                <div id="instructions" class="instructionsPreview">
+    </div>
+    <input type="hidden" id="rawContent" value="[TemplateVersion]:
+&#39;1.1&#39;
+
+[LODLabID]:
+&#39;40021&#39;
+
+[LODLabNumber]:
+&#39;07 FS.Scripts&#39;
+
+[AdminPowerShell]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell -Verb RunAs&quot;
+exit
+```
+
+[AdminPowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise -Verb RunAs&quot;
+exit
+```
+
+[PowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise&quot;
+exit
+```
+
+# Scripts
+
+Welcome student to the module: Scripts
+
+**Scripts** are essential for packaging commands into a **reusable** form and for scheduling their execution. A script can contain **any** valid Windows PowerShell **commands**, including single commands, commands that use the pipeline, functions, etc.
+
+To write a **script**, start a text editor (such as Notepad) or a script editor (such as the Windows PowerShell ISE). Type the commands and save them in a file with a valid file name and the **.ps1** extension.
+
+Estimated time to complete this lab: **30 minutes**
+
+## Module Objective
+After completing this lab you will be able to:
+- Write a simple script.
+- Add parameters, help and comments to a script.
+- Execute scripts from within and outside of Windows PowerShell.
+- Digitally sign a script & modify script execution behavior.
+
+===
+
+# Login to Windows 10 and Start the Lab
+
+Login to **win10(wdt** machine with the given credentials. You can find them on the **Resources** pane.
+
+Please login with
+Username: **+++Power+++** and Password: **+++Pa$$w0rd+++**
+
+After logging in wait until you see the &quot;Lab preparation has been completed&quot; in the action center (This can take up to 2 minutes). If this does not popup you can click in the bottom right of the Vm to open the action center. Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+> [!TIP] **Notes about using the lab:**
+> - It might take a moment to start ISE if you click the above link.
+> - You can click the **+++Type Text+++** icon to enter the highlighted text at the position of the cursor in the virtual machine. You can also click on the **++Copyto Clipboard++** icon and then paste in at the desired destination.
+> - Entering your code in the script pane of the ISE will allow for better troubleshooting if you find errors.
+> - Remember that the PowerShell ISE will allow you to highlight multiple lines of PowerShell code and run them together by pressing **F8**.
+
+===
+
+# Exercise 1: Writing scripts
+
+Writing a Powershell **script** is much like writing a **function**. Scripts are saved to file with the extension **.ps1** and can be loaded and executed in a PowerShell host.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Write a Powershell script and save to file.
+- Load the script into a Powershell host and execute it.
+- Add help for your script which is integrated in the PowerShell help system.
+
+===
+
+# Task 1.1: Creating scripts
+
+This task will **create a script** that finds the services that the **Bits** service **requires** to run. In the next task, the script will be expanded to use parameters.
+
+1. [] Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting &quot;Run ISE as an Administrator, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+1. [] Create a **new script** in the Windows PowerShell ISE Script pane. The command below retrieves the **bits** service and then **returns** any Windows services it **requires** to run.
+
+    Add it to the new script in the script pane, *then* push the **Play** button or **F5** to see the results.
+
+    ```PowerShell-notab
+    Get-Service -Name bits -RequiredServices
+    ```
+1. [] Expand on this command using the pipeline to:
+     - **Select** the *Status, Name, and DisplayName* properties of the result.
+     - **Convert** that data to **HTML** with the **Heading** `&quot;Bits Required Services&quot;`.
+     - Send the results to a file named `C:\PShell\Labs\RequiredServiceInfo.html` using `Out-File`.
+
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    Get-Service -Name &quot;Bits&quot; -RequiredServices |
+        Select-Object -Property Status, Name, DisplayName |
+        ConvertTo-Html -head &quot;Bits Required Services&quot; |
+        Out-File -FilePath C:\PShell\Labs\RequiredServiceInfo.html
+    ```
+    </details>
+
+1. [] **Execute** the code by pushing the **Play** button to see the results. Notice the code is **copied** to the shell pane at the bottom of the ISE.
+
+1. [] Open `C:\PShell\Labs\RequiredServiceInfo.html` to view the results.
+
+1. [] Add one more line to the bottom of the script, which will automatically *open the html file* for **convenience**.
+
+    ```PowerShell-notab
+    Invoke-Item C:\PShell\Labs\RequiredServiceInfo.html
+    ```
+
+1. [] Click **File** -&gt; **Save As** to save the script as `C:\PShell\Labs\GetServiceRequirements.ps1`
+
+1. [] Execute the script again and observe the behavior. What happens that is different from before?
+
+    <details>
+    <summary>Answer</summary>
+
+    The code is not copied to the shell pane, instead the file path is shown.
+
+    Additionally, the html report is opened automatically.
+
+    </details>
+
+1. [] From the taskbar, open the **Windows PowerShell console** (not the ISE) and change your current working directory to **C:\PShell\Labs**.
+
+    ```PowerShell-notab
+    Set-Location C:\PShell\Labs
+    ```
+1. [] Try to execute the **script** by typing its name **+++GetServiceRequirements.ps1+++** in the Windows PowerShell console. Notice the error is returned, because it assumes that is a cmdlet.
+
+1. [] To execute the **script** itself, a **file path** needs to be provided. Retype the script name with the full file path `C:\PShell\Labs\GetServiceRequirements.ps1` or the relative path prefix `.\GetServiceRequirements.ps1`.
+
+    The script should now run successfully.
+
+===
+# Task 1.2: Script parameters
+
+**Scripts** accept **parameters** in exactly the same way as functions. Scripts are *essentially* functions, but their **name** is the *file path*. This task will add **parameters** to the *previous* script allowing it to run for any service provided.
+
+1. [] Open the previous script in the ISE, which should be located at +++C:\PShell\Labs\GetServiceRequirements.ps1+++
+
+1. [] Modify the script to add a **Param()** statement *at the top* containing two named parameters - **$ServiceName** and **$FileName**.
+
+    ```PowerShell-notab
+    param($ServiceName, $FileName)
+    ```
+1. [] The parameters are not being used currently.
+
+    Modify the script so that:
+
+    1. [] The service being **found** *and* the **heading** to the HTML are reflecting the `$ServiceName` value.
+    1. [] The `$FileName` value is used as the name of the HTML file **produced** *and* **opened**.
+
+    <details>
+    <summary>Answer</summary>
+
+    ```PowerShell-notab
+    param($ServiceName, $FileName)
+
+    Get-Service -Name $ServiceName -RequiredServices |
+        Select-Object -Property Status, Name, DisplayName |
+        ConvertTo-Html -head &quot;$ServiceName Required Services&quot; |
+        Out-File -FilePath C:\PShell\Labs\$FileName.html
+
+    Invoke-Item C:\PShell\Labs\$FileName.html
+    ```
+    </details>
+
+2. [] Make sure the script is **saved**. Unfortunately, the ISE does **not** provide a convenient option to pass in parameter values using the Play button. To execute the script, with parameters, use the **PowerShell console** and provide the **parameters** values as if the script is function.
+
+    ```
+    C:\PShell\Labs\GetServiceRequirements.ps1 –ServiceName WinRM -FileName WinRMResults
+    ```
+
+3. [] Re-run the script, in the Windows PowerShell **console**, using the named parameters, but **changing the values**.
+
+    ```
+    C:\PShell\Labs\GetServiceRequirements.ps1 –ServiceName Spooler -FileName SpoolerResults
+    ```
+
+===
+
+# Task 1.3: Comments and Requirements
+
+**Comments** are used to leave notes and **explanations** in a script to make them more **manageable** as they get longer and more complex.
+
+**Commenting** in your scripts is a **best practice**.
+
+Formally **describing** the actions that a script is supposed to be taking makes it far easier for others to **understand** and maintain them.
+
+Windows PowerShell defines two comment types:
+
+- Single inline comment, which are used for something short.
+- Multi-lined, or block comments, which can be used for larger pieces of text.
+
+
+    ```PowerShell-nocopy-notab
+    # Single line comment character
+
+    <#
+        block comment tags
+        on multiple lines
+    #>
+    ```
+
+1. [] In the ISE, open the script created in the last task, which should be called `C:\PShell\Labs\GetServiceRequirements.ps1`
+
+1. [] Add **comments** to the **script** to make it a little *clearer*. Some examples might be adding a description of the script *actions* to the *top* or clarifying what one of the lines does if its not clear. In this task, it does **not** matter what comments you type, but try putting **one block comment** and **one inline comment**.
+
+    <details>
+    <summary>Suggested comments</summary>
+
+    ```PowerShell-notab
+    param($ServiceName, $FileName)
+    <#
+        The purpose of this script is to return an HTML report, which shows the services required for a specific service to run
+        The report will be saved to C:\PShell\Labs\ with the file name specified
+    #>
+
+    Get-Service -Name $ServiceName -RequiredServices |
+        Select-Object -Property Status, Name, DisplayName |
+        ConvertTo-Html -head &quot;$ServiceName Required Services&quot; |
+        Out-File -FilePath C:\PShell\Labs\$FileName.html
+
+    #This opens the HTML file for convenience
+    Invoke-Item C:\PShell\Labs\$FileName.html
+    ```
+    </details>
+
+1. [] The ISE, and **most** scripting editors, will add a button to **collapse** the **block** comments **visually**. This can get them out of the way while actually working with the code. Try collapsing one.
+
+1. [] Save the script, open the PowerShell Console, and try to execute it the same way as the previous exercise.
+
+    <details>
+    <summary>Reminder for how to execute the script</summary>
+    ```
+    C:\PShell\Labs\GetServiceRequirements.ps1 –ServiceName Spooler -FileName SpoolerResults
+    ```
+    </details>
+
+    Notice that it executes **exactly** as expected, the comments made **no** difference to the actions the script takes.
+
+1. [] Some **specialized** comments in PowerShell can change behavior. The **#Requires** statement **prevents** a script from running **unless** a specific set of requirements are met. These requirements can include:
+
+    - The PowerShell version.
+    - Installed modules.
+    - Running as Administator.
+
+    Add a **#Requires** statement to the top of the previous script, which will require the script to be run with elevated permissions, then **Save the script**.
+
+    ```PowerShell-nocopy-notab
+    #requires -RunAsAdministrator
+    ```
+
+    >[!TIP] A **#Requires** statement can appear on any line in a script, but applies to the entire execution. It is best practice to put these at or close to the top.
+
+1. [] Open the Windows PowerShell **console** as **non-elevated** (do **not** run with Administrator privileges). Run the script using the named parameters.
+
+    ```
+    C:\PShell\Labs\GetServiceRequirements.ps1 –ServiceName Spooler -FileName SpoolerResults
+    ```
+
+    Observe that an error occurs because the console is not being run as Administrator.
+
+1. []  Open the PowerShell **console** with **elevated** permissions by right clicking on the PowerShell icon and selecting **Run as Administrator**.  Run the script using the named parameters. It should **successfully** run.
+
+    ```
+    C:\PShell\Labs\GetServiceRequirements.ps1 –ServiceName Spooler -FileName SpoolerResults
+    ```
+
+===
+
+# Task 1.4: Help Data
+
+The details of help data will be covered in **another** section, however the **basics** of **Get-Help** can be leveraged from a script using **special comments**.
+
+To add help data to a script or function, a block comment can be placed at the **top** (above the **param()** statement) using one or more of the help **keywords**.
+
+In this example, only a few will be used.
+
+>[!TIP] For a list of all available keywords, view the [documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7.1)
+
+1. [] Open the **previous** script, located at +++C:\PShell\Labs\GetServiceRequirements.ps1+++
+
+1. [] Add this comment block to the very **top** of the script.
+
+    ```
+    <#
+
+    .SYNOPSIS
+
+    .DESCRIPTION
+
+    .PARAMETER FileName
+
+    .PARAMETER ServiceName
+
+    .EXAMPLE
+
+    .EXAMPLE
+
+    #>
+    ```
+
+    >  [!TIP] **Ctrl + J** brings up a snippet menu in the ISE.
+    >
+    > **New-ISESnippet** will add to that list, and its common to make one for basic help data
+
+1. [] **Add** text **underneath** each dot-prefixed **keyword** to further describe the script
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    <#
+    .SYNOPSIS
+    The purpose of this script is to return an HTML report, which shows the services required for a specific service to run
+
+    The report will be saved to C:\PShell\Labs\ with the file name specified
+
+    .DESCRIPTION
+    The purpose of this script is to return an HTML report, which shows the services required for a specific service to run
+
+    The report will be saved to C:\PShell\Labs\ with the file name specified
+
+    .PARAMETER FileName
+    Specifies the file name, which will be saved as an HTML file at C:\PShell\Labs
+
+    .PARAMETER ServiceName
+    Specifies the service that needs the report on required services to run
+
+    .EXAMPLE
+    PS> C:\PShell\Labs\GetServiceRequirements.ps1 –ServiceName Spooler -FileName SpoolerResults
+
+    .EXAMPLE
+    PS> C:\PShell\Labs\GetServiceRequirements.ps1 Spooler SpoolerResults
+    #>
+    ```
+    </details>
+
+1. [] Save the changes to your script and use **Get-Help** to view the help content added. If you have updated the script correctly, the help will appear correctly:
+
+    1. [] This command will show you the help of the script just created.
+
+        ```PowerShell-notab
+        Get-Help C:\PShell\Labs\GetServiceRequirements.ps1
+        ```
+    1. [] This command will show you only the **Examples** part of the help.
+
+        ```PowerShell-notab
+        Get-Help C:\PShell\Labs\GetServiceRequirements.ps1 –Examples
+        ```
+    1. [] This command will show you the help topic in a window for easier reading and searching.
+
+        ```PowerShell-notab
+        Get-Help C:\PShell\Labs\GetServiceRequirements.ps1 -ShowWindow
+        ```
+
+===
+# Exercise 2: Execution Policy and More
+
+In the previous exercise, running a script **only** required typing the file path. On *older* machines, or more *locked down* environments, it might **not** be as simple. **Execution Policies** can prevent any script files from being run, depending on their setting.
+
+## Objectives
+After completing this exercise, you will be able to:
+
+- Understand and change execution policies.
+- Use a code signing certificate to digitally sign a script.
+- Launch a PowerShell script from cmd.
+
+===
+
+# Task 2.1: Execution policies
+
+A fresh install of Windows PowerShell **will** allow scripts, created locally or digitally signed, to run by default on **Windows Server**. Windows Clients **will not** run scripts by default, due to their **execution policy** set to **Restricted**.
+
+
+1. [] Launch the **ISE** or PowerShell **Console** as **Administrator**.
+
+1. [] View the **current** script **execution policy** by typing the cmdlet Get-ExecutionPolicy the ISE command pane or the console. It should show as **Remote Signed**.
+
+    ```PowerShell-notab
+    Get-ExecutionPolicy
+    ```
+
+1. [] **Tighten** the default **execution policy** and no longer allow the scripts to run unless they have a **trusted** signature. Click &quot;Yes&quot; when prompted.
+
+    ```PowerShell-notab
+    Set-ExecutionPolicy -ExecutionPolicy Allsigned
+    ```
+1. [] View the current script **execution policy** and ensure it was correctly changed.
+
+    ```PowerShell-notab
+    Get-ExecutionPolicy
+    ```
+
+1. [] Attempt to execute the script from the previous task again in the Windows PowerShell console, using the named parameters.
+
+    ```
+    C:\PShell\Labs\GetServiceRequirements.ps1 –ServiceName Spooler -FileName SpoolerResults
+    ```
+    Notice the error points out that the script can not run because it is not **digitally signed**. This may be encountered on some *secure* servers. **Signatures** will be explored later in this exercise.
+
+1. [] Set the execution policy back to the default **RemoteSigned**
+
+    ```PowerShell-notab
+    Set-ExecutionPolicy -ExecutionPolicy remotesigned
+    ```
+
+1. [] Insure it has changed back by executing the script using the named parameters.  It should run now.
+
+    ```
+    C:\PShell\Labs\GetServiceRequirements.ps1 –ServiceName Spooler -FileName SpoolerResults
+    ```
+
+===
+
+# Task 2.2: Unblocking Scripts
+
+The **default**, and current, **execution policy** is **RemoteSigned**. This is *not* the same as **Unrestricted**. RemoteSigned allows any **local** script to run, but if the script is **downloaded** from the Internet, it will be blocked unless it has a valid signature.
+
+Occasionally, a machine in **RemoteSigned** will want to **unblock** a script that has no signature.
+
+1. [] Launch Windows PowerShell ISE by right clicking on the PowerShell icon and selecting &quot;Run ISE as an Administrator, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+1. [] Verify that the execution policy is set to &#39;RemoteSigned&#39;.
+
+    ```PowerShell-notab
+    Get-ExecutionPolicy
+    ```
+
+1. [] **C:\PShell\Labs\Get-NetAdapters.ps1** has been downloaded from the internet.
+
+1. [] **Try** to **execute** the script from the Windows PowerShell ISE console pane. An **error** should occur.
+
+    ```PowerShell-notab
+    C:\PShell\Labs\Get-NetAdapters.ps1
+    ```
+
+    The script is not digitally signed so it cannot be executed. The file is blocked, because it was downloaded from the Internet.
+
+1. [] To allow a downloaded script to run the following two methods can be used:
+    - Locate the script in Windows Explorer and right-click it, then select **Properties**. Click the **Unblock** button.
+    - Using the **Unblock-File** cmdlet.
+
+    ```PowerShell-notab
+    Unblock-File –Path C:\PShell\Labs\Get-NetAdapters.ps1
+    ```
+
+    >[!Alert] Beware that unblocking PowerShell scripts without having first reviewed what the script is not a good idea. Unblocking in a test environment before moving to production is strongly advised.
+
+1. [] Run the script again. It should now run correctly.
+
+    ```PowerShell-notab
+    C:\PShell\Labs\Get-NetAdapters.ps1
+    ```
+
+===
+
+
+# Task 2.3: Signing Scripts
+
+Scripts can be digitally **signed** to ensure their **integrity** and help the **security** of a system. Modifying the script execution policy to **AllSigned** will prevent the execution of unsigned scripts, but will not encrypt their contents or stop commands from being copied into the Windows PowerShell console or ISE and executed.
+
+1. [] **Change** the current execution policy to **AllSigned**. Ensure the Windows PowerShell console or ISE is running as **administrator** before attempting this. This time, use the switch parameter **-Force** to avoid being prompted.
+
+    ```PowerShell-notab
+    Set-ExecutionPolicy –Executionpolicy AllSigned -Force
+    ```
+
+1. [] Try to execute the script **+++C:\PShell\Labs\Get-NetAdapters.ps1+++** and note the error returned.
+
+1. [] **Open** the script to confirm there is no Authenticode **signature** at the bottom then close the script.
+
+1. [] In order to sign the script, a certificate is required. Type the commands below to create a self-signing certificate.
+
+    ```PowerShell-notab
+    $codeSignCert = New-SelfSignedCertificate -Subject &quot;My Code Signing Certificate&quot; -Type CodeSigningCert -CertStoreLocation cert:\LocalMachine\My
+    ```
+
+    > [!KNOWLEDGE] Using a **self-signed** certificate is intended for testing purposes only. This command was introduced with Windows 8.1 and Windows Server 2012 R2 as part of the PKI module.
+
+1. [] The **codesigning** certificate has been **created**, but the machine does **not** know about it yet. For test purposes in this lab, run the following code to export the new certificate then import it to the **root** certificates. **Press yes on the prompt**.
+
+    ```PowerShell-notab
+    Export-Certificate -FilePath exported_cert.cer -Cert $CodeSignCert
+    Import-Certificate -FilePath exported_cert.cer -CertStoreLocation Cert:\CurrentUser\Root
+    ```
+
+1. [] **Sign** the **script** with the certificate using  **Set-AuthenticodeSignature**.
+
+    ```PowerShell-notab
+    Set-AuthenticodeSignature -FilePath C:\PShell\Labs\Get-NetAdapters.ps1 -Certificate $codeSignCert
+    ```
+
+1. [] **Examine** the newly signed script to find the signature at the **bottom** of the **file**.
+
+    ```PowerShell-notab
+    Get-Content C:\PShell\Labs\Get-NetAdapters.ps1
+    ```
+
+1. [] **Try** to run the script +++C:\PShell\Labs\Get-NetAdapters.ps1+++. It should now run without error, though there is **no output** to this downloaded script, because it&#39;s a function.
+    >[!Hint] Remember that some scripts need to be executed with a **Run as Administrator.**
+
+    The code signing certificate has not been added to the local **TrustedPublishers store**, the first time the script is run you will be **prompted**.
+
+    Click the **Always Run** button to add the code signing certificate to the **TrustedPublishers** store of the current user.
+
+1. [] Finally, reset the execution policy to &quot;**RemoteSigned**&quot;.
+
+    ```PowerShell-notab
+    Set-ExecutionPolicy –ExecutionPolicy RemoteSigned -Force
+    ```
+
+===
+
+# Task 2.4: Executing Scripts from Outside of PowerShell
+
+One way to execute a script is to use **Command Prompt** to start **PowerShell.exe** and provide the script **file**.
+
+1. [] Launch **CommandPrompt**
+
+    >[!NOTE] **Note:** You can do this by search for cmd.exe or Command Prompt from the search bar in the bottom left hand corner.
+
+1. [] Execute the script from the previous exercise, from within cmd.exe.
+
+    ```PowerShell-notab
+    PowerShell.exe –File &quot;C:\PShell\Labs\GetServiceRequirements.ps1&quot; –ServiceName Spooler -FileName SpoolerResults
+    ```
+
+1. [] **PowerShell.exe** is the text-based Windows PowerShell host application. It has a number of parameters, which can control its behavior. List them by typing the following command in cmd.exe
+
+    ```PowerShell-notab
+    PowerShell.exe -?
+    ```
+
+1. [] How would you **execute** a the command &quot;Get-Process&quot; from **cmd.exe** using **PowerShell.exe**?
+
+    <details>
+    <summary>Answer</summary>
+
+    `PowerShell.exe –Command &quot;Get-Process&quot;`
+
+    </details>
+
+===
+
+# Congratulations student!
+
+You have successfully completed this module.
+
+There is an optional self test on the **next** page.
+
+To mark the lab as complete, take the test and click **End**.
+
+===
+
+# Self test (Optional part of the course)
+
+## Self test information
+
+The following self test is an optional part of this course and can be used to evaluate if your knowledge of the subject matter is sufficient. You can use this self test to re-evaluate your knowledge after taking the course or test your knowledge before you take / retake the course.
+
+This self test uses 10 questions and or exercises. To get a fair result you should complete this self test using your knowledge only and not using any internet search engines.
+
+##  Self test duration
+
+Although the self test is not timed this test should be completed in approximately 15 minutes.
+
+To start the self test continue to the next page.
+
+===
+
+## Self test
+
+1. <Removed>
+___
+2. <Removed>
+___
+3. <Removed>
+___
+4. <Removed>
+___
+5. <Removed>
+___
+6. <Removed>
+___
+7. <Removed>
+
+">
+    <input type="hidden" id="activities" value="[]">
+    <input type="hidden" id="replacementTokens" value="[{&quot;Token&quot;:&quot;@lab.LabProfile.Id&quot;,&quot;Replacement&quot;:&quot;38671&quot;},{&quot;Token&quot;:&quot;@lab.CtrlAltDelete&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;ctrlAltDeleteLink&#39;&gt;Ctrl+Alt+Delete&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;63124&#39;&gt;WIN10&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54597&#39;&gt;MS&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54598&#39;&gt;DC&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Username&quot;,&quot;Replacement&quot;:&quot;Administrator&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.OpticalMedia(5638).LoadLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;loadMediaLink opticalMedia&#39; data-data=&#39;5638&#39;&gt;Introduction to Commands - 0050&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.Id&quot;,&quot;Replacement&quot;:&quot;[ID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.GlobalId&quot;,&quot;Replacement&quot;:&quot;[lodID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.StartDate&quot;,&quot;Replacement&quot;:&quot;20190108&quot;},{&quot;Token&quot;:&quot;@lab.User.Id&quot;,&quot;Replacement&quot;:&quot;[USERID]&quot;},{&quot;Token&quot;:&quot;@lab.User.FirstName&quot;,&quot;Replacement&quot;:&quot;[FIRSTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.LastName&quot;,&quot;Replacement&quot;:&quot;[LASTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.Email&quot;,&quot;Replacement&quot;:&quot;[EMAIL]&quot;},{&quot;Token&quot;:&quot;@lab.User.ExternalId&quot;,&quot;Replacement&quot;:&quot;[EXTERNALID]&quot;},{&quot;Token&quot;:&quot;@lab.Tag&quot;,&quot;Replacement&quot;:&quot;[TAG]&quot;}]">
+
+    <textarea id="copyInput" value="" style="position: absolute; left:-10000px; top:-10000px; "></textarea>
+
+    <script type="text/javascript"> 
+    
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        var childWindows = [];
+
+        function showClickFeedbackMessage(text, x, y, duration) {
+            var $message = $("<div class='clickFeedbackMessage noselect'>" + text + "</div>");
+            $message.appendTo($("body")).hide();
+            $message.css({ left: x, top: y });
+            $message.fadeIn("fast");
+            window.setTimeout(function () {
+                $message.fadeOut("fast", function () { $message.remove(); });
+            }, duration);
+        }
+
+        function copyableClicked(element) {
+            //only copy if we are clicking, not if we have used the mouse to select the text manually.
+            var selectedText;
+            if (window.getSelection) {
+                selectedText = window.getSelection().toString();
+            } else if (document.selection && document.selection.type !== "Control") {
+                selectedText = document.selection.createRange().text;
+            }
+            if (selectedText) { return };
+
+            var $element = $(element);
+            var text = $element.text();
+            $("#copyInput").val(text).select();
+            var offset = $element.offset();
+            var x = offset.left;
+            var y = offset.top - 40;
+            try {
+                var successful = document.execCommand("copy");
+                if (successful) {
+                    showClickFeedbackMessage("Copied to clipboard", x, y, 2000);
+                } else {
+                    showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                }
+            } catch (err) {
+                showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                console.log("Unable to copy. " + err);
+            }
+        }
+
+        function setupKnowledgeExpanders() {
+            $(".knowledge").each(function () {
+                var knowledge = this;
+                var $knowledge = $(this);
+                var $moreKnowledge = $knowledge.next();
+                if ($moreKnowledge.is(".moreKnowledge")) {
+                    var maxHeight = 100;
+                    var leeway = 100;
+                    var diff = knowledge.scrollHeight - maxHeight;
+                    if (diff < leeway) {
+                        $knowledge.removeClass("collapsed");
+                        $moreKnowledge.find("a").hide();
+                    } else {
+                        //this is tall content, let's show the 'more' link
+                        $moreKnowledge.find("a").show();
+                        $knowledge.addClass("collapsed");
+                    }
+                }
+            });
+        }
+
+        var variables = {};
+
+        function processVariables() {
+            $("span.variable").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.html(variables[name]);
+                } else {
+                    $this.text("<" + name + ">");
+                }
+            });
+            $("input.variableTextBox").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.val(variables[name]);
+                } else {
+                    $this.val("");
+                }
+            });
+            $("code").each(function () {
+                var originalHtml = this.originalHtml ? this.originalHtml : this.innerHTML;
+                var newHtml = originalHtml;
+                for (var name in variables) {
+                    var val = variables[name];
+                    var regex = new RegExp('<span class="nocode">&lt;' + name + '&gt;</span>', 'g');
+                    newHtml = newHtml.replace(regex, val);
+                }
+                if (originalHtml != newHtml || originalHtml != this.innerHTML) {
+                    this.originalHtml = originalHtml;
+                    this.innerHTML = newHtml;
+                }
+            });
+        }
+        
+        window.onload = function () {
+
+            var rawContent = document.getElementById("rawContent").value;
+            var contentRoot = "./Content/"
+            var activitiesString = document.getElementById("activities").value;
+            var activities = (activitiesString == null || activitiesString.length == 0) ? [] : JSON.parse(activitiesString);
+            var replacementTokensString = document.getElementById("replacementTokens").value;
+            var replacementTokens = (replacementTokensString == null || replacementTokensString.length == 0) ? [] : JSON.parse(replacementTokensString);
+            instructionsProcessor.process(rawContent, "instructions", false, contentRoot, replacementTokens,
+                function ($page) {
+                    setupKnowledgeExpanders();
+                },
+                activities
+            );
+            $(".page").each(function () {
+                var $page = $(this);
+                if ($page.find("iframe.externalManual").length > 0) {
+                    $page.css("padding", 0);
+                }
+            });
+
+            $("body").on("click", ".moreKnowledgeLink", function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var $knowledge = $link.parent().prev();
+                if ($knowledge.hasClass("expanded")) {
+                    $knowledge.removeClass("expanded");
+                    $link.text("more...");
+                } else {
+                    $knowledge.addClass("expanded");
+                    $link.text("...less");
+                }
+            }).on("click", ".copyable, code:not(.nocopy)", function (e) {
+                copyableClicked(this);
+            }).on("click", ".dialogLink", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var $dialogLink = $(this);
+                var title = $dialogLink.attr("title");
+                var target = $dialogLink.attr("data-target");
+                if (target) {
+                    var $hiddenDialog = $("blockquote.referenceContent[data-id='" + target + "']");
+                    if ($hiddenDialog.length === 0) {
+                        alert('CONTENT ERROR: Unable to find a reference content "' + target + '"');
+                    } else {
+                        showDialog({title:title, content: $hiddenDialog.html() });
+                    }
+                }
+                else {
+                    showDialog({title:title, url: $dialogLink.attr("href"), isInstructions: $dialogLink.hasClass("instructions") });
+                }
+            }).on("click", ".videoLink, video", function (e) {
+                e.preventDefault();
+                var videoUrl = $(this).hasClass("videoLink") ? this.href : this.src;
+                var url = "./Content/" + videoUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var videoWindow = window.open(url, "videoWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(videoWindow);
+                try {
+                    videoWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".imageLink, img", function (e) {
+                var $this = $(this);
+                if ($this.parent().is("a")) return;
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var imgUrl = $this.hasClass("imageLink") ? this.href : this.src;
+                var url = "./Content/" + imgUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var imageWindow = window.open(url, "imageWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(imageWindow);
+                try {
+                    imageWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".tipLink", function (e) {
+                e.preventDefault();
+                var $tiplink = $(this);
+                var $hiddenTip = $tiplink.next();
+                var offset = $(this).offset();
+                var x = offset.left;
+                var y = offset.top + 25;
+                showClickFeedbackMessage($hiddenTip.html().replaceAll('<code title="Copy to clipboard" class="prettyprint">','<code title="Copy to clipboard" style="background-color:#8888;" class="prettyprint">').replaceAll("class",'style="background-color:#8888;" class'), x, y, 5000);
+            }).on("change", ".variableTextBox", function () {
+                var $textBox = $(this);
+                var name = $textBox.attr("data-name");
+                var val = $textBox.val();
+                if (val == null || val.length == 0) {
+                    if (name in variables) {
+                        delete variables[name];
+                    }
+                } else {
+                    variables[name] = val;
+                }
+                processVariables();
+            });;
+
+            $(window).resize(function () {
+                setupKnowledgeExpanders();
+            }).unload(function () {
+                closeAllChildWindows();
+            });
+
+            function closeAllChildWindows() {
+                for (var i = 0; i < childWindows.length; i++) {
+                    try {
+                        childWindows[i].close();
+                    } catch (e) {
+                    }
+                }
+                childWindows = [];
+            }
+
+            function showDialog(options) {
+                if (!options) return;
+                var $dialog = $("#modalDialog");
+                var isUpdatedContent = false;
+                if ($dialog.length > 0) {
+                    $dialog.find(".dialogContent").html("");
+                    $dialog.find(".dialogButtons").html("");
+                    isUpdatedContent = true;
+                } else {
+                    var $dialog = $('<div id="modalDialog" class="dialog"><div class="dialogMask"></div><div class="dialogBox"><div class="dialogCloseButton"></div><div class="dialogTitle"></div><div class="dialogContent"></div><div class="dialogButtons"></div></div></div>');
+                }
+                var $dialogBox = $dialog.find(".dialogBox");
+                var close = function () {
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", 0).animate({ marginTop: -h - offset.top }, 300);
+                    $dialog.delay(200).fadeOut("fast", function () { $dialog.remove(); });
+                }
+                $dialog.find(".dialogCloseButton").click(close);
+
+                if (options.title) {
+                    $dialog.find(".dialogTitle").html(options.title).show();
+                } else {
+                    $dialog.find(".dialogTitle").hide();
+                    $dialog.addClass("noTitle");
+                }
+                if (options.content) {
+                    $dialog.find(".dialogContent").removeClass("noScroll").append(options.content);
+                } else if (options.url) {
+                    var urlLower = options.url.toLowerCase();
+                    if (urlLower.indexOf(".mp4") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<video src="' + options.url + '" controls autoplay></video>');
+                        var $video = $("#contentDialogVideo");
+                        try {
+                            $video[0].play();
+                        } catch (e) {
+                            //
+                        }
+                    } else if (urlLower.indexOf(".png") !== -1 || urlLower.indexOf(".jpg") !== -1 || urlLower.indexOf(".jpeg") !== -1 || urlLower.indexOf(".gif") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<img src="' + options.url + '" controls></iframe>');
+                    } else if (options.isInstructions || urlLower.indexOf(".md") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<div id="instructionsDialog"></div>');
+                        window.setTimeout(function () {
+                            instructionsProcessor.processUrl(options.url, "instructionsDialog");
+                            if (options.url.indexOf("#") >= 0) {
+                                window.setTimeout(function () {
+                                    var hash = options.url.substr(options.url.indexOf("#"));
+                                    var $element = $("#instructionsDialog " + hash);
+                                    if ($element.length > 0) {
+                                        $dialog.find(".dialogContent").scrollTop($element.position().top);
+                                    }
+                                }, 400); //leave time for the content to layout... the dialog takes 400ms to animate anyway, which should be sufficient.
+                            }
+                        }, 1);
+                    } else {
+                        $dialog.find(".dialogContent").addClass("noScroll").append('<iframe id="contentDialogIFrame" src="' + options.url + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>');
+                    }
+                } else {
+                    $dialog.find(".dialogContent").hide();
+                }
+                if (options.buttons && options.buttons.length > 0) {
+                    $dialog.addClass("hasButtons");
+                    var $dialogButtons = $dialog.find(".dialogButtons");
+                    var numButtons = options.buttons.length;
+                    for (var i = 0; i < numButtons; i++) {
+                        var button = options.buttons[i];
+                        var $button = $("<input type='button' value='" + button.text + "' />");
+                        if (button.click) {
+                            $button.click(button.click);
+                        }
+                        if (button.primary) {
+                            $button.addClass("primary");
+                        }
+                        if (button.closeDialog) {
+                            $button.click(close);
+                        }
+                        $dialogButtons.append($button);
+                    }
+                }
+                if (!isUpdatedContent) {
+                    $("body").append($dialog);
+                    $dialog.hide().fadeIn("fast", function () {
+                        if (options.open) {
+                            options.open();
+                        }
+                    });
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", -h - offset.top).animate({ marginTop: 0 }, 400);
+                }
+                return {
+                    close: close
+                };
+            }
+
+        }
+
+        function getScrollTop() {
+            return document.body.scrollTop;
+        }
+
+    </script>
+
+
+</body>
+</html>

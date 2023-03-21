@@ -1,0 +1,1074 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0047)https://labondemand.com/LabProfile/Manual/LABID -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Local Lab Instructions</title>
+
+
+    <script src="./Content/jquery-2.1.4.min.js.download" type="text/javascript"></script>
+    <script src="./Content/showdown.min.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Content/prettify.css">
+    <script src="./Content/yaml.min.js.download"></script>
+    <script src="./Content/LocalizeTo" type="text/javascript"></script>
+    <link href="./Content/CloudClient.css" rel="stylesheet" type="text/css">
+  
+    <style type="text/css">
+        body, html {
+            font-family: Segoe UI,Tahoma,Verdana,Arial,sans-serif;
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            background-color: #efefef;
+            color: #000;
+            height: 100%;
+        }
+
+        body {
+            overflow:auto;
+        }
+
+        #outputWrapper {
+            background-color: #efefef;
+            min-height:100%;
+        }
+
+        .instructionsPreview {
+            padding: 20px;
+            height: 100%;
+        }
+
+        .instructionsPreview .page {
+            position:relative;
+            display: block !important;
+            padding: 15px 20px;
+            background-color:#fff;
+            page-break-after: always;
+            min-height:40px;
+        }
+
+        .instructionsPreview .page:not(:first-child) {
+            margin-top:20px;
+        }
+
+        @media print {
+            body, html{
+                height:auto;
+            }
+            
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            div {
+                page-break-inside: avoid;
+            }
+
+            #outputWrapper {
+                background-color: transparent;
+            }
+
+            .instructionsPreview {
+                padding: 0;
+            }
+
+            .instructionsPreview .page:not(:first-child) {
+                margin-top: 0px;
+            }
+
+        }
+
+        @page {
+            margin-left: 1.5cm;
+            margin-right: 1.5cm;
+            margin-top: 1.5cm;
+            margin-bottom: 1.5cm;
+        }
+    </style>
+    <link id="themeStylesheet" href="./Content/Blue.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="outputWrapper">
+                <div id="instructions" class="instructionsPreview">
+    </div>
+    <input type="hidden" id="rawContent" value="[TemplateVersion]:
+&#39;1.1&#39;
+
+[LODLabID]:
+&#39;40029&#39;
+
+[LODLabNumber]:
+&#39;11 FS.Remoting_Basic&#39;
+
+[AdminPowerShell]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell -Verb RunAs&quot;
+exit
+```
+
+[AdminPowerShellISE]:
+```
+powershell -NoProfile -command &quot;Start-Process powershell_ise -Verb RunAs&quot;
+exit
+```
+
+>[Flyout01]:
+>![RemotingBasics_GPO_01_Service.png](Media/RemotingBasics_GPO_01_Service.png)
+
+>[Flyout02]:
+>![RemotingBasics_GPO_02_Firewall.png](Media/RemotingBasics_GPO_02_Firewall.png)
+
+>[Flyout03]:
+>![RemotingBasics_GPO_03_WinRM.png](Media/RemotingBasics_GPO_03_WinRM.png)
+
+# Welcome student to the module: Remoting basic
+This module introduces the concept of PowerShell remoting to other computers. PowerShell allows for remoting into one computer at a time or multiples.
+This section discussions the process of accessing remote devices via PowerShell.
+
+Estimated time to complete this lab: **60 minutes**
+
+## Module Objective
+After completing this lab you will be able to:
+- Understand PowerShell Remoting Concept.
+- Understand enabling PowerShell remoting: locally, and through GPO settings.
+- Understand, create and use PowerShell Remoting Sessions.
+- Understand working with temporary and persistent sessions.
+- View PowerShell commands against one or multiple computers.
+- Work with PowerShell Remoting.
+
+===
+
+# Login to Windows 10 and Start the Lab
+
+Login to **win10(wdt** machine with the given credentials. You can find them on the **Resources** pane.
+
+Please login with Username: **+++Power+++** and Password: **+++Pa$$w0rd+++**
+
+After logging in wait until you see the &quot;Lab preparation has been completed&quot; in the action center (This can take up to 2 minutes). If this does not popup you can click in the bottom right of the Vm to open the action center. Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting **Run ISE as an Administrator**, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+> [!TIP] **Notes about using the lab**
+> - It might take a moment to start ISE if you click the above link
+> - You can click the **+++Type Text+++** icon to enter the highlighted text at the position of the cursor in the virtual machine. You can also click on the **++Copyto Clipboard++** icon and then paste in at the desired destination.
+> - Entering your code in the script pane of the ISE will allow for better troubleshooting if you find errors
+> - Remember that the PowerShell ISE will allow you to highlight multiple lines of PowerShell code and run them together by pressing **F8**
+
+===
+
+# Exercise 1: Understand Native OS Remoting
+<!--This is where we show them how to use native remoting from WS2016 into Win10 machine that does nit have WinRM enabled yet-->
+Built-In cmdlets that take `-ComputerName` parameter but do not have a `-Session` parameter utilize native OS remoting capabilities. Meaning that PowerShell remoting does *not* need to be enabled for these cmdlets to work. Instead DCOM and RPC protocols are utilized.
+
+## Objectives
+After completing this exercise, you will be able to:
+- Find PowerShell cmdlets that utilize native OS remoting.
+- Use native OS remoting cmdlets.
+
+===
+# Task 1.1: Find native OS remoting cmdlets
+PowerShell is shipped with built-in cmdlets supports native OS remoting.
+
+1. [] Sign in to **win10(wdt** as **+++Power+++** using +++**Pa$$w0rd**+++ as the password.
+
+1. [] Wait till labsetup is complete this will be displayed as a notification on desktop
+
+1. [] Sign in to **ms(wdt** as **+++Power+++** using +++**Pa$$w0rd**+++ as the password.
+
+1. [] Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting &quot;Run ISE as an Administrator, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+1. [] Type a command to find all cmdlets that include the `ComputerName` parameter.
+    
+    <details>
+    <summary>Hint</summary>
+    
+    Try using `Get-Command`
+
+    </details>
+    
+    <details>
+    
+    <summary>Answer</summary>
+    
+    ++Get-Command -ParameterName ComputerName++
+    
+    </details>
+
+===
+
+# Task 1.2: List updates installed on a remote computer
+The cmdlet `Get-HotFix` can be used to list updates installed on a local or remote computer.
+1. [] Execute the following command in the PowerShell ISE window.
+
+    `Get-HotFix -ComputerName Win10`
+
+1. [] How can you use the same cmdlet to collect updates from multiple computers?
+    
+    <details>
+    <summary>Hint</summary>
+    
+    The `-ComputerName` parameter has type [string[]] which accepts an array of strings as comma separated values.
+    
+    </details>
+    
+    <details>
+    <summary>Answer</summary>
+    
+    `Get-HotFix -ComputerName &#39;Win10&#39;,&#39;MS&#39;`
+    
+    </details>
+
+===
+
+# Task 1.3: Restart spooler service on a remote computer
+You can restart a service by using `Stop-Service` followed by `Start-Service`. Or you can use `Restart-Service`.
+
+1. [] Use `Restart-Service` to restart the **spooler** service on **Win10** machine.
+    <details>
+    <summary>Hint</summary>
+    
+    `Restart-Service` does not have `-ComputerName` parameter, however `Get-Service` does and we can use a pipeline.
+    
+    </details>
+    
+    <details>
+    <summary>Answer</summary>
+    
+    `Get-Service -Name spooler -ComputerName Win10 | Restart-Service`
+    
+    </details>
+
+
+===
+
+# Task 1.4: Try using Invoke-Command when PowerShell remoting is not enabled.
+
+`Invoke-Command` is one of the cmdlets that supports PowerShell remoting, which is disabled by default on Windows Clients.
+
+1. [] Execute the following command in the PowerShell ISE window,
+
+    ```
+    Invoke-Command -ComputerName Win10 -ScriptBlock {Get-NetAdapter}
+    ```
+
+    >[!Alert] We expect to see an error from the previous command as PowerShell remoting is disabled by default on Win10 machine as it is running Windows 10 not Windows Server.
+
+>[!Note] Note: In the next exercise we will learn how to enable PowerShell remoting on clients.
+
+===
+
+# Exercise 2: Enable PowerShell Remoting
+
+By default PowerShell remoting is enabled on Windows Server <!-- on Domain and Private only? --> and disabled on Windows Client. In this exercise we will learn how to enable and manage PowerShell remoting.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Enable PowerShell Remoting using command line
+- Enable and manage PowerShell Remoting using Group Policy.
+
+===
+
+# Task 2.1: Enable PowerShell using command line
+
+`Enable-PSRemoting` allows a user to interactively enable PowerShell remoting​. The command must be run with elevated privileges.
+
+1. [] Sign in to **win10(wdt** as **+++Power+++** using +++**Pa$$w0rd**+++ as the password.
+
+1. [] Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting &quot;Run ISE as an Administrator, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+1. [] What is the status of Windows Remote Management (WinRM) service?
+    
+    <details>
+    <summary>Hint</summary>
+    
+    `Get-Service -Name WinRM`
+    
+    </details>
+    
+    <details>
+    
+    <summary>Answer</summary>
+    
+    The service is set to Manual by default on Windows Clients.
+    
+    </details>
+
+1. [] Check if there are any listeners on TCP port 5985
+
+    <details>
+    <summary>Hint</summary>
+
+    `Get-NetTCPConnection` is a good alternative to netstat in PowerShell.
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    `Get-NetTCPConnection -LocalPort 5985`
+
+    </details>
+
+    >[!TIP] We expect to see an error here as no services are currently listening on that port.
+
+1. [] Are Windows Remote Management rules enabled in Firewall inbound policices?
+    
+    <details>
+    <summary>Hint</summary>
+    
+    `Get-NetFirewallRule -DisplayGroup &#39;Windows Remote Management&#39; | ft Name,Display*, Profile, Enabled`
+    
+    </details>
+    
+    <details>
+    <summary>Answer</summary>
+    
+    The rules are disabled by default on Windows clients.
+    
+    </details>
+
+1. [] Execute the following command from an elevated PowerShell window.
+    
+    `Enable-PSRemoting`
+    
+1. [] Go through the steps 3 to 5. What has changed?
+    
+    <details>
+    <summary>Answer</summary>
+    
+    - WinRM service is set to Automatic start.
+    - There is now a listener on port 5985.
+    - Firewall rules are now enabled.
+    
+    </details>
+
+1. [] To confirm that PowerShell remoting is now working on this machine, move to **ms(wdt** as **+++Power+++** using +++**Pa$$w0rd**+++ as the password and execute the following command,
+
+    ```
+    Invoke-Command -ComputerName Win10 -ScriptBlock {Get-NetAdapter}
+    ```
+
+    >[!TIP] In the previous exercise this command failed as WinRM was not enabled, now it works as we have enabled the service.
+
+    >[!TIP] In the next exercise we will learn how to enable PowerShell remoting using Group Policy.
+
+===
+
+# Task 2.2: Enable and manage PowerShell Remoting using Group Policy.
+Group Policy allows central management of WinRM status as well as configuration.
+
+1. [] Sign in to **dc(wdt** as **+++Power+++** using +++**Pa$$w0rd**+++ as the password.
+
+1. [] Open Group Policy Management Console (GPMC) Start -> MMC -> add snapin -> Group Policy Management
+
+1. [] Navigate to **contoso.local** domain, right-click and choose *Create a GPO in This domain, and Link it here...*
+
+1. [] Set a name for the GPO, for example: **+++WinRM_Enable+++**
+
+1. [] Right click on the newly created GPO and choose *Edit...*.
+
+1. [] Navigate to: Computer Configuration | Policies | Windows Settings | Security Settings | System Services | Windows Remote Management (WS-Management)​
+
+1. [] Set the service as Defined and startup mode as Automatic. ^[Click here to see an example][Flyout01]
+
+1. [] Navigate to: Computer Configuration | Policies | Windows Settings | Security Settings | Windows Firewall with Advanced Security | Windows Firewall with Advanced Security | Inbound Rules
+
+1. [] Create a new **Inbound rule** using the predefined rule: **Windows Remote Management**. Click Next.
+
+1. [] Select both rules. Click Next.
+
+1. [] Allow the connection. Click Finish. ^[Click here to see an example][Flyout02]
+
+1. [] Navigate to: Computer Configuration | Policies | Administrative Templates | Windows Components | Windows Remote Management (WinRM) | WinRM Service
+
+1. [] Open **Allow remote server management through WinRM​** and Enable it.
+
+1. [] Under **IPv4 filter** and **IPv6 filter** type **&quot;*&quot;** (without the quotes). Click OK. ^[Click here to see an example][Flyout03]
+
+1. [] Close the GPO editor.
+
+>[!HINT] To be sure that the previous created Computer policy are applied to the Servers, you need to:
+- Execute from an elevated **command prompt** the &quot;**GpUpdate /force**&quot; command, on the server where the GPO should be applied. 
+- Or restart the Server, where the GPO should be applied.
+
+>[!KNOWLEDGE] You can enter IPv4/6 filters to control which IPs or subnets are allowed to connect remotely using WinRM.
+
+===
+
+# Exercise 3: Using PowerShell Remoting
+Once PowerShell remoting is enabled you can use it interactively, in simultaneous sessions. Sessions can be temporary or persistent. In the following exercises we will examine these options.
+
+## Objectives
+
+After completing this exercise, you will be able to:
+
+- Use PowerShell Remoting in Interactive Session.
+- Simultaneous PowerShell sessions using Invoke-Command
+- Persistent PowerShell Remoting sessions
+
+===
+
+# Task 3.1: Create Interactive Remote PowerShell session
+
+1. [] Sign in to **win10(wdt** as **+++Power+++** using +++**Pa$$w0rd**+++ as the password.
+
+1. [] Begin by opening Windows PowerShell ISE by right clicking on the PowerShell icon and selecting &quot;Run ISE as an Administrator, or by clicking @[Run ISE as Administrator.][AdminPowerShellISE]{shell visible}.
+
+1. [] Use environment variable to find the Computername of the machine you are using.
+    
+    <details>
+    <summary>Answer</summary>
+
+    `$env:Computername`
+    
+    </details>
+
+1. [] Execute the following command in the command window to create an interactive session on the server **MS**.
+
+    `Enter-PSSession -ComputerName MS`
+
+1. [] Does the computername environment variable show a different name now?
+    <details>
+    <summary>Answer</summary>
+
+    The variable should return **MS** as we are in an interactive session.
+    </details>
+
+1. [] In the current session, create a new variable **&#39;a&#39;** with value **123**.
+    
+    <details>
+    <summary>Answer</summary>
+
+    `$a = 123`
+
+    </details>
+
+1. [] Exit the interactive session.
+
+    <details>
+    <summary>Answer</summary>
+
+    `Exit-PSSession`
+
+    </details>
+1. [] Try getting the value of variable **&#39;a&#39;**, is it **123**?
+
+    <details>
+    <summary>Answer</summary>
+
+    The value is null as we created the variable within the session on computer **MS** which we just quit.
+
+    </details>
+1. [] Re-enter a session on **MS**.
+
+    <details>
+    <summary>Answer</summary>
+
+    `Enter-PSSession MS`
+
+    >[!TIP] `-ComputerName` is a positional paramter, so we can omit it and type the value directly.
+
+    </details>
+
+1. [] What is the value of **&#39;a&#39;** within this session?
+
+    <details>
+    <summary>Answer</summary>
+
+    **&#39;a&#39;** is null because we are using temporary sessions which are closed on exit.
+
+    </details>
+    
+1. [] Exit the interactive session.
+
+    <details>
+    <summary>Answer</summary>
+
+    `Exit-PSSession`
+
+    </details>
+===
+# Task 3.2: Create Persistent Interactive Remote PowerShell session
+
+1. [] Create a new session to computer **MS** and store it in the variable **Session**.
+    
+    <details>
+    <summary>Hint</summary>
+
+    We can use `New-PSSession` to create persistent sessions.
+    
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    `$Session = New-PSSession -ComputerName MS`
+    
+    </details>
+
+1. [] Use the **Session** variable to enter an interactive session on **MS**.
+    
+    <details>
+    <summary>Hint</summary>
+
+    `Enter-PSSession` has a parameter `-Session` that accepts session objects.
+    
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    `Enter-PSSession -Session $Session`
+    </details>
+
+1. [] In the current session, create a new variable **&#39;a&#39;** with value **123**.
+
+    <details>
+    <summary>Answer</summary>
+    
+    `$a = 123`
+    
+    </details>
+
+1. [] Exit the interactive session.
+
+    <details>
+    <summary>Answer</summary>
+
+    `Exit-PSSession`
+
+    </details>
+
+1. [] Re-enter the same session on **MS**.
+
+    <details>
+    <summary>Answer</summary>
+
+    `Enter-PSSession $Session`
+
+    >[!TIP] Parameter `-Session` is also a positional paramter, PowerShell detects the input object type and decides which parameter set to use.
+
+    </details>
+
+1. [] What is the value of **&#39;a&#39;** within this session?
+
+    <details>
+    <summary>Answer</summary>
+
+    **&#39;a&#39;** equals 123 because we are using a persistent session which is *not* closed on exit.
+
+    </details>
+
+    >[!KNOWLEDGE] For any cmdlet, the parameter `-ComputerName` creates temp sessions, `-Session` is used for persistent ones.
+
+1. [] Exit the current remote session.
+
+===
+# Task 3.3: Copy a file in a persistent PowerShell session
+You can use `Copy-Item` with `-ToSession` parameter to copy files into a session without using SMB protocol or opening its ports in firewall. <!-- The idea is that we trigger security concerned admins to spark discussion on PowerShell security -->
+
+1. [] use PowerShell to create a text file with the content below, you can save the file as  **C:\\PowerShellScripts\\SampleText.txt**
+
+    ++&quot;Sample Text&quot;++
+
+    <details>
+    <summary>Answer</summary>
+
+    `Set-Content -Path C:\PowerShellScripts\SampleText.txt -Value &#39;Sample Text&#39;`
+    </details>
+
+1. [] Did the last command return an error?
+
+    <details>
+    <summary>Answer</summary>
+
+    Yes! The error states that a part of the path provided cannot be found because there is no **PowerShellScripts** folder under **C:\\**
+
+    `New-Item -Path C:\PowerShellScripts -Type Directory`
+    
+    Reattempt to create the text file again
+
+    </details>
+
+1. [] Create (or reuse) a session on computer **MS**, store in a variable named **$Session**.
+    
+    <details>
+    <summary>Answer</summary>
+
+    `$Session = New-PSSession -ComputerName MS`
+    
+    </details>
+
+1. [] Use `Copy-Item` to copy the script we created to the root of the **C:\\** drive on **MS**.
+    
+    <details>
+    <summary>Answer</summary>
+
+    `Copy-Item -ToSession $Session -Path C:\PowerShellScripts\SampleText.txt -Destination C:\SampleText.txt`
+    </details>
+
+===
+# Task 3.4: Using Invoke-Command to run commands on remote computers.
+
+In Interactive sessions we cannot reuse output in the parent session. We also cannot use them in a script running in the background. Invoke-Command solves both problems and more.
+
+1. [] Use Invoke-Command to collect list of disks on computer **MS**.
+
+    <details>
+    <summary>Answer</summary>
+
+    `Invoke-Command -ComputerName MS -ScriptBlock {Get-Disk}`
+
+    </details>
+
+    >[!KNOWLEDGE] The output from Invoke-Command is not text as in interactive sessions, it is a PowerShell object that you can store in a variable or manipulate as needed.
+
+1. [] Use Invoke-Command to collect list of disks from both **MS** and **DC** in parallel.
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    $ComputerNames = @(&quot;MS&quot;,&quot;DC&quot;)
+    Invoke-Command -ComputerName $ComputerNames -ScriptBlock {Get-Disk}
+    ```
+    </details>
+
+>[!KNOWLEDGE] You can also import the computer names from a text file using `Get-Content`
+
+===
+# Task 3.5: Use Invoke-Command to run a script on remote computers.
+
+1. [] Create a PowerShell script file with the content below, you can save the file as  **C:\\PowerShellScripts\\RemoteScript.ps1**
+
+    `Get-NetAdapter | Select InterfaceIndex, Name, InterfaceDescription, DriverInformation`
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    Set-Content -Path C:\PowerShellScripts\RemoteScript.ps1 -Value &#39;Get-NetAdapter | Select InterfaceIndex, Name, InterfaceDescription, DriverInformation&#39;
+    ```
+
+    </details>
+
+1. [] Using persistent PowerShell sessions run the PowerShell file created earlier on **MS** and **DC** in parallel.
+
+    <details>
+    <summary>Answer</summary>
+
+    ```
+    $Sessions = New-PSSession -ComputerName MS,DC
+    Invoke-Command -Session $Sessions -FilePath C:\PowerShellScripts\RemoteScript.ps1
+    ```
+
+    </details>
+
+1. [] Can you format the output from previous step into a table?
+
+    <details>
+    <summary>Hint</summary>
+
+    Try using pipeline into `Format-Table` (FT)
+
+    </details>
+
+    <details>
+    <summary>Answer</summary>
+
+    `Invoke-Command -Session $Sessions -FilePath C:\PowerShellScripts\RemoteScript.ps1  | FT`
+
+    </details>
+
+1. [] Close the PowerShell Sessions to reserve resources.
+
+    <details>
+    <summary>Answer</summary>
+
+    `$Sessions | Remove-PSSession`
+
+    </details>
+
+>[!Knowledge] Always close persistent remote sessions to reserve resources. You can also use `Get-PSSession | Remove-PSSession`
+
+===
+# Self test (Optional part of the course)
+
+## Self test information
+
+The following self test is an optional part of this course and can be used to evaluate if your knowledge of the subject matter is sufficient. You can use this self test to re-evaluate your knowledge after taking the course or test your knowledge before you take / retake the course.
+
+The self test consists of 10 questions/exercises. For best results, it is recommended to complete this self test without referring back to the previous materials or other resources.
+
+##  Self test duration
+
+Although the self test is not timed this test should be completed in approximately 15 minutes.
+
+To start the self test continue to the next page.
+
+===
+
+## Self test questions
+
+Based on what you learned in the course you should now be able to answer the following set of questions without lookup the answers.
+
+1. <Removed>
+___
+2. <Removed>
+___
+3. <Removed>
+___
+4. <Removed>
+___
+5. <Removed>
+___
+6. <Removed>
+___
+7. <Removed>
+___
+8. <Removed>
+___
+9. <Removed>
+___
+10. <Removed>
+
+===
+# Congratulations!
+
+You have successfully completed this module. To mark the lab as complete, click **End**.">
+    <input type="hidden" id="activities" value="[]">
+    <input type="hidden" id="replacementTokens" value="[{&quot;Token&quot;:&quot;@lab.LabProfile.Id&quot;,&quot;Replacement&quot;:&quot;38671&quot;},{&quot;Token&quot;:&quot;@lab.CtrlAltDelete&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;ctrlAltDeleteLink&#39;&gt;Ctrl+Alt+Delete&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;63124&#39;&gt;WIN10&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(WIN10).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54597&#39;&gt;MS&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Username&quot;,&quot;Replacement&quot;:&quot;Power&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(MS).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).SelectLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;selectMachineLink&#39; data-data=&#39;54598&#39;&gt;DC&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Username&quot;,&quot;Replacement&quot;:&quot;Administrator&quot;},{&quot;Token&quot;:&quot;@lab.VirtualMachine(DC).Password&quot;,&quot;Replacement&quot;:&quot;Pa$$$$w0rd&quot;},{&quot;Token&quot;:&quot;@lab.OpticalMedia(5638).LoadLink&quot;,&quot;Replacement&quot;:&quot;&lt;a href=&#39;#&#39; class=&#39;loadMediaLink opticalMedia&#39; data-data=&#39;5638&#39;&gt;Introduction to Commands - 0050&lt;/a&gt;&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.Id&quot;,&quot;Replacement&quot;:&quot;[ID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.GlobalId&quot;,&quot;Replacement&quot;:&quot;[lodID]&quot;},{&quot;Token&quot;:&quot;@lab.LabInstance.StartDate&quot;,&quot;Replacement&quot;:&quot;20190108&quot;},{&quot;Token&quot;:&quot;@lab.User.Id&quot;,&quot;Replacement&quot;:&quot;[USERID]&quot;},{&quot;Token&quot;:&quot;@lab.User.FirstName&quot;,&quot;Replacement&quot;:&quot;[FIRSTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.LastName&quot;,&quot;Replacement&quot;:&quot;[LASTNAME]&quot;},{&quot;Token&quot;:&quot;@lab.User.Email&quot;,&quot;Replacement&quot;:&quot;[EMAIL]&quot;},{&quot;Token&quot;:&quot;@lab.User.ExternalId&quot;,&quot;Replacement&quot;:&quot;[EXTERNALID]&quot;},{&quot;Token&quot;:&quot;@lab.Tag&quot;,&quot;Replacement&quot;:&quot;[TAG]&quot;}]">
+
+    <textarea id="copyInput" value="" style="position: absolute; left:-10000px; top:-10000px; "></textarea>
+
+    <script type="text/javascript"> 
+    
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        var childWindows = [];
+
+        function showClickFeedbackMessage(text, x, y, duration) {
+            var $message = $("<div class='clickFeedbackMessage noselect'>" + text + "</div>");
+            $message.appendTo($("body")).hide();
+            $message.css({ left: x, top: y });
+            $message.fadeIn("fast");
+            window.setTimeout(function () {
+                $message.fadeOut("fast", function () { $message.remove(); });
+            }, duration);
+        }
+
+        function copyableClicked(element) {
+            //only copy if we are clicking, not if we have used the mouse to select the text manually.
+            var selectedText;
+            if (window.getSelection) {
+                selectedText = window.getSelection().toString();
+            } else if (document.selection && document.selection.type !== "Control") {
+                selectedText = document.selection.createRange().text;
+            }
+            if (selectedText) { return };
+
+            var $element = $(element);
+            var text = $element.text();
+            $("#copyInput").val(text).select();
+            var offset = $element.offset();
+            var x = offset.left;
+            var y = offset.top - 40;
+            try {
+                var successful = document.execCommand("copy");
+                if (successful) {
+                    showClickFeedbackMessage("Copied to clipboard", x, y, 2000);
+                } else {
+                    showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                }
+            } catch (err) {
+                showClickFeedbackMessage("Copying was unsuccessful", x, y, 2000);
+                console.log("Unable to copy. " + err);
+            }
+        }
+
+        function setupKnowledgeExpanders() {
+            $(".knowledge").each(function () {
+                var knowledge = this;
+                var $knowledge = $(this);
+                var $moreKnowledge = $knowledge.next();
+                if ($moreKnowledge.is(".moreKnowledge")) {
+                    var maxHeight = 100;
+                    var leeway = 100;
+                    var diff = knowledge.scrollHeight - maxHeight;
+                    if (diff < leeway) {
+                        $knowledge.removeClass("collapsed");
+                        $moreKnowledge.find("a").hide();
+                    } else {
+                        //this is tall content, let's show the 'more' link
+                        $moreKnowledge.find("a").show();
+                        $knowledge.addClass("collapsed");
+                    }
+                }
+            });
+        }
+
+        var variables = {};
+
+        function processVariables() {
+            $("span.variable").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.html(variables[name]);
+                } else {
+                    $this.text("<" + name + ">");
+                }
+            });
+            $("input.variableTextBox").each(function () {
+                var $this = $(this);
+                var name = $this.attr("data-name");
+                if (name in variables) {
+                    $this.val(variables[name]);
+                } else {
+                    $this.val("");
+                }
+            });
+            $("code").each(function () {
+                var originalHtml = this.originalHtml ? this.originalHtml : this.innerHTML;
+                var newHtml = originalHtml;
+                for (var name in variables) {
+                    var val = variables[name];
+                    var regex = new RegExp('<span class="nocode">&lt;' + name + '&gt;</span>', 'g');
+                    newHtml = newHtml.replace(regex, val);
+                }
+                if (originalHtml != newHtml || originalHtml != this.innerHTML) {
+                    this.originalHtml = originalHtml;
+                    this.innerHTML = newHtml;
+                }
+            });
+        }
+        
+        window.onload = function () {
+
+            var rawContent = document.getElementById("rawContent").value;
+            var contentRoot = "./Content/"
+            var activitiesString = document.getElementById("activities").value;
+            var activities = (activitiesString == null || activitiesString.length == 0) ? [] : JSON.parse(activitiesString);
+            var replacementTokensString = document.getElementById("replacementTokens").value;
+            var replacementTokens = (replacementTokensString == null || replacementTokensString.length == 0) ? [] : JSON.parse(replacementTokensString);
+            instructionsProcessor.process(rawContent, "instructions", false, contentRoot, replacementTokens,
+                function ($page) {
+                    setupKnowledgeExpanders();
+                },
+                activities
+            );
+            $(".page").each(function () {
+                var $page = $(this);
+                if ($page.find("iframe.externalManual").length > 0) {
+                    $page.css("padding", 0);
+                }
+            });
+
+            $("body").on("click", ".moreKnowledgeLink", function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var $knowledge = $link.parent().prev();
+                if ($knowledge.hasClass("expanded")) {
+                    $knowledge.removeClass("expanded");
+                    $link.text("more...");
+                } else {
+                    $knowledge.addClass("expanded");
+                    $link.text("...less");
+                }
+            }).on("click", ".copyable, code:not(.nocopy)", function (e) {
+                copyableClicked(this);
+            }).on("click", ".dialogLink", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var $dialogLink = $(this);
+                var title = $dialogLink.attr("title");
+                var target = $dialogLink.attr("data-target");
+                if (target) {
+                    var $hiddenDialog = $("blockquote.referenceContent[data-id='" + target + "']");
+                    if ($hiddenDialog.length === 0) {
+                        alert('CONTENT ERROR: Unable to find a reference content "' + target + '"');
+                    } else {
+                        showDialog({title:title, content: $hiddenDialog.html() });
+                    }
+                }
+                else {
+                    showDialog({title:title, url: $dialogLink.attr("href"), isInstructions: $dialogLink.hasClass("instructions") });
+                }
+            }).on("click", ".videoLink, video", function (e) {
+                e.preventDefault();
+                var videoUrl = $(this).hasClass("videoLink") ? this.href : this.src;
+                var url = "./Content/" + videoUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var videoWindow = window.open(url, "videoWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(videoWindow);
+                try {
+                    videoWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".imageLink, img", function (e) {
+                var $this = $(this);
+                if ($this.parent().is("a")) return;
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var imgUrl = $this.hasClass("imageLink") ? this.href : this.src;
+                var url = "./Content/" + imgUrl.split('Content/').pop().replace(/\#(.*?)$/, '').replace(/\?(.*?)$/, '')
+                if (this.title) {
+                    
+                }
+                var imageWindow = window.open(url, "imageWindow", "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no");
+                childWindows.push(imageWindow);
+                try {
+                    imageWindow.focus();
+                } catch (e) {
+
+                }
+            }).on("click", ".tipLink", function (e) {
+                e.preventDefault();
+                var $tiplink = $(this);
+                var $hiddenTip = $tiplink.next();
+                var offset = $(this).offset();
+                var x = offset.left;
+                var y = offset.top + 25;
+                showClickFeedbackMessage($hiddenTip.html().replaceAll('<code title="Copy to clipboard" class="prettyprint">','<code title="Copy to clipboard" style="background-color:#8888;" class="prettyprint">').replaceAll("class",'style="background-color:#8888;" class'), x, y, 5000);
+            }).on("change", ".variableTextBox", function () {
+                var $textBox = $(this);
+                var name = $textBox.attr("data-name");
+                var val = $textBox.val();
+                if (val == null || val.length == 0) {
+                    if (name in variables) {
+                        delete variables[name];
+                    }
+                } else {
+                    variables[name] = val;
+                }
+                processVariables();
+            });;
+
+            $(window).resize(function () {
+                setupKnowledgeExpanders();
+            }).unload(function () {
+                closeAllChildWindows();
+            });
+
+            function closeAllChildWindows() {
+                for (var i = 0; i < childWindows.length; i++) {
+                    try {
+                        childWindows[i].close();
+                    } catch (e) {
+                    }
+                }
+                childWindows = [];
+            }
+
+            function showDialog(options) {
+                if (!options) return;
+                var $dialog = $("#modalDialog");
+                var isUpdatedContent = false;
+                if ($dialog.length > 0) {
+                    $dialog.find(".dialogContent").html("");
+                    $dialog.find(".dialogButtons").html("");
+                    isUpdatedContent = true;
+                } else {
+                    var $dialog = $('<div id="modalDialog" class="dialog"><div class="dialogMask"></div><div class="dialogBox"><div class="dialogCloseButton"></div><div class="dialogTitle"></div><div class="dialogContent"></div><div class="dialogButtons"></div></div></div>');
+                }
+                var $dialogBox = $dialog.find(".dialogBox");
+                var close = function () {
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", 0).animate({ marginTop: -h - offset.top }, 300);
+                    $dialog.delay(200).fadeOut("fast", function () { $dialog.remove(); });
+                }
+                $dialog.find(".dialogCloseButton").click(close);
+
+                if (options.title) {
+                    $dialog.find(".dialogTitle").html(options.title).show();
+                } else {
+                    $dialog.find(".dialogTitle").hide();
+                    $dialog.addClass("noTitle");
+                }
+                if (options.content) {
+                    $dialog.find(".dialogContent").removeClass("noScroll").append(options.content);
+                } else if (options.url) {
+                    var urlLower = options.url.toLowerCase();
+                    if (urlLower.indexOf(".mp4") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<video src="' + options.url + '" controls autoplay></video>');
+                        var $video = $("#contentDialogVideo");
+                        try {
+                            $video[0].play();
+                        } catch (e) {
+                            //
+                        }
+                    } else if (urlLower.indexOf(".png") !== -1 || urlLower.indexOf(".jpg") !== -1 || urlLower.indexOf(".jpeg") !== -1 || urlLower.indexOf(".gif") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<img src="' + options.url + '" controls></iframe>');
+                    } else if (options.isInstructions || urlLower.indexOf(".md") !== -1) {
+                        $dialog.find(".dialogContent").removeClass("noScroll").append('<div id="instructionsDialog"></div>');
+                        window.setTimeout(function () {
+                            instructionsProcessor.processUrl(options.url, "instructionsDialog");
+                            if (options.url.indexOf("#") >= 0) {
+                                window.setTimeout(function () {
+                                    var hash = options.url.substr(options.url.indexOf("#"));
+                                    var $element = $("#instructionsDialog " + hash);
+                                    if ($element.length > 0) {
+                                        $dialog.find(".dialogContent").scrollTop($element.position().top);
+                                    }
+                                }, 400); //leave time for the content to layout... the dialog takes 400ms to animate anyway, which should be sufficient.
+                            }
+                        }, 1);
+                    } else {
+                        $dialog.find(".dialogContent").addClass("noScroll").append('<iframe id="contentDialogIFrame" src="' + options.url + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>');
+                    }
+                } else {
+                    $dialog.find(".dialogContent").hide();
+                }
+                if (options.buttons && options.buttons.length > 0) {
+                    $dialog.addClass("hasButtons");
+                    var $dialogButtons = $dialog.find(".dialogButtons");
+                    var numButtons = options.buttons.length;
+                    for (var i = 0; i < numButtons; i++) {
+                        var button = options.buttons[i];
+                        var $button = $("<input type='button' value='" + button.text + "' />");
+                        if (button.click) {
+                            $button.click(button.click);
+                        }
+                        if (button.primary) {
+                            $button.addClass("primary");
+                        }
+                        if (button.closeDialog) {
+                            $button.click(close);
+                        }
+                        $dialogButtons.append($button);
+                    }
+                }
+                if (!isUpdatedContent) {
+                    $("body").append($dialog);
+                    $dialog.hide().fadeIn("fast", function () {
+                        if (options.open) {
+                            options.open();
+                        }
+                    });
+                    var h = $dialogBox.outerHeight();
+                    var offset = $dialogBox.offset();
+                    $dialogBox.css("marginTop", -h - offset.top).animate({ marginTop: 0 }, 400);
+                }
+                return {
+                    close: close
+                };
+            }
+
+        }
+
+        function getScrollTop() {
+            return document.body.scrollTop;
+        }
+
+    </script>
+
+
+</body>
+</html>
